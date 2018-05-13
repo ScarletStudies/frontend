@@ -12,14 +12,33 @@ export class AppPage {
 
 export class AppHome {
     static getJumbotronHeader() {
-        return element(by.css('app-root h1')).getText();
+        return element(by.css('app-root app-home h1')).getText();
+    }
+
+    static navigateToRegister() {
+        return element(by.css('app-root app-home a.register')).click();
     }
 }
 
 export class AppHeader {
     static navigateToLogin() {
-        return element(by.css('app-root a.login')).click();
+        return element(by.css('app-root app-header a.login')).click();
     }
+
+    static navigateToRegister() {
+        return element(by.css('app-root app-header a.register')).click();
+    }
+
+    static isPresent() {
+        return element(by.css('app-root app-header')).isPresent();
+    }
+}
+
+export class AppFooter {
+    static isPresent() {
+        return element(by.css('app-root app-footer')).isPresent();
+    }
+
 }
 
 export class AppLogin {
@@ -41,7 +60,7 @@ export class AppLogin {
     }
 
     static navigateToRegister() {
-        return element(by.css('app-root a.register')).click();
+        return element(by.css('app-root app-login a.register')).click();
     }
 }
 
