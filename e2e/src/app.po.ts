@@ -87,3 +87,30 @@ export class AppRegister {
         return browser.get('/register');
     }
 }
+
+export class AppManageCourses {
+    static fields = {
+        search: {
+            edit(text: string) {
+                return element(by.css('app-root app-manage-courses input.search')).sendKeys(text);
+            }
+        },
+        subject: {
+            select(optionPartial: string) {
+                return element(by.cssContainingText('option', optionPartial)).click();
+            }
+        }
+    };
+
+    static courses = {
+        available: {
+            count() {
+                return element.all(by.css('app-root app-manage-courses .course.available')).count();
+            }
+        }
+    };
+
+    static navigateTo() {
+        return browser.get('/dashboard/manage');
+    }
+}

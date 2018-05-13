@@ -4,6 +4,7 @@ import {
     AppHome,
     AppHeader,
     AppLogin,
+    AppManageCourses,
     AppRegister
 } from './app.po';
 
@@ -84,5 +85,24 @@ describe('register', () => {
         await AppRegister.fields.email.edit('example@example.com');
         await AppRegister.fields.password.edit('password123');
         await AppRegister.fields.passwordConfirmation.edit('password123');
+    });
+});
+
+describe('manage courses', () => {
+    it('should navigate to manage courses', async () => {
+        await AppManageCourses.navigateTo();
+        await expect(AppPage.currentUrl()).toContain('manage');
+    });
+
+    it('should display a list of courses to add', async () => {
+        await AppManageCourses.navigateTo();
+        const courses_count = await AppManageCourses.courses.available.count();
+        await expect(courses_count).toBeGreaterThan(0);
+    });
+
+    it('should search for a course to add', async () => {
+        await AppManageCourses.navigateTo();
+        await AppManageCourses.fields.search.edit('example search');
+        await AppManageCourses.fields.subject.select('Computer Science');
     });
 });
