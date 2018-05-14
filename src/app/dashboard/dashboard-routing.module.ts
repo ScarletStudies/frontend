@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { ManageCoursesComponent } from './manage-courses/manage-courses.component';
-import { HomeComponent } from './home/home.component';
+import { DashboardHomeComponent } from './dashboard-home/dashboard-home.component';
 
 const routes: Routes = [
     {
         path: '',
-        component: HomeComponent
+        component: DashboardHomeComponent
     },
     {
         path: 'manage',

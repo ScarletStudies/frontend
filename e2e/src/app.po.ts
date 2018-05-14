@@ -29,6 +29,10 @@ export class AppHeader {
         return element(by.css('app-root app-header a.register')).click();
     }
 
+    static navigateToLogout() {
+        return element(by.css('app-root app-header a.logout')).click();
+    }
+
     static isPresent() {
         return element(by.css('app-root app-header')).isPresent();
     }
@@ -61,6 +65,10 @@ export class AppLogin {
 
     static navigateToRegister() {
         return element(by.css('app-root app-login a.register')).click();
+    }
+
+    static doLogin() {
+        return element(by.css('app-root app-login button[type=submit]')).click();
     }
 }
 
@@ -112,5 +120,17 @@ export class AppManageCourses {
 
     static navigateTo() {
         return browser.get('/dashboard/manage');
+    }
+}
+
+export class AppDashboard {
+    static courses = {
+        count() {
+            return element.all(by.css('app-root app-dashboard-home a.course')).count();
+        }
+    };
+
+    static navigateTo() {
+        return browser.get('/dashboard/');
     }
 }
