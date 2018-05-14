@@ -73,7 +73,7 @@ describe('sign up', () => {
         await AppLogin.fields.password.edit('password123'); // don't make this your password
     });
 
-    fit('should login', async () => {
+    it('should login', async () => {
         await AppLogin.navigateTo();
         // test credentials
         await AppLogin.fields.email.edit('test@example.com');
