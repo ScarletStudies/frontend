@@ -1,5 +1,6 @@
 import {
     AppPage,
+    AppDashboard,
     AppFooter,
     AppHome,
     AppHeader,
@@ -72,6 +73,16 @@ describe('sign up', () => {
         await AppLogin.fields.password.edit('password123'); // don't make this your password
     });
 
+    fit('should login', async () => {
+        await AppLogin.navigateTo();
+        // test credentials
+        await AppLogin.fields.email.edit('test@example.com');
+        await AppLogin.fields.password.edit('password123');
+        await AppLogin.doLogin();
+        // should navigate to the dashboard after successful login
+        await expect(AppPage.currentUrl()).toContain('dashboard');
+    });
+
     it('should navigate to the register page', async () => {
         await AppLogin.navigateTo();
         await AppLogin.navigateToRegister();
@@ -104,5 +115,18 @@ describe('manage courses', () => {
         await AppManageCourses.navigateTo();
         await AppManageCourses.fields.search.edit('example search');
         await AppManageCourses.fields.subject.select('Computer Science');
+    });
+});
+
+describe('dashboard', () => {
+    it('should navigate to the dashboard', async () => {
+        await AppDashboard.navigateTo();
+        await expect(AppPage.currentUrl()).toContain('dashboard');
+    });
+
+    it('should display a list of links to user courses', async () => {
+        await AppDashboard.navigateTo();
+        const courses_count = await AppDashboard.courses.count();
+        await expect(courses_count).toBeGreaterThan(0);
     });
 });
