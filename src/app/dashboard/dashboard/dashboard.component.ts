@@ -6,11 +6,11 @@ import { IAppState, ICourse } from '../../models';
 import * as ScheduleActions from '../../actions/schedule.actions';
 
 @Component({
-    selector: 'app-dashboard-home',
-    templateUrl: './dashboard-home.component.html',
-    styleUrls: ['./dashboard-home.component.css']
+    selector: 'app-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.css']
 })
-export class DashboardHomeComponent implements OnInit {
+export class DashboardComponent implements OnInit {
 
     public semesterCourses$: Observable<ICourse[]>;
 
