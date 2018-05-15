@@ -25,48 +25,22 @@ describe('home page', () => {
 });
 
 describe('app header', () => {
-    it('should navigate to the login page', async () => {
-        await AppPage.navigateTo();
-        await AppHeader.login.go();
-        await expect(AppPage.currentUrl()).toContain('login');
-    });
-
-    it('should navigate to the register page', async () => {
-        await AppPage.navigateTo();
-        await AppHeader.register.go();
-        await expect(AppPage.currentUrl()).toContain('register');
-    });
-
-    it('should display on all pages', async () => {
-        await AppPage.navigateTo();
-
-        await expect(AppHeader.isPresent()).toBeTruthy();
-
-        await AppLogin.navigateTo();
-
-        await expect(AppHeader.isPresent()).toBeTruthy();
-
-        await AppRegister.navigateTo();
-
-        await expect(AppHeader.isPresent()).toBeTruthy();
-    });
-
-    it('should display the current user and the logout link when logged in', async () => {
+    it('should update the header when user is logged in', async () => {
         // login
         await AppLogin.doTestCredentialsLogin();
 
-        // user info and logout link should be displayed
+        // user info, logout link, dashboard link should be displayed
         await expect(AppHeader.currentUser.isLoggedIn()).toBeTruthy();
         await expect(AppHeader.currentUser.get()).toContain(TEST_CREDENTIALS.email);
-
         await expect(AppHeader.logout.isPresent()).toBeTruthy();
+        await expect(AppHeader.dashboard.isPresent()).toBeTruthy();
 
         // login and register should be hidden
         await expect(AppHeader.login.isPresent()).toBeFalsy();
         await expect(AppHeader.register.isPresent()).toBeFalsy();
     });
 
-    it('should not display the current user or logout when logged in', async () => {
+    it('should update the header when user is not logged in', async () => {
         // login and then logout to be sure state is logged out
         await AppLogin.doTestCredentialsLogin();
         await AppHeader.logout.do();
@@ -78,6 +52,7 @@ describe('app header', () => {
         // user info and logout link should be hidden
         await expect(AppHeader.currentUser.isLoggedIn()).toBeFalsy();
         await expect(AppHeader.logout.isPresent()).toBeFalsy();
+        await expect(AppHeader.dashboard.isPresent()).toBeFalsy();
     });
 });
 

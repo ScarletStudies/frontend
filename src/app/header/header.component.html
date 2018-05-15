@@ -6,40 +6,47 @@
 	Scarlet Studies
     </a>
 
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-	<ul class="navbar-nav mr-auto">
+    <ul class="navbar-nav mr-auto">
+	<li class="nav-item">
+	    <a class="nav-link"
+	       routerLink="/"
+	       routerLinkActive="active"
+	       [routerLinkActiveOptions]="{exact: true}">
+		Home
+	    </a>
+	</li>
+    </ul>
+
+    <ul class="navbar-nav">
+	<ng-container *ngIf="!((user$ | async)?.email)">
 	    <li class="nav-item">
-		<a class="nav-link"
-		   routerLink="/"
+		<a class="nav-link login"
+		   routerLink="/login"
 		   routerLinkActive="active"
 		   [routerLinkActiveOptions]="{exact: true}">
-		    Home
+		    Login
 		</a>
 	    </li>
-	    <ng-container *ngIf="!((user$ | async)?.email)">
-		<li class="nav-item">
-		    <a class="nav-link login"
-		       routerLink="/login"
-		       routerLinkActive="active"
-		       [routerLinkActiveOptions]="{exact: true}">
-			Login
-		    </a>
-		</li>
-		<li class="nav-item">
-		    <a class="nav-link register"
-		       routerLink="/register"
-		       routerLinkActive="active"
-		       [routerLinkActiveOptions]="{exact: true}">
-			Register
-		    </a>
-		</li>
-	    </ng-container>
-	</ul>
-
-	<ul class="navbar-nav"
-		   *ngIf="(user$ | async)?.email; let email">
+	    <li class="nav-item">
+		<a class="nav-link register"
+		   routerLink="/register"
+		   routerLinkActive="active"
+		   [routerLinkActiveOptions]="{exact: true}">
+		    Register
+		</a>
+	    </li>
+	</ng-container>
+	<ng-container *ngIf="(user$ | async)?.email; let email">
 	    <li class="nav-item nav-link current-user">
 		{{ email }}
+	    </li>
+	    <li class="nav-item">
+		<a class="nav-link dashboard"
+		   routerLink="/dashboard"
+		   routerLinkActive="active"
+		   [routerLinkActiveOptions]="{exact: true}">
+		    Dashboard
+		</a>
 	    </li>
 	    <li class="nav-item">
 		<a class="nav-link logout"
@@ -48,6 +55,7 @@
 		    Logout
 		</a>
 	    </li>
-	</ul>
-    </div>
+
+	</ng-container>
+    </ul>
 </nav>

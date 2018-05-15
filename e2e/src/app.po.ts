@@ -66,6 +66,12 @@ export class AppHeader {
         }
     };
 
+    static dashboard = {
+        isPresent() {
+            return element(by.css('app-root app-header a.dashboard')).isPresent();
+        }
+    };
+
     static isPresent() {
         return element(by.css('app-root app-header')).isPresent();
     }
