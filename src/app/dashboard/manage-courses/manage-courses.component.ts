@@ -3,7 +3,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { ICourse } from '../../app.actions';
+import { Store, select } from '@ngrx/store';
+import {
+    IAppState,
+    ICourse,
+    ScheduleAddCourseAttemptAction,
+    ScheduleRemoveCourseAttemptAction
+} from '../../app.actions';
 
 @Component({
     selector: 'app-manage-courses',
@@ -15,22 +21,31 @@ export class ManageCoursesComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription[] = [];
 
     public availableCourses$: Observable<ICourse[]> = null;
+    public scheduleCourses$: Observable<ICourse[]> = null;
 
     public queryControl = new FormControl();
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient,
+        private store: Store<IAppState>) { }
 
     ngOnInit() {
+        // setup course listings and search
         this.updateSearch();
 
         this.subscriptions.push(
             this.queryControl
                 .valueChanges
                 .pipe(
-                    debounceTime(500)
+                    debounceTime(250)
                 )
                 .subscribe(this.updateSearch.bind(this))
         );
+
+        // setup course schedule
+        this.scheduleCourses$ = this.store
+            .pipe(
+                select(state => state.schedule)
+            );
     }
 
     ngOnDestroy() {
@@ -39,7 +54,7 @@ export class ManageCoursesComponent implements OnInit, OnDestroy {
         }
     }
 
-    public updateSearch(query: string = null): void {
+    private updateSearch(query: string = null): void {
         let params = new HttpParams();
 
         if (query) {
@@ -51,5 +66,13 @@ export class ManageCoursesComponent implements OnInit, OnDestroy {
                 'http://localhost:5000/courses/',
                 { params }
             );
+    }
+
+    public addCourseToSchedule(course: ICourse): void {
+        this.store.dispatch(new ScheduleAddCourseAttemptAction(course.id));
+    }
+
+    public removeCourseFromSchedule(course: ICourse): void {
+        this.store.dispatch(new ScheduleRemoveCourseAttemptAction(course.id));
     }
 }

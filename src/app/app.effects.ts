@@ -11,7 +11,15 @@ import {
     AttemptLoginAction,
     LoginSuccessAction,
     LoginFailedAction,
-    IUser
+    IUser,
+    ICourse,
+    ScheduleActionTypes,
+    ScheduleAddCourseAttemptAction,
+    ScheduleAddCourseSuccessAction,
+    ScheduleAddCourseFailedAction,
+    ScheduleRemoveCourseAttemptAction,
+    ScheduleRemoveCourseSuccessAction,
+    ScheduleRemoveCourseFailedAction
 } from './app.actions';
 
 import * as RouterActions from './router.actions';
@@ -20,7 +28,7 @@ import * as RouterActions from './router.actions';
 export class AuthEffects {
     @Effect()
     login$: Observable<Action> = this.actions$.pipe(
-        ofType(UserActionTypes.ATTEMPT_LOGIN),
+        ofType(UserActionTypes.LOGIN_ATTEMPT),
         mergeMap(
             (action: AttemptLoginAction) =>
                 this.http.post('http://localhost:5000/users/login', action.payload)
@@ -36,6 +44,45 @@ export class AuthEffects {
                         ),
                         // If request fails, dispatch failed action
                         catchError(err => of(new LoginFailedAction(err.message)))
+                    )
+        )
+    );
+
+    constructor(private http: HttpClient, private actions$: Actions) { }
+}
+
+@Injectable()
+export class ScheduleEffects {
+    @Effect()
+    addCourse$: Observable<Action> = this.actions$.pipe(
+        ofType(ScheduleActionTypes.ADD_COURSE_ATTEMPT),
+        mergeMap(
+            (action: ScheduleAddCourseAttemptAction) =>
+                this.http.post(`http://localhost:5000/users/courses/${action.payload}`, '')
+                    .pipe(
+                        // If successful, dispatch success action with result
+                        map(
+                            (data: ICourse[]) => new ScheduleAddCourseSuccessAction(data)
+                        ),
+                        // If request fails, dispatch failed action
+                        catchError(err => of(new ScheduleAddCourseFailedAction(err.message)))
+                    )
+        )
+    );
+
+    @Effect()
+    removeCourse$: Observable<Action> = this.actions$.pipe(
+        ofType(ScheduleActionTypes.REMOVE_COURSE_ATTEMPT),
+        mergeMap(
+            (action: ScheduleRemoveCourseAttemptAction) =>
+                this.http.delete(`http://localhost:5000/users/courses/${action.payload}`)
+                    .pipe(
+                        // If successful, dispatch success action with result
+                        map(
+                            (data: ICourse[]) => new ScheduleRemoveCourseSuccessAction(data)
+                        ),
+                        // If request fails, dispatch failed action
+                        catchError(err => of(new ScheduleRemoveCourseFailedAction(err.message)))
                     )
         )
     );

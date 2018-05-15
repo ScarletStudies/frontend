@@ -184,3 +184,9 @@ export class AppDashboard {
         return browser.get('/dashboard/');
     }
 }
+
+export class AppDashboardSideBar {
+    static navigateToManageCourses() {
+        return element(by.css('app-root app-dashboard-home a.manage')).click();
+    }
+}

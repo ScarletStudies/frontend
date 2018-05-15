@@ -1,6 +1,7 @@
 import {
     AppPage,
     AppDashboard,
+    AppDashboardSideBar,
     AppFooter,
     AppHome,
     AppHeader,
@@ -100,20 +101,18 @@ describe('register', () => {
     });
 });
 
-fdescribe('manage courses', () => {
+describe('manage courses', () => {
     beforeEach(async () => {
         await AppLogin.doTestCredentialsLogin();
+        await AppDashboardSideBar.navigateToManageCourses();
     });
 
     it('should navigate to manage courses', async () => {
-        await AppManageCourses.navigateTo();
         await expect(AppPage.currentUrl()).toContain('manage');
     });
 
     it('should add a course', async () => {
-        await AppManageCourses.navigateTo();
-
-        const courseName = AppManageCourses.courses.available.get.byIndex(0);
+        const courseName = await AppManageCourses.courses.available.get.byIndex(0);
 
         // before add
         await expect(AppManageCourses.courses.schedule.get.all()).not.toContain(courseName);
@@ -125,19 +124,20 @@ fdescribe('manage courses', () => {
     });
 
     it('should remove a course', async () => {
-        await AppManageCourses.navigateTo();
+        const courseName = await AppManageCourses.courses.available.get.byIndex(0);
 
-        const courseName = AppManageCourses.courses.schedule.get.byIndex(0);
+        // before add
+        await expect(AppManageCourses.courses.schedule.get.all()).not.toContain(courseName);
+
+        await AppManageCourses.courses.available.add.byIndex(0);
 
         await AppManageCourses.courses.schedule.remove.byIndex(0);
 
+        // after remove
         await expect(AppManageCourses.courses.schedule.get.all()).not.toContain(courseName);
-
     });
 
     it('should display a list of courses to add', async () => {
-        await AppManageCourses.navigateTo();
-
         const courses_count = await AppManageCourses.courses.available.count();
 
         // default 10 results
@@ -145,8 +145,6 @@ fdescribe('manage courses', () => {
     });
 
     it('should search for a course to add', async () => {
-        await AppManageCourses.navigateTo();
-
         // search by name
         const courseName = 'Numerical Analysis';
 
