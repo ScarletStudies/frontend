@@ -1,5 +1,10 @@
 import { browser, by, element } from 'protractor';
 
+export const TEST_CREDENTIALS = {
+    email: 'test@example.com',
+    password: 'password123'
+};
+
 export class AppPage {
     static navigateTo() {
         return browser.get('/');
@@ -70,6 +75,19 @@ export class AppLogin {
     static doLogin() {
         return element(by.css('app-root app-login button[type=submit]')).click();
     }
+
+    static async doTestCredentialsLogin() {
+        await AppLogin.navigateTo();
+        await AppLogin.fields.email.edit(TEST_CREDENTIALS.email);
+        await AppLogin.fields.password.edit(TEST_CREDENTIALS.password);
+        await AppLogin.doLogin();
+    }
+
+    static doLogout() {
+        // TODO right now this simply refreshes the page, which erases the redux state
+        // it should hit a button that causes the redux state to be flushed
+        return browser.refresh();
+    }
 }
 
 export class AppRegister {
@@ -114,6 +132,51 @@ export class AppManageCourses {
         available: {
             count() {
                 return element.all(by.css('app-root app-manage-courses .course.available')).count();
+            },
+            get: {
+                byIndex(index: number) {
+                    return element.all(by.css('app-root app-manage-courses .course.available .course-name'))
+                        .get(index)
+                        .getText();
+                },
+                all() {
+                    return element.all(by.css('app-root app-manage-courses .course.available .course-name'))
+                        .map(ef => ef.getText());
+                }
+            },
+            add: {
+                byIndex(index: number) {
+                    return element.all(by.css('app-root app-manage-courses .course.available button.add'))
+                        .get(index)
+                        .click();
+                }
+            }
+        },
+        schedule: {
+            count() {
+                return element.all(by.css('app-root app-manage-courses .course.schedule')).count();
+            },
+            get: {
+                byIndex(index: number) {
+                    return element.all(by.css('app-root app-manage-courses .course.schedule .course-name'))
+                        .get(index)
+                        .getText();
+                },
+                all() {
+                    return element.all(by.css('app-root app-manage-courses .course.schedule .course-name'))
+                        .map(ef => ef.getText());
+                }
+            },
+            remove: {
+                byIndex(index: number) {
+                    return element.all(by.css('app-root app-manage-courses .course.schedule button.remove'))
+                        .get(index)
+                        .click();
+                },
+                all() {
+                    return element.all(by.css('app-root app-manage-courses .course.schedule button.remove'))
+                        .each(ef => ef.click());
+                }
             }
         }
     };
@@ -132,5 +195,11 @@ export class AppDashboard {
 
     static navigateTo() {
         return browser.get('/dashboard/');
+    }
+}
+
+export class AppDashboardSideBar {
+    static navigateToManageCourses() {
+        return element(by.css('app-root app-dashboard-home a.manage')).click();
     }
 }

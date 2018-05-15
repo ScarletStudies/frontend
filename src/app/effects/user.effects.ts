@@ -3,39 +3,32 @@ import { HttpClient } from '@angular/common/http';
 import { Action } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of, from } from 'rxjs';
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { catchError, mergeMap } from 'rxjs/operators';
 
-import {
-    UserActions,
-    UserActionTypes,
-    AttemptLoginAction,
-    LoginSuccessAction,
-    LoginFailedAction,
-    IUser
-} from './app.actions';
-
-import * as RouterActions from './router.actions';
+import * as UserActions from '../actions/user.actions';
+import * as RouterActions from '../actions/router.actions';
+import { IUser } from '../models';
 
 @Injectable()
-export class AuthEffects {
+export class UserEffects {
     @Effect()
     login$: Observable<Action> = this.actions$.pipe(
-        ofType(UserActionTypes.ATTEMPT_LOGIN),
+        ofType(UserActions.ActionTypes.LOGIN_ATTEMPT),
         mergeMap(
-            (action: AttemptLoginAction) =>
+            (action: UserActions.AttemptLoginAction) =>
                 this.http.post('http://localhost:5000/users/login', action.payload)
                     .pipe(
                         // If successful, dispatch success action with result
                         mergeMap(
                             (data: IUser) => from(
                                 [
-                                    new LoginSuccessAction(data),
+                                    new UserActions.LoginSuccessAction(data),
                                     new RouterActions.Go({ path: ['/dashboard'] })
                                 ]
                             )
                         ),
                         // If request fails, dispatch failed action
-                        catchError(err => of(new LoginFailedAction(err.message)))
+                        catchError(err => of(new UserActions.LoginFailedAction(err.message)))
                     )
         )
     );

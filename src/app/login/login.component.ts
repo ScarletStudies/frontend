@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { IAppState, AttemptLoginAction } from '../app.actions';
+import { IAppState } from '../models';
+
+import * as LoginActions from '../actions/user.actions';
 
 @Component({
     selector: 'app-login',
@@ -15,6 +17,6 @@ export class LoginComponent implements OnInit {
     }
 
     public login(email: string, password: string): void {
-        this.store.dispatch(new AttemptLoginAction({ email, password }));
+        this.store.dispatch(new LoginActions.AttemptLoginAction({ email, password }));
     }
 }
