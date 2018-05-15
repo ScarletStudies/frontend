@@ -27,13 +27,13 @@ describe('home page', () => {
 describe('app header', () => {
     it('should navigate to the login page', async () => {
         await AppPage.navigateTo();
-        await AppHeader.navigateToLogin();
+        await AppHeader.login.go();
         await expect(AppPage.currentUrl()).toContain('login');
     });
 
     it('should navigate to the register page', async () => {
         await AppPage.navigateTo();
-        await AppHeader.navigateToRegister();
+        await AppHeader.register.go();
         await expect(AppPage.currentUrl()).toContain('register');
     });
 
@@ -49,6 +49,35 @@ describe('app header', () => {
         await AppRegister.navigateTo();
 
         await expect(AppHeader.isPresent()).toBeTruthy();
+    });
+
+    it('should display the current user and the logout link when logged in', async () => {
+        // login
+        await AppLogin.doTestCredentialsLogin();
+
+        // user info and logout link should be displayed
+        await expect(AppHeader.currentUser.isLoggedIn()).toBeTruthy();
+        await expect(AppHeader.currentUser.get()).toContain(TEST_CREDENTIALS.email);
+
+        await expect(AppHeader.logout.isPresent()).toBeTruthy();
+
+        // login and register should be hidden
+        await expect(AppHeader.login.isPresent()).toBeFalsy();
+        await expect(AppHeader.register.isPresent()).toBeFalsy();
+    });
+
+    it('should not display the current user or logout when logged in', async () => {
+        // login and then logout to be sure state is logged out
+        await AppLogin.doTestCredentialsLogin();
+        await AppHeader.logout.do();
+
+        // login and register should be displayed
+        await expect(AppHeader.login.isPresent()).toBeTruthy();
+        await expect(AppHeader.register.isPresent()).toBeTruthy();
+
+        // user info and logout link should be hidden
+        await expect(AppHeader.currentUser.isLoggedIn()).toBeFalsy();
+        await expect(AppHeader.logout.isPresent()).toBeFalsy();
     });
 });
 
@@ -71,7 +100,7 @@ describe('app footer', () => {
 describe('sign up', () => {
     afterEach(async () => {
         try {
-            await AppHeader.logout();
+            await AppHeader.logout.do();
         } catch (e) { }
     });
 
@@ -125,7 +154,7 @@ describe('sign up', () => {
         await expect(AppHeader.currentUser.get()).toContain(TEST_CREDENTIALS.email);
 
         // perform logout
-        await AppHeader.logout();
+        await AppHeader.logout.do();
 
         // confirm logged out
         await expect(AppHeader.currentUser.isLoggedIn()).toBeFalsy();
@@ -214,7 +243,7 @@ describe('manage courses', () => {
         const courseName = await AppManageCourses.courses.available.get.byIndex(0);
 
         // logout and login
-        await AppLogin.doLogout();
+        await AppHeader.logout.do();
         await AppLogin.doTestCredentialsLogin();
         await AppDashboardSideBar.navigateToManageCourses();
 

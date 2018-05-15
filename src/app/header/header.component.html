@@ -16,22 +16,24 @@
 		    Home
 		</a>
 	    </li>
-	    <li class="nav-item">
-		<a class="nav-link login"
-		   routerLink="/login"
-		   routerLinkActive="active"
-		   [routerLinkActiveOptions]="{exact: true}">
-		    Login
-		</a>
-	    </li>
-	    <li class="nav-item">
-		<a class="nav-link register"
-		   routerLink="/register"
-		   routerLinkActive="active"
-		   [routerLinkActiveOptions]="{exact: true}">
-		    Register
-		</a>
-	    </li>
+	    <ng-container *ngIf="!((user$ | async)?.email)">
+		<li class="nav-item">
+		    <a class="nav-link login"
+		       routerLink="/login"
+		       routerLinkActive="active"
+		       [routerLinkActiveOptions]="{exact: true}">
+			Login
+		    </a>
+		</li>
+		<li class="nav-item">
+		    <a class="nav-link register"
+		       routerLink="/register"
+		       routerLinkActive="active"
+		       [routerLinkActiveOptions]="{exact: true}">
+			Register
+		    </a>
+		</li>
+	    </ng-container>
 	</ul>
 
 	<ul class="navbar-nav"

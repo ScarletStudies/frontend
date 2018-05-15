@@ -39,21 +39,32 @@ export class AppHeader {
         }
     };
 
-    static logout() {
-        return element(by.css('app-root app-header .logout')).click();
-    }
+    static logout = {
+        do() {
+            return element(by.css('app-root app-header .logout')).click();
+        },
+        isPresent() {
+            return element(by.css('app-root app-header .logout')).isPresent();
+        }
+    };
 
-    static navigateToLogin() {
-        return element(by.css('app-root app-header a.login')).click();
-    }
+    static login = {
+        go() {
+            return element(by.css('app-root app-header a.login')).click();
+        },
+        isPresent() {
+            return element(by.css('app-root app-header a.login')).isPresent();
+        }
+    };
 
-    static navigateToRegister() {
-        return element(by.css('app-root app-header a.register')).click();
-    }
-
-    static navigateToLogout() {
-        return element(by.css('app-root app-header a.logout')).click();
-    }
+    static register = {
+        go() {
+            return element(by.css('app-root app-header a.register')).click();
+        },
+        isPresent() {
+            return element(by.css('app-root app-header a.register')).isPresent();
+        }
+    };
 
     static isPresent() {
         return element(by.css('app-root app-header')).isPresent();
@@ -98,12 +109,6 @@ export class AppLogin {
         await AppLogin.fields.email.edit(TEST_CREDENTIALS.email);
         await AppLogin.fields.password.edit(TEST_CREDENTIALS.password);
         await AppLogin.doLogin();
-    }
-
-    static doLogout() {
-        // TODO right now this simply refreshes the page, which erases the redux state
-        // it should hit a button that causes the redux state to be flushed
-        return browser.refresh();
     }
 }
 
