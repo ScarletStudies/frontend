@@ -105,6 +105,7 @@ describe('manage courses', () => {
     beforeEach(async () => {
         await AppLogin.doTestCredentialsLogin();
         await AppDashboardSideBar.navigateToManageCourses();
+        await AppManageCourses.courses.schedule.remove.all();
     });
 
     it('should navigate to manage courses', async () => {
@@ -151,6 +152,27 @@ describe('manage courses', () => {
         await AppManageCourses.fields.search.edit(courseName);
 
         await expect(AppManageCourses.courses.available.get.all()).toContain(courseName);
+    });
+
+    it('should list the user\'s courses', async () => {
+        // add a course if semester is empty
+        const courseCount = await AppManageCourses.courses.schedule.count();
+
+        if (courseCount === 0) {
+            await AppManageCourses.courses.available.add.byIndex(0);
+        }
+
+        // course to look for
+        const courseName = await AppManageCourses.courses.available.get.byIndex(0);
+
+        // logout and login
+        await AppLogin.doLogout();
+        await AppLogin.doTestCredentialsLogin();
+        await AppDashboardSideBar.navigateToManageCourses();
+
+        // confirm presence of course in user list
+        await expect(AppManageCourses.courses.schedule.count()).toEqual(1);
+        await expect(AppManageCourses.courses.schedule.get.all()).toContain(courseName);
     });
 });
 

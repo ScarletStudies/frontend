@@ -19,7 +19,10 @@ import {
     ScheduleAddCourseFailedAction,
     ScheduleRemoveCourseAttemptAction,
     ScheduleRemoveCourseSuccessAction,
-    ScheduleRemoveCourseFailedAction
+    ScheduleRemoveCourseFailedAction,
+    ScheduleGetCoursesAttemptAction,
+    ScheduleGetCoursesSuccessAction,
+    ScheduleGetCoursesFailedAction
 } from './app.actions';
 
 import * as RouterActions from './router.actions';
@@ -83,6 +86,23 @@ export class ScheduleEffects {
                         ),
                         // If request fails, dispatch failed action
                         catchError(err => of(new ScheduleRemoveCourseFailedAction(err.message)))
+                    )
+        )
+    );
+
+    @Effect()
+    getCourses$: Observable<Action> = this.actions$.pipe(
+        ofType(ScheduleActionTypes.GET_COURSES_ATTEMPT),
+        mergeMap(
+            (action: ScheduleGetCoursesAttemptAction) =>
+                this.http.get(`http://localhost:5000/users/courses/`)
+                    .pipe(
+                        // If successful, dispatch success action with result
+                        map(
+                            (data: ICourse[]) => new ScheduleGetCoursesSuccessAction(data)
+                        ),
+                        // If request fails, dispatch failed action
+                        catchError(err => of(new ScheduleGetCoursesFailedAction(err.message)))
                     )
         )
     );

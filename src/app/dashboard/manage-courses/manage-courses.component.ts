@@ -8,7 +8,8 @@ import {
     IAppState,
     ICourse,
     ScheduleAddCourseAttemptAction,
-    ScheduleRemoveCourseAttemptAction
+    ScheduleRemoveCourseAttemptAction,
+    ScheduleGetCoursesAttemptAction
 } from '../../app.actions';
 
 @Component({
@@ -41,7 +42,8 @@ export class ManageCoursesComponent implements OnInit, OnDestroy {
                 .subscribe(this.updateSearch.bind(this))
         );
 
-        // setup course schedule
+        // setup and update course schedule
+        this.store.dispatch(new ScheduleGetCoursesAttemptAction());
         this.scheduleCourses$ = this.store
             .pipe(
                 select(state => state.schedule)

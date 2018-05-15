@@ -82,6 +82,12 @@ export class AppLogin {
         await AppLogin.fields.password.edit(TEST_CREDENTIALS.password);
         await AppLogin.doLogin();
     }
+
+    static doLogout() {
+        // TODO right now this simply refreshes the page, which erases the redux state
+        // it should hit a button that causes the redux state to be flushed
+        return browser.refresh();
+    }
 }
 
 export class AppRegister {
@@ -147,6 +153,9 @@ export class AppManageCourses {
             }
         },
         schedule: {
+            count() {
+                return element.all(by.css('app-root app-manage-courses .course.schedule')).count();
+            },
             get: {
                 byIndex(index: number) {
                     return element.all(by.css('app-root app-manage-courses .course.schedule .course-name'))
@@ -164,6 +173,10 @@ export class AppManageCourses {
                         .get(index)
                         .click();
                 },
+                all() {
+                    return element.all(by.css('app-root app-manage-courses .course.schedule button.remove'))
+                        .each(ef => ef.click());
+                }
             }
         }
     };

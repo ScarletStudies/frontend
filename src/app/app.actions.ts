@@ -129,12 +129,33 @@ export class ScheduleRemoveCourseFailedAction implements Action {
     constructor(public payload: { message: string }) { }
 }
 
+export class ScheduleGetCoursesAttemptAction implements Action {
+    readonly type = ScheduleActionTypes.GET_COURSES_ATTEMPT;
+
+    constructor() { }
+}
+
+export class ScheduleGetCoursesSuccessAction implements Action {
+    readonly type = ScheduleActionTypes.GET_COURSES_SUCCESS;
+
+    constructor(public payload: ICourse[]) { }
+}
+
+export class ScheduleGetCoursesFailedAction implements Action {
+    readonly type = ScheduleActionTypes.GET_COURSES_FAILED;
+
+    constructor(public payload: { message: string }) { }
+}
+
 export type ScheduleActions = ScheduleAddCourseAttemptAction
     | ScheduleAddCourseSuccessAction
     | ScheduleAddCourseFailedAction
     | ScheduleRemoveCourseAttemptAction
     | ScheduleRemoveCourseSuccessAction
-    | ScheduleRemoveCourseFailedAction;
+    | ScheduleRemoveCourseFailedAction
+    | ScheduleGetCoursesAttemptAction
+    | ScheduleGetCoursesSuccessAction
+    | ScheduleGetCoursesFailedAction;
 
 /**********
 * Schedule Reducer
@@ -144,6 +165,7 @@ export function scheduleReducer(state: ICourse[] = [], action: ScheduleActions):
     switch (action.type) {
         case ScheduleActionTypes.ADD_COURSE_SUCCESS:
         case ScheduleActionTypes.REMOVE_COURSE_SUCCESS:
+        case ScheduleActionTypes.GET_COURSES_SUCCESS:
             return action.payload;
     }
 
