@@ -1,0 +1,29 @@
+<h2>Course Schedule</h2>
+
+<table class="table table-striped">
+    <thead>
+	<tr>
+	    <th scope="col">Course Name</th>
+	    <th scope="col">Course ID</th>
+	    <th scope="col">Actions</th>
+	</tr>
+    </thead>
+    <tbody>
+	<tr class="course schedule"
+	    *ngFor="let course of scheduleCourses$ | async">
+	    <td class="course-name">
+		{{ course.name }}
+	    </td>
+	    <td>
+		{{ course.offering_unit }}:{{ course.subject }}:{{ course.course_number }}
+	    </td>
+	    <td>
+		<button type="button"
+			class="btn btn-danger btn-sm remove"
+			(click)="removeCourseFromSchedule(course)">
+		    Remove
+		</button>
+	    </td>
+	</tr>
+    </tbody>
+</table>

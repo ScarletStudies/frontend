@@ -7,6 +7,8 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import { ManageCoursesComponent } from './manage-courses/manage-courses.component';
 import { DashboardHomeComponent } from './dashboard-home/dashboard-home.component';
 import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overview.component';
+import { ManageCoursesScheduleComponent } from './manage-courses/manage-courses-schedule/manage-courses-schedule.component';
+import { ManageCoursesAddComponent } from './manage-courses/manage-courses-add/manage-courses-add.component';
 
 
 @NgModule({
@@ -16,6 +18,12 @@ import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overv
         FormsModule,
         ReactiveFormsModule
     ],
-    declarations: [ManageCoursesComponent, DashboardHomeComponent, DashboardOverviewComponent]
+    declarations: [
+        ManageCoursesComponent,
+        DashboardHomeComponent,
+        DashboardOverviewComponent,
+        ManageCoursesScheduleComponent,
+        ManageCoursesAddComponent
+    ]
 })
 export class DashboardModule { }

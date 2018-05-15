@@ -21,6 +21,8 @@ import { APP_EFFECTS } from './effects';
 
 import { JwtModule, JWT_OPTIONS, JwtModuleOptions } from '@auth0/angular-jwt';
 
+import { APP_SERVICES } from './services';
+
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
@@ -89,7 +91,9 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
             logOnly: environment.production
         })
     ],
-    providers: [],
+    providers: [
+        ...APP_SERVICES
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

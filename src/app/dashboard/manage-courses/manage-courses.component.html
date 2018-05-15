@@ -2,71 +2,10 @@
     <div class="container mt-2">
 	<h1>Manage Courses</h1>
 
-	<h2>Course Schedule</h2>
+	<app-manage-courses-schedule></app-manage-courses-schedule>
 
-	<table class="table table-striped">
-	    <thead>
-		<tr>
-		    <th scope="col">Course Name</th>
-		    <th scope="col">Course ID</th>
-		    <th scope="col">Actions</th>
-		</tr>
-	    </thead>
-	    <tbody>
-		<tr class="course schedule"
-		    *ngFor="let course of scheduleCourses$ | async">
-		    <td class="course-name">
-			{{ course.name }}
-		    </td>
-		    <td>
-			{{ course.offering_unit }}:{{ course.subject }}:{{ course.course_number }}
-		    </td>
-		    <td>
-			<button type="button"
-				class="btn btn-danger btn-sm remove"
-				(click)="removeCourseFromSchedule(course)">
-			    Remove
-			</button>
-		    </td>
-		</tr>
-	    </tbody>
-	</table>
-
-	<h2>Add Course</h2>
-
-	<div class="form-row">
-	    <input [formControl]="queryControl"
-		   type="text"
-		   class="form-control search"
-		   placeholder="Search...">
-	</div>
-
-	<table class="table table-striped mt-2">
-	    <thead>
-		<tr>
-		    <th scope="col">Course Name</th>
-		    <th scope="col">Course ID</th>
-		    <th scope="col">Actions</th>
-		</tr>
-	    </thead>
-	    <tbody>
-		<tr class="course available"
-		    *ngFor="let course of availableCourses$ | async">
-		    <td class="course-name">
-			{{ course.name }}
-		    </td>
-		    <td>
-			{{ course.offering_unit }}:{{ course.subject }}:{{ course.course_number }}
-		    </td>
-		    <td>
-			<button type="button"
-				      class="btn btn-secondary btn-sm add"
-				      (click)="addCourseToSchedule(course)">
-			    Add
-			</button>
-		    </td>
-		</tr>
-	    </tbody>
-	</table>	
+	<hr>
+	
+	<app-manage-courses-add></app-manage-courses-add>
     </div>
 </main>
