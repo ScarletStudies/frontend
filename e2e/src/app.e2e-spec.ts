@@ -6,7 +6,8 @@ import {
     AppHeader,
     AppLogin,
     AppManageCourses,
-    AppRegister
+    AppRegister,
+    TEST_CREDENTIALS
 } from './app.po';
 
 describe('home page', () => {
@@ -76,8 +77,8 @@ describe('sign up', () => {
     it('should login', async () => {
         await AppLogin.navigateTo();
         // test credentials
-        await AppLogin.fields.email.edit('test@example.com');
-        await AppLogin.fields.password.edit('password123');
+        await AppLogin.fields.email.edit(TEST_CREDENTIALS.email);
+        await AppLogin.fields.password.edit(TEST_CREDENTIALS.password);
         await AppLogin.doLogin();
         // should navigate to the dashboard after successful login
         await expect(AppPage.currentUrl()).toContain('dashboard');
@@ -99,22 +100,59 @@ describe('register', () => {
     });
 });
 
-describe('manage courses', () => {
+fdescribe('manage courses', () => {
+    beforeEach(async () => {
+        await AppLogin.doTestCredentialsLogin();
+    });
+
     it('should navigate to manage courses', async () => {
         await AppManageCourses.navigateTo();
         await expect(AppPage.currentUrl()).toContain('manage');
     });
 
+    it('should add a course', async () => {
+        await AppManageCourses.navigateTo();
+
+        const courseName = AppManageCourses.courses.available.get.byIndex(0);
+
+        // before add
+        await expect(AppManageCourses.courses.schedule.get.all()).not.toContain(courseName);
+
+        await AppManageCourses.courses.available.add.byIndex(0);
+
+        // after add
+        await expect(AppManageCourses.courses.schedule.get.all()).toContain(courseName);
+    });
+
+    it('should remove a course', async () => {
+        await AppManageCourses.navigateTo();
+
+        const courseName = AppManageCourses.courses.schedule.get.byIndex(0);
+
+        await AppManageCourses.courses.schedule.remove.byIndex(0);
+
+        await expect(AppManageCourses.courses.schedule.get.all()).not.toContain(courseName);
+
+    });
+
     it('should display a list of courses to add', async () => {
         await AppManageCourses.navigateTo();
+
         const courses_count = await AppManageCourses.courses.available.count();
-        await expect(courses_count).toBeGreaterThan(0);
+
+        // default 10 results
+        await expect(courses_count).toEqual(10);
     });
 
     it('should search for a course to add', async () => {
         await AppManageCourses.navigateTo();
-        await AppManageCourses.fields.search.edit('example search');
-        await AppManageCourses.fields.subject.select('Computer Science');
+
+        // search by name
+        const courseName = 'Numerical Analysis';
+
+        await AppManageCourses.fields.search.edit(courseName);
+
+        await expect(AppManageCourses.courses.available.get.all()).toContain(courseName);
     });
 });
 

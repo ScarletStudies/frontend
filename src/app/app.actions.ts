@@ -9,6 +9,14 @@ export interface IUser {
     jwt: string;
 }
 
+export interface ICourse {
+    id: string;
+    name: string;
+    offering_unit: string;
+    subject: string;
+    course_number: string;
+}
+
 export interface IAppState {
     user: IUser;
 }
