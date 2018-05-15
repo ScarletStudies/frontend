@@ -13,6 +13,8 @@ export function userReducer(state: IUser = DEFAULT_USER_STATE, action: UserActio
     switch (action.type) {
         case UserActions.ActionTypes.LOGIN_SUCCESS:
             return action.payload;
+        case UserActions.ActionTypes.LOGOUT:
+            return DEFAULT_USER_STATE;
     }
 
     return state;

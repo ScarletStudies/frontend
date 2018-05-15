@@ -13,6 +13,10 @@ export class AppPage {
     static currentUrl() {
         return browser.getCurrentUrl();
     }
+
+    static refresh() {
+        return browser.refresh();
+    }
 }
 
 export class AppHome {
@@ -26,6 +30,19 @@ export class AppHome {
 }
 
 export class AppHeader {
+    static currentUser = {
+        get() {
+            return element(by.css('app-root app-header .current-user')).getText();
+        },
+        isLoggedIn() {
+            return element(by.css('app-root app-header .current-user')).isPresent();
+        }
+    };
+
+    static logout() {
+        return element(by.css('app-root app-header .logout')).click();
+    }
+
     static navigateToLogin() {
         return element(by.css('app-root app-header a.login')).click();
     }

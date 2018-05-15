@@ -11,7 +11,8 @@ import { take } from 'rxjs/operators';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { routerReducer, StoreRouterConnectingModule } from '@ngrx/router-store';
 
-import { StoreModule, Store, select } from '@ngrx/store';
+import { StoreModule, Store, select, MetaReducer, ActionReducer } from '@ngrx/store';
+import { localStorageSync } from 'ngrx-store-localstorage';
 import { reducers } from './reducers';
 import { IAppState } from './models';
 
@@ -46,6 +47,12 @@ export function jwtOptionsFactory(store: Store<IAppState>) {
     };
 }
 
+export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
+    return localStorageSync({ keys: ['user'], rehydrate: true })(reducer);
+}
+
+const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -71,7 +78,8 @@ export function jwtOptionsFactory(store: Store<IAppState>) {
         StoreModule.forRoot({
             router: routerReducer,
             ...reducers
-        }),
+        },
+            { metaReducers }),
         EffectsModule.forRoot(APP_EFFECTS),
         StoreRouterConnectingModule.forRoot({
             stateKey: 'router' // name of reducer key

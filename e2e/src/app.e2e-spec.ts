@@ -69,6 +69,12 @@ describe('app footer', () => {
 });
 
 describe('sign up', () => {
+    afterEach(async () => {
+        try {
+            await AppHeader.logout();
+        } catch (e) { }
+    });
+
     it('should accept an email and password', async () => {
         await AppLogin.navigateTo();
         await AppLogin.fields.email.edit('example@example.com');
@@ -77,12 +83,52 @@ describe('sign up', () => {
 
     it('should login', async () => {
         await AppLogin.navigateTo();
+
         // test credentials
         await AppLogin.fields.email.edit(TEST_CREDENTIALS.email);
         await AppLogin.fields.password.edit(TEST_CREDENTIALS.password);
         await AppLogin.doLogin();
+
+        // should contain user email in header after successful login
+        await expect(AppHeader.currentUser.get()).toContain(TEST_CREDENTIALS.email);
+
         // should navigate to the dashboard after successful login
         await expect(AppPage.currentUrl()).toContain('dashboard');
+    });
+
+    it('should persist login through page refresh', async () => {
+        await AppLogin.navigateTo();
+
+        // test credentials
+        await AppLogin.fields.email.edit(TEST_CREDENTIALS.email);
+        await AppLogin.fields.password.edit(TEST_CREDENTIALS.password);
+        await AppLogin.doLogin();
+
+        // should contain user email in header after successful login
+        await expect(AppHeader.currentUser.get()).toContain(TEST_CREDENTIALS.email);
+
+        await AppPage.refresh();
+
+        // confirm still logged in
+        await expect(AppHeader.currentUser.get()).toContain(TEST_CREDENTIALS.email);
+    });
+
+    it('should logout', async () => {
+        await AppLogin.navigateTo();
+
+        // test credentials
+        await AppLogin.fields.email.edit(TEST_CREDENTIALS.email);
+        await AppLogin.fields.password.edit(TEST_CREDENTIALS.password);
+        await AppLogin.doLogin();
+
+        // should contain user email in header after successful login
+        await expect(AppHeader.currentUser.get()).toContain(TEST_CREDENTIALS.email);
+
+        // perform logout
+        await AppHeader.logout();
+
+        // confirm logged out
+        await expect(AppHeader.currentUser.isLoggedIn()).toBeFalsy();
     });
 
     it('should navigate to the register page', async () => {
@@ -103,9 +149,11 @@ describe('register', () => {
 
 describe('manage courses', () => {
     beforeEach(async () => {
-        await AppLogin.doTestCredentialsLogin();
-        await AppDashboardSideBar.navigateToManageCourses();
-        await AppManageCourses.courses.schedule.remove.all();
+        try {
+            await AppLogin.doTestCredentialsLogin();
+            await AppDashboardSideBar.navigateToManageCourses();
+            await AppManageCourses.courses.schedule.remove.all();
+        } catch (e) { }
     });
 
     it('should navigate to manage courses', async () => {
@@ -199,3 +247,4 @@ describe('dashboard side bar', () => {
         await expect(AppDashboardSideBar.courses.count()).toEqual(3);
     });
 });
+

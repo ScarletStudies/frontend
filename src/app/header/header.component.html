@@ -33,5 +33,19 @@
 		</a>
 	    </li>
 	</ul>
+
+	<ul class="navbar-nav"
+		   *ngIf="(user$ | async)?.email; let email">
+	    <li class="nav-item nav-link current-user">
+		{{ email }}
+	    </li>
+	    <li class="nav-item">
+		<a class="nav-link logout"
+		   routerLink="/"
+		   (click)="logout()">
+		    Logout
+		</a>
+	    </li>
+	</ul>
     </div>
 </nav>
