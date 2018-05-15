@@ -5,6 +5,8 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of, from } from 'rxjs';
 import { catchError, mergeMap } from 'rxjs/operators';
 
+import { environment } from '../../environments/environment';
+
 import * as UserActions from '../actions/user.actions';
 import * as RouterActions from '../actions/router.actions';
 import { IUser } from '../models';
@@ -16,7 +18,7 @@ export class UserEffects {
         ofType(UserActions.ActionTypes.LOGIN_ATTEMPT),
         mergeMap(
             (action: UserActions.AttemptLoginAction) =>
-                this.http.post('http://localhost:5000/users/login', action.payload)
+                this.http.post(`${environment.api}/users/login`, action.payload)
                     .pipe(
                         // If successful, dispatch success action with result
                         mergeMap(

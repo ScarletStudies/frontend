@@ -4,11 +4,13 @@ import { FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
+
+import { environment } from '../../../environments/environment';
+
 import {
     IAppState,
     ICourse
 } from '../../models';
-
 import * as ScheduleActions from '../../actions/schedule.actions';
 
 @Component({
@@ -64,7 +66,7 @@ export class ManageCoursesComponent implements OnInit, OnDestroy {
 
         this.availableCourses$ = this.http
             .get<ICourse[]>(
-                'http://localhost:5000/courses/',
+                `${environment.api}/courses/`,
                 { params }
             );
     }

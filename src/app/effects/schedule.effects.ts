@@ -4,6 +4,7 @@ import { Action } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of, from } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 import * as ScheduleActions from '../actions/schedule.actions';
 import { ICourse } from '../models';
@@ -15,7 +16,7 @@ export class ScheduleEffects {
         ofType(ScheduleActions.ActionTypes.ADD_COURSE_ATTEMPT),
         mergeMap(
             (action: ScheduleActions.AddCourseAttemptAction) =>
-                this.http.post(`http://localhost:5000/users/courses/${action.payload}`, '')
+                this.http.post(`${environment.api}/users/courses/${action.payload}`, '')
                     .pipe(
                         // If successful, dispatch success action with result
                         map(
@@ -32,7 +33,7 @@ export class ScheduleEffects {
         ofType(ScheduleActions.ActionTypes.REMOVE_COURSE_ATTEMPT),
         mergeMap(
             (action: ScheduleActions.RemoveCourseAttemptAction) =>
-                this.http.delete(`http://localhost:5000/users/courses/${action.payload}`)
+                this.http.delete(`${environment.api}/users/courses/${action.payload}`)
                     .pipe(
                         // If successful, dispatch success action with result
                         map(
@@ -49,7 +50,7 @@ export class ScheduleEffects {
         ofType(ScheduleActions.ActionTypes.GET_COURSES_ATTEMPT),
         mergeMap(
             (action: ScheduleActions.GetCoursesAttemptAction) =>
-                this.http.get(`http://localhost:5000/users/courses/`)
+                this.http.get(`${environment.api}/users/courses/`)
                     .pipe(
                         // If successful, dispatch success action with result
                         map(
