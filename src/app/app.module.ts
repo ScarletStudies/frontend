@@ -10,11 +10,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { take } from 'rxjs/operators';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { routerReducer, StoreRouterConnectingModule } from '@ngrx/router-store';
+
 import { StoreModule, Store, select } from '@ngrx/store';
-import { reducers, IAppState } from './app.actions';
+import { reducers } from './reducers';
+import { IAppState } from './models';
+
 import { EffectsModule } from '@ngrx/effects';
-import { AuthEffects, ScheduleEffects } from './app.effects';
-import { RouterEffects } from './router.effects';
+import { APP_EFFECTS } from './effects';
 
 import { JwtModule, JWT_OPTIONS, JwtModuleOptions } from '@auth0/angular-jwt';
 
@@ -70,7 +72,7 @@ export function jwtOptionsFactory(store: Store<IAppState>) {
             router: routerReducer,
             ...reducers
         }),
-        EffectsModule.forRoot([AuthEffects, RouterEffects, ScheduleEffects]),
+        EffectsModule.forRoot(APP_EFFECTS),
         StoreRouterConnectingModule.forRoot({
             stateKey: 'router' // name of reducer key
         }),

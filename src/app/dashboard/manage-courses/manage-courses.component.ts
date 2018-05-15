@@ -6,11 +6,10 @@ import { debounceTime } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import {
     IAppState,
-    ICourse,
-    ScheduleAddCourseAttemptAction,
-    ScheduleRemoveCourseAttemptAction,
-    ScheduleGetCoursesAttemptAction
-} from '../../app.actions';
+    ICourse
+} from '../../models';
+
+import * as ScheduleActions from '../../actions/schedule.actions';
 
 @Component({
     selector: 'app-manage-courses',
@@ -43,7 +42,7 @@ export class ManageCoursesComponent implements OnInit, OnDestroy {
         );
 
         // setup and update course schedule
-        this.store.dispatch(new ScheduleGetCoursesAttemptAction());
+        this.store.dispatch(new ScheduleActions.GetCoursesAttemptAction());
         this.scheduleCourses$ = this.store
             .pipe(
                 select(state => state.schedule)
@@ -71,10 +70,10 @@ export class ManageCoursesComponent implements OnInit, OnDestroy {
     }
 
     public addCourseToSchedule(course: ICourse): void {
-        this.store.dispatch(new ScheduleAddCourseAttemptAction(course.id));
+        this.store.dispatch(new ScheduleActions.AddCourseAttemptAction(course.id));
     }
 
     public removeCourseFromSchedule(course: ICourse): void {
-        this.store.dispatch(new ScheduleRemoveCourseAttemptAction(course.id));
+        this.store.dispatch(new ScheduleActions.RemoveCourseAttemptAction(course.id));
     }
 }
