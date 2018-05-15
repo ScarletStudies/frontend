@@ -199,6 +199,12 @@ export class AppDashboard {
 }
 
 export class AppDashboardSideBar {
+    static courses = {
+        count() {
+            return element.all(by.css('app-root nav.sidebar a.course')).count();
+        }
+    };
+
     static navigateToManageCourses() {
         return element(by.css('app-root app-dashboard-home a.manage')).click();
     }

@@ -181,10 +181,21 @@ describe('dashboard', () => {
         await AppDashboard.navigateTo();
         await expect(AppPage.currentUrl()).toContain('dashboard');
     });
+});
 
-    it('should display a list of links to user courses', async () => {
-        await AppDashboard.navigateTo();
-        const courses_count = await AppDashboard.courses.count();
-        await expect(courses_count).toBeGreaterThan(0);
+describe('dashboard side bar', () => {
+    beforeEach(async () => {
+        await AppLogin.doTestCredentialsLogin();
+        await AppDashboardSideBar.navigateToManageCourses();
+        await AppManageCourses.courses.schedule.remove.all();
+
+        // add test courses for view in side bar
+        await AppManageCourses.courses.available.add.byIndex(0);
+        await AppManageCourses.courses.available.add.byIndex(1);
+        await AppManageCourses.courses.available.add.byIndex(2);
+    });
+
+    it('should display a list of the user\'s courses', async () => {
+        await expect(AppDashboardSideBar.courses.count()).toEqual(3);
     });
 });

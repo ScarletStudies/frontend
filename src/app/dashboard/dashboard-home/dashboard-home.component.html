@@ -25,9 +25,13 @@
 		</h6>
 
 		<ul class="nav flex-column mb-2">
-		    <li class="nav-item">
-			<a class="nav-link course" href="#">
-			    Linear Algebra
+		    <li class="nav-item"
+			*ngFor="let course of semesterCourses$ | async">
+			<a class="nav-link course"
+			   [routerLink]="['/dashboard', 'course', course.id]"
+			   routerLinkActive="active"
+			   [routerLinkActiveOptions]="{exact: true}">
+			    {{ course.name }}
 			</a>
 		    </li>
 		</ul>
