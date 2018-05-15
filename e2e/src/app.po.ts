@@ -110,11 +110,17 @@ export class AppLogin {
         return element(by.css('app-root app-login button[type=submit]')).click();
     }
 
-    static async doTestCredentialsLogin() {
-        await AppLogin.navigateTo();
-        await AppLogin.fields.email.edit(TEST_CREDENTIALS.email);
-        await AppLogin.fields.password.edit(TEST_CREDENTIALS.password);
-        await AppLogin.doLogin();
+    static doTestCredentialsLogin() {
+        return AppLogin.navigateTo()
+            .then(
+                () => AppLogin.fields.email.edit(TEST_CREDENTIALS.email)
+            )
+            .then(
+                () => AppLogin.fields.password.edit(TEST_CREDENTIALS.password)
+            )
+            .then(
+                () => AppLogin.doLogin()
+            );
     }
 }
 
@@ -234,6 +240,6 @@ export class AppDashboardSideBar {
     };
 
     static navigateToManageCourses() {
-        return element(by.css('app-root app-dashboard-home a.manage')).click();
+        return element(by.css('app-root nav.sidebar a.manage')).click();
     }
 }
