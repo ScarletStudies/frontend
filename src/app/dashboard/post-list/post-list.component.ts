@@ -56,7 +56,6 @@ export class PostListComponent implements OnInit, OnDestroy {
     }
 
     private updatePosts(queryParams?: IPostQueryParameters) {
-        console.log('hello world');
         this.posts$ = this.postService.get(queryParams);
     }
 }

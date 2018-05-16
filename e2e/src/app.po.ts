@@ -250,6 +250,12 @@ export class AppDashboardSideBar {
         }
     };
 
+    static navigateToCourse = {
+        byName(name: string) {
+            return element(by.cssContainingText('app-root nav.sidebar a.course', name)).click();
+        }
+    };
+
     static navigateToManageCourses() {
         return element(by.css('app-root nav.sidebar a.manage')).click();
     }
@@ -284,6 +290,29 @@ export class AppDashboardOverview {
     static message = {
         get() {
             return element(by.css('app-root app-dashboard-overview .empty-message')).getText();
+        }
+    };
+}
+
+export class AppDashboardCourseOverview {
+    static posts = {
+        get: {
+            count() {
+                return element.all(by.css('app-root app-course app-post-list-item')).count();
+            },
+            async all() {
+                const postRefs = await element.all(by.css('app-root app-course app-post-list-item'));
+
+                const posts = [];
+
+                for (const postRef of postRefs) {
+                    posts.push({
+                        course: await postRef.element(by.css('.course-name')).getText()
+                    });
+                }
+
+                return posts;
+            }
         }
     };
 }

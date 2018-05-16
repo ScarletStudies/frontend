@@ -1,6 +1,7 @@
 import {
     AppPage,
     AppDashboard,
+    AppDashboardCourseOverview,
     AppDashboardOverview,
     AppDashboardSideBar,
     AppFooter,
@@ -294,5 +295,40 @@ describe('dashboard semester overview', () => {
 
         // message
         await expect(AppDashboardOverview.message.get()).toContain('Your semester is empty');
+    });
+});
+
+describe('dashboard course overview', () => {
+    let course;
+
+    beforeEach(async () => {
+        await AppLogin.doTestCredentialsLogin();
+        await AppDashboardSideBar.navigateToManageCourses();
+        await AppManageCourses.courses.schedule.remove.all();
+
+        // add test courses for viewing posts in overview
+        await AppManageCourses.courses.available.add.byIndex(0);
+        await AppManageCourses.courses.available.add.byIndex(1);
+        await AppManageCourses.courses.available.add.byIndex(2);
+
+        // remember course name
+        course = await AppManageCourses.courses.schedule.get.byIndex(0);
+
+        // navigate to that course overview
+        await AppDashboardSideBar.navigateToCourse.byName(course);
+    });
+
+
+    it('should display a list of posts', async () => {
+        await expect(AppDashboardCourseOverview.posts.get.count()).toBeGreaterThan(0);
+    });
+
+    it('should display posts from a single courses', async () => {
+        const posts = await AppDashboardCourseOverview.posts.get.all();
+        const postCourses = posts.map(post => post.course);
+
+        for (const postCourse of postCourses) {
+            expect(postCourse).toContain(course);
+        }
     });
 });

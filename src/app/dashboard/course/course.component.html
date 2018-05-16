@@ -4,4 +4,5 @@
     </div>
 </div>
 
-<app-post-list></app-post-list>
+<app-post-list [courses]="courses$ | async"
+	       [limit]="10"></app-post-list>
