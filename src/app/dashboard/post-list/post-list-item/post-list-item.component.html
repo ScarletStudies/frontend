@@ -2,7 +2,7 @@
     <div class="media-body small border rounded p-1 border-gray">
 	<div class="d-flex mb-2 align-content-center">
 	    <strong class="text-gray-dark">
-		Lorem Ipsum - todo title
+		{{ post.title }}
 	    </strong>
 	    <span class="badge badge-info ml-auto course-name">
 		{{ post.course.name }}
@@ -11,7 +11,7 @@
 		{{ post.category.name }}
 	    </span>
 	    <span class="badge badge-info ml-1">
-		Fall 2018
+		{{ post.semester.season }} {{ post.semester.year }}
 	    </span>
 	</div>
         <p class="mb-2">
@@ -19,7 +19,7 @@
 	</p>
 	<div class="font-weight-light d-flex">
 	    <span>
-		100 cheers &bull; 42 comments &bull; {{ post.timestamp | date }} &bull; test@example.com
+		{{ post.cheers_count }} cheers &bull; {{ post.comments_count }} comments &bull; {{ post.timestamp | date }} &bull; {{ post.author.email }}
 	    </span>
 	    <a class="ml-auto" href="#">
 		View Post
