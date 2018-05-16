@@ -1,6 +1,7 @@
 import {
     AppPage,
     AppDashboard,
+    AppDashboardOverview,
     AppDashboardSideBar,
     AppFooter,
     AppHome,
@@ -250,3 +251,48 @@ describe('dashboard side bar', () => {
     });
 });
 
+
+describe('dashboard semester overview', () => {
+    let courses = [];
+
+    beforeEach(async () => {
+        await AppLogin.doTestCredentialsLogin();
+        await AppDashboardSideBar.navigateToManageCourses();
+        await AppManageCourses.courses.schedule.remove.all();
+
+        // add test courses for viewing posts in overview
+        await AppManageCourses.courses.available.add.byIndex(0);
+        await AppManageCourses.courses.available.add.byIndex(1);
+        await AppManageCourses.courses.available.add.byIndex(2);
+
+        // remember course names
+        courses = await AppManageCourses.courses.schedule.get.all();
+
+        await AppDashboardSideBar.navigateToDashboardOverview();
+    });
+
+    it('should display a list of posts', async () => {
+        await expect(AppDashboardOverview.posts.get.count()).toBeGreaterThan(0);
+    });
+
+    it('should display posts from multiple courses', async () => {
+        const posts = await AppDashboardOverview.posts.get.all();
+        const postCourses = posts.map(post => post.course);
+
+        for (const course of courses) {
+            expect(postCourses).toContain(course);
+        }
+    });
+
+    it('should display a message when the user has no courses in semester', async () => {
+        await AppDashboardSideBar.navigateToManageCourses();
+        await AppManageCourses.courses.schedule.remove.all();
+        await AppDashboardSideBar.navigateToDashboardOverview();
+
+        // no posts displayed
+        await expect(AppDashboardOverview.posts.get.count()).toEqual(0);
+
+        // message
+        await expect(AppDashboardOverview.message.get()).toContain('Your semester is empty');
+    });
+});

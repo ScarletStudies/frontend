@@ -253,4 +253,37 @@ export class AppDashboardSideBar {
     static navigateToManageCourses() {
         return element(by.css('app-root nav.sidebar a.manage')).click();
     }
+
+    static navigateToDashboardOverview() {
+        return element(by.css('app-root nav.sidebar a.dashboard')).click();
+    }
+}
+
+export class AppDashboardOverview {
+    static posts = {
+        get: {
+            count() {
+                return element.all(by.css('app-root app-dashboard-overview app-post-list-item')).count();
+            },
+            async all() {
+                const postRefs = await element.all(by.css('app-root app-dashboard-overview app-post-list-item'));
+
+                const posts = [];
+
+                for (const postRef of postRefs) {
+                    posts.push({
+                        course: await postRef.element(by.css('.course-name')).getText()
+                    });
+                }
+
+                return posts;
+            }
+        }
+    };
+
+    static message = {
+        get() {
+            return element(by.css('app-root app-dashboard-overview .empty-message')).getText();
+        }
+    };
 }

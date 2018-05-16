@@ -4,4 +4,16 @@
     </div>
 </div>
 
-<app-post-list></app-post-list>
+<div *ngIf="semesterCourses$ | async; let courses">
+    <app-post-list *ngIf="courses?.length > 0"
+		   [courses]="courses"
+		   [limit]="10"></app-post-list>
+
+    <div *ngIf="courses?.length === 0"
+	 class="empty-message">
+	<h3>Your semester is empty!</h3>
+	<p>Navigate to <a routerLink="/dashboard/manage">course manager</a> and add your current courses.</p>
+    </div>
+
+</div>
+

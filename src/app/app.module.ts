@@ -62,7 +62,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
         LoginComponent,
         RegisterComponent,
         HeaderComponent,
-        FooterComponent
+        FooterComponent,
     ],
     imports: [
         BrowserModule,
