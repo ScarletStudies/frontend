@@ -7,6 +7,8 @@ import { environment } from '../environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 import { take } from 'rxjs/operators';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { routerReducer, StoreRouterConnectingModule } from '@ngrx/router-store';
@@ -89,7 +91,8 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
         StoreDevtoolsModule.instrument({
             maxAge: 25, // retains last 25 states
             logOnly: environment.production
-        })
+        }),
+        NgbModule.forRoot()
     ],
     providers: [
         ...APP_SERVICES

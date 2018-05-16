@@ -331,4 +331,21 @@ describe('dashboard course overview', () => {
             expect(postCourse).toContain(course);
         }
     });
+
+    it('should add a post', async () => {
+        const post = {
+            title: 'I am an e2e title',
+            content: 'I am an e2e content',
+            category: 'Exam'
+        };
+
+        await AppDashboardCourseOverview.posts.add(post);
+
+        const posts = await AppDashboardCourseOverview.posts.get.all();
+
+        const found = posts.find(potential => potential.title === post.title && potential.content === post.content);
+
+        await expect(found).toBeTruthy();
+    });
 });
+

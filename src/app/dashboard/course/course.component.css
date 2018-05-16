@@ -2,3 +2,6 @@
 
 .lh-100 { line-height: 1; }
 
+.backdrop {
+    background-color: #DDDDDD;
+}

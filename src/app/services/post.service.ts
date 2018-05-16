@@ -53,4 +53,12 @@ export class PostService {
                 { params }
             );
     }
+
+    public add(title: string, content: string, course_id: string, category_id: string): Observable<void> {
+        return this.http
+            .post<void>(
+                `${environment.api}/posts/`,
+                { title, content, course_id, category_id }
+            );
+    }
 }

@@ -154,11 +154,6 @@ export class AppManageCourses {
             edit(text: string) {
                 return element(by.css('app-root app-manage-courses input.search')).sendKeys(text);
             }
-        },
-        subject: {
-            select(optionPartial: string) {
-                return element(by.cssContainingText('option', optionPartial)).click();
-            }
         }
     };
 
@@ -278,7 +273,7 @@ export class AppDashboardOverview {
 
                 for (const postRef of postRefs) {
                     posts.push({
-                        course: await postRef.element(by.css('.course-name')).getText()
+                        course: await postRef.element(by.css('.post-course')).getText()
                     });
                 }
 
@@ -307,12 +302,25 @@ export class AppDashboardCourseOverview {
 
                 for (const postRef of postRefs) {
                     posts.push({
-                        course: await postRef.element(by.css('.course-name')).getText()
+                        course: await postRef.element(by.css('.post-course')).getText(),
+                        title: await postRef.element(by.css('.post-title')).getText(),
+                        content: await postRef.element(by.css('.post-content')).getText(),
                     });
                 }
 
                 return posts;
             }
+        },
+        async add({ title, content, category }) {
+            await element(by.css('app-root app-course .open-new-post-modal')).click();
+
+            // input data
+            await element(by.css('.new-post-modal-body textarea#newPostContent')).sendKeys(content);
+            await element(by.css('.new-post-modal-body input#newPostTitle')).sendKeys(title);
+
+            await element(by.cssContainingText('.new-post-modal-body #newPostCategory option', category)).click();
+
+            await element(by.css('.new-post-modal-body button[type=submit]')).click();
         }
     };
 }

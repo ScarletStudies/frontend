@@ -1,9 +1,13 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, EventEmitter } from '@angular/core';
 import { Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { ICourse, IPost } from '../../models';
 import { PostService, IPostQueryParameters } from '../../services';
+
+export interface IRefreshEvent {
+    type: 'refresh';
+}
 
 @Component({
     selector: 'app-post-list',
@@ -28,25 +32,34 @@ export class PostListComponent implements OnInit, OnDestroy {
         });
     }
 
+    @Input()
+    public set refreshEvents(events: EventEmitter<IRefreshEvent>) {
+        this.subscriptions.push(
+            events.subscribe(
+                () => this.updatePosts(this.queryParams$.value)
+            )
+        );
+    }
+
     public posts$: Observable<IPost[]> = null;
 
-    private queryParams$: BehaviorSubject<IPostQueryParameters> = new BehaviorSubject<IPostQueryParameters>({});
+    private queryParams$ = new BehaviorSubject<IPostQueryParameters>({});
 
     private subscriptions: Subscription[] = [];
 
     constructor(private postService: PostService) { }
 
     ngOnInit() {
-        const sub = this.queryParams$
-            .pipe(
-                distinctUntilChanged(),
-                debounceTime(250)
-            )
-            .subscribe(
-                this.updatePosts.bind(this)
-            );
-
-        this.subscriptions.push(sub);
+        this.subscriptions.push(
+            this.queryParams$
+                .pipe(
+                    distinctUntilChanged(),
+                    debounceTime(250)
+                )
+                .subscribe(
+                    this.updatePosts.bind(this)
+                )
+        );
     }
 
     ngOnDestroy() {

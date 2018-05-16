@@ -1,20 +1,20 @@
 <div class="media text-muted post-listing pt-3 px-2">
     <div class="media-body small border rounded p-1 border-gray">
 	<div class="d-flex mb-2 align-content-center">
-	    <strong class="text-gray-dark">
+	    <strong class="text-gray-dark post-title">
 		{{ post.title }}
 	    </strong>
-	    <span class="badge badge-info ml-auto course-name">
+	    <span class="badge badge-info ml-auto post-course">
 		{{ post.course.name }}
 	    </span>
-	    <span class="badge badge-info ml-1">
+	    <span class="badge badge-info ml-1 post-category">
 		{{ post.category.name }}
 	    </span>
-	    <span class="badge badge-info ml-1">
+	    <span class="badge badge-info ml-1 post-semester">
 		{{ post.semester.season }} {{ post.semester.year }}
 	    </span>
 	</div>
-        <p class="mb-2">
+        <p class="mb-2 post-content">
 	    {{ post.content }}
 	</p>
 	<div class="font-weight-light d-flex">
