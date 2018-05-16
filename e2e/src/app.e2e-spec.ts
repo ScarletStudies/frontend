@@ -3,6 +3,7 @@ import {
     AppDashboard,
     AppDashboardCourseOverview,
     AppDashboardOverview,
+    AppDashboardPostView,
     AppDashboardSideBar,
     AppFooter,
     AppHome,
@@ -346,6 +347,25 @@ describe('dashboard course overview', () => {
         const found = posts.find(potential => potential.title === post.title && potential.content === post.content);
 
         await expect(found).toBeTruthy();
+    });
+
+    it('should view a post', async () => {
+        const post = await AppDashboardCourseOverview.posts.get.byIndex(0);
+        await AppDashboardCourseOverview.posts.open.byIndex(0);
+
+        await expect(AppDashboardPostView.post.get()).toEqual(post);
+    });
+
+    it('should view the comments of a post', async () => {
+        // todo combine with add a comment
+
+        await AppDashboardCourseOverview.posts.open.byIndex(0);
+
+        const comment = await AppDashboardPostView.comments.get.byIndex(0);
+
+        await expect(comment.content).toBeTruthy();
+        await expect(comment.timestamp).toBeTruthy();
+        await expect(comment.author).toBeTruthy();
     });
 });
 

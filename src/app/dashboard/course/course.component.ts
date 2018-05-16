@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
@@ -11,7 +11,6 @@ import { IAppState, ICourse, ICategory } from '../../models';
 import { IRefreshEvent } from '../post-list/post-list.component';
 
 @Component({
-    encapsulation: ViewEncapsulation.None,
     selector: 'app-course',
     templateUrl: './course.component.html',
     styleUrls: ['./course.component.css']

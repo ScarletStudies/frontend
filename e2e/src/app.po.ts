@@ -309,6 +309,16 @@ export class AppDashboardCourseOverview {
                 }
 
                 return posts;
+            },
+            async byIndex(index: number) {
+                const postRef = await element.all(by.css('app-root app-course app-post-list-item'))
+                    .get(index);
+
+                return {
+                    course: await postRef.element(by.css('.post-course')).getText(),
+                    title: await postRef.element(by.css('.post-title')).getText(),
+                    content: await postRef.element(by.css('.post-content')).getText(),
+                };
             }
         },
         async add({ title, content, category }) {
@@ -321,6 +331,40 @@ export class AppDashboardCourseOverview {
             await element(by.cssContainingText('.new-post-modal-body #newPostCategory option', category)).click();
 
             await element(by.css('.new-post-modal-body button[type=submit]')).click();
+        },
+        open: {
+            byIndex(index: number) {
+                return element.all(by.css('app-root app-course app-post-list-item .open-view-post-modal'))
+                    .get(index)
+                    .click();
+            }
+        }
+    };
+}
+
+export class AppDashboardPostView {
+    static post = {
+        async get() {
+            return {
+                course: await element(by.css('.view-post-modal-body .post-course')).getText(),
+                title: await element(by.css('.view-post-modal-body .post-title')).getText(),
+                content: await element(by.css('.view-post-modal-body .post-content')).getText()
+            };
+        }
+    };
+
+    static comments = {
+        get: {
+            async byIndex(index: number) {
+                const commentRef = await element.all(by.css('.view-post-modal-body .post-comment'))
+                    .get(index);
+
+                return {
+                    content: await commentRef.element(by.css('.comment-content')).getText(),
+                    timestamp: await commentRef.element(by.css('.comment-timestamp')).getText(),
+                    author: await commentRef.element(by.css('.comment-author')).getText()
+                };
+            }
         }
     };
 }

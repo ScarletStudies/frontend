@@ -1,3 +1,19 @@
+<div class="d-flex align-items-center p-3 my-3 bg-teal rounded box-shadow">
+    <div class="ml-2 lh-100">
+        <h6 class="mb-0 lh-100">Course Overview</h6>
+    </div>
+</div>
+
+<button type="button"
+	      class="btn open-new-post-modal"
+	      (click)="open(content)">
+    New Post
+</button>
+
+<app-post-list [courses]="[course]"
+	       [limit]="10"
+	       [refreshEvents]="refreshEvents"></app-post-list>
+
 <ng-template #content let-c="close" let-d="dismiss">
     <div class="modal-header">
 	<h4 class="modal-title">New Post</h4>
@@ -17,8 +33,8 @@
 	    <div class="form-group">
 		<label for="newPostCategory">Category</label>
 		<select #category
-			class="form-control" 
-			id="newPostCategory">
+		    class="form-control" 
+			   id="newPostCategory">
 		    <option *ngFor="let category of categories$ | async"
 			    [value]="category.id">
 			{{ category.name }}
@@ -43,19 +59,3 @@
 	<button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
     </div>
 </ng-template>
-
-<div class="d-flex align-items-center p-3 my-3 bg-teal rounded box-shadow">
-    <div class="ml-2 lh-100">
-        <h6 class="mb-0 lh-100">Course Overview</h6>
-    </div>
-</div>
-
-<button type="button"
-	class="btn open-new-post-modal"
-	(click)="open(content)">
-    New Post
-</button>
-
-<app-post-list [courses]="[course]"
-	       [limit]="10"
-	       [refreshEvents]="refreshEvents"></app-post-list>
