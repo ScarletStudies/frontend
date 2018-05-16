@@ -152,17 +152,10 @@ describe('register', () => {
 });
 
 describe('manage courses', () => {
-    beforeEach(done => {
-        AppLogin.doTestCredentialsLogin()
-            .then(
-                () => AppDashboardSideBar.navigateToManageCourses()
-            )
-            .then(
-                () => AppManageCourses.courses.schedule.remove.all()
-            )
-            .then(
-                done
-            );
+    beforeEach(async () => {
+        await AppLogin.doTestCredentialsLogin();
+        await AppDashboardSideBar.navigateToManageCourses();
+        await AppManageCourses.courses.schedule.remove.all();
     });
 
     it('should navigate to manage courses', async () => {

@@ -9,6 +9,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overview.component';
 import { ManageCoursesScheduleComponent } from './manage-courses/manage-courses-schedule/manage-courses-schedule.component';
 import { ManageCoursesAddComponent } from './manage-courses/manage-courses-add/manage-courses-add.component';
+import { CourseComponent } from './course/course.component';
+import { PostListComponent } from './post-list/post-list.component';
+import { PostListItemComponent } from './post-list/post-list-item/post-list-item.component';
 
 
 @NgModule({
@@ -23,7 +26,10 @@ import { ManageCoursesAddComponent } from './manage-courses/manage-courses-add/m
         DashboardComponent,
         DashboardOverviewComponent,
         ManageCoursesScheduleComponent,
-        ManageCoursesAddComponent
+        ManageCoursesAddComponent,
+        CourseComponent,
+        PostListComponent,
+        PostListItemComponent
     ]
 })
 export class DashboardModule { }

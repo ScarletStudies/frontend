@@ -208,8 +208,19 @@ export class AppManageCourses {
                         .click();
                 },
                 all() {
-                    return element.all(by.css('app-root app-manage-courses .course.schedule button.remove'))
-                        .each(ef => ef.click());
+                    return new Promise(
+                        async resolve => {
+                            const selector = 'app-root app-manage-courses .course.schedule button.remove';
+                            while (0 < await element.all(by.css(selector)).count()) {
+                                await element.all(by.css('app-root app-manage-courses .course.schedule button.remove'))
+                                    .first()
+                                    .click();
+                            }
+
+                            resolve();
+                        }
+                    );
+
                 }
             }
         }
