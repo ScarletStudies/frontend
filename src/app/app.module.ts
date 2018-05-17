@@ -9,6 +9,9 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
+import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
+
 import { take } from 'rxjs/operators';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { routerReducer, StoreRouterConnectingModule } from '@ngrx/router-store';
@@ -92,7 +95,9 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
             maxAge: 25, // retains last 25 states
             logOnly: environment.production
         }),
-        NgbModule.forRoot()
+        NgbModule.forRoot(),
+        LoadingBarHttpClientModule,
+        LoadingBarRouterModule
     ],
     providers: [
         ...APP_SERVICES
