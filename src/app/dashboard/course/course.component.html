@@ -1,14 +1,16 @@
 <div class="d-flex align-items-center p-3 my-3 bg-teal rounded box-shadow">
     <div class="ml-2 lh-100">
-        <h6 class="mb-0 lh-100">Course Overview</h6>
+        <h6 class="mb-0 lh-100">{{ course?.name }}</h6>
+    </div>
+
+    <div class="ml-auto mr-2">
+	<button type="button"
+		class="btn open-new-post-modal"
+		(click)="open(content)">
+	    New Post
+	</button>
     </div>
 </div>
-
-<button type="button"
-	      class="btn open-new-post-modal"
-	      (click)="open(content)">
-    New Post
-</button>
 
 <app-post-list [courses]="[course]"
 	       [limit]="10"
@@ -16,7 +18,7 @@
 
 <ng-template #content let-c="close" let-d="dismiss">
     <div class="modal-header">
-	<h4 class="modal-title">New Post</h4>
+	<h5 class="modal-title">New Post</h5>
 	<button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
 	    <span aria-hidden="true">&times;</span>
 	</button>
@@ -28,7 +30,8 @@
 		<input #title
 		       type="text"
 		       class="form-control"
-		       id="newPostTitle">
+		       id="newPostTitle"
+		       placeholder="Title...">
 	    </div>
 	    <div class="form-group">
 		<label for="newPostCategory">Category</label>
@@ -46,7 +49,8 @@
 		<textarea #content
 			  class="form-control" 
 			  id="newPostContent" 
-			  rows="5"></textarea>
+			  rows="5"
+			  placeholder="Content..."></textarea>
 	    </div>
 
 	    <button type="submit"
@@ -54,8 +58,5 @@
 		Submit
 	    </button>
 	</form>
-    </div>
-    <div class="modal-footer">
-	<button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
     </div>
 </ng-template>

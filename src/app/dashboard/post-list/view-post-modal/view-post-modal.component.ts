@@ -4,6 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 
 import { PostService } from '../../../services';
 import { IPost, IPostWithComments } from '../../../models';
+import { IPostListItemOptions } from '../post-list-item/post-list-item.component';
 
 @Component({
     selector: 'app-view-post-modal',
@@ -13,22 +14,27 @@ import { IPost, IPostWithComments } from '../../../models';
 export class ViewPostModalComponent implements OnInit, OnDestroy {
 
     @Input()
-    public set post(post: IPost) {
-        this.postId = post.id;
+    public set postId(postId: string) {
+        this._postId = postId;
 
         this.refresh();
     }
 
     public post$: Observable<IPostWithComments> = null;
 
-    private postId: string;
+    public itemOptions: IPostListItemOptions = {
+        action: 'cheer',
+        hideBorderBottom: true,
+        hideCourseName: false
+    };
+
+    private _postId: string;
     private subscriptions: Subscription[] = [];
 
     constructor(public activeModal: NgbActiveModal,
         private postService: PostService) { }
 
-    ngOnInit() {
-    }
+    ngOnInit() { }
 
     ngOnDestroy() {
         for (const sub of this.subscriptions) {
@@ -37,13 +43,13 @@ export class ViewPostModalComponent implements OnInit, OnDestroy {
     }
 
     private refresh(): void {
-        this.post$ = this.postService.one(this.postId);
+        this.post$ = this.postService.one(this._postId);
     }
 
     public comment(content: string): void {
         this.subscriptions.push(
             this.postService
-                .comment(this.postId, content)
+                .comment(this._postId, content)
                 .subscribe(
                     this.refresh.bind(this)
                 )
@@ -53,7 +59,7 @@ export class ViewPostModalComponent implements OnInit, OnDestroy {
     public cheer(): void {
         this.subscriptions.push(
             this.postService
-                .cheer(this.postId)
+                .cheer(this._postId)
                 .subscribe(
                     this.refresh.bind(this)
                 )

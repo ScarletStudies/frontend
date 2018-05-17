@@ -1,83 +1,53 @@
 <div class="modal-header">
-    <h4 class="modal-title">View Post</h4>
+    <h5 class="modal-title">View Post</h5>
     <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
 	<span aria-hidden="true">&times;</span>
     </button>
 </div>
-<div class="modal-body view-post-modal-body">
-    <div *ngIf="post$ | async; let myPost">
-	<div class="media text-muted post-listing pt-3 px-2">
-	    <div class="media-body small border rounded p-1 border-gray">
-		<button type="button"
-			class="btn cheer"
-			(click)="cheer()">
-		    Cheer
+<div class="modal-body view-post-modal-body p-1"
+     *ngIf="post$ | async; let post">
+    <app-post-list-item [post]="post"
+			[options]="itemOptions"
+			(cheer)="cheer()"></app-post-list-item>
+
+    <form (submit)="comment(content.value)"
+		    class="media-body p-2">
+	<div class="input-group">
+	    <textarea #content
+		      id="comment-content"
+		      class="form-control"
+		      rows="3"
+		      placeholder="Add comment..."></textarea>
+	    <div class="input-group-append">
+		<button id="comment-submit"
+			type="button"
+			class="btn btn-outline-secondary"
+			(click)="comment(content.value)">
+		    Submit
 		</button>
-		<div class="d-flex mb-2 align-content-center">
-		    <strong class="text-gray-dark post-title">
-			{{ myPost.title }}
-		    </strong>
-		    <span class="badge badge-info ml-auto post-course">
-			{{ myPost.course.name }}
-		    </span>
-		    <span class="badge badge-info ml-1 post-category">
-			{{ myPost.category.name }}
-		    </span>
-		    <span class="badge badge-info ml-1 post-semester">
-			{{ myPost.semester.season }} {{ myPost.semester.year }}
-		    </span>
-		</div>
-		<p class="mb-2 post-content">
-		    {{ myPost.content }}
-		</p>
-		<div class="font-weight-light">
-		    <span class="cheer-count">
-			{{ myPost.cheers_count }} cheer(s)
-		    </span>
-		    &bull;
-		    {{ myPost.comments_count }} comment(s)
-		    &bull;
-		    {{ myPost.timestamp | date }}
-		    &bull;
-		    <span class="post-author">
-			{{ myPost.author.email }}
-		    </span>
-		</div>
 	    </div>
 	</div>
-	<ul class="list-unstyled">
-	    <li class="media add-comment">
-		<form (submit)="comment(content.value)">
-		    <div class="media-body">
-			<textarea #content
-				  id="comment-content"
-				  class="form-control"
-				  rows="3"></textarea>
-			<button id="comment-submit"
-				type="submit"
-				class="btn btn-primary">
-			    Submit
-			</button>
-		    </div>
-		</form>
-	    </li>
-	    <li class="media post-comment"
-		*ngFor="let comment of myPost.comments">
-		<div class="media-body">
-		    <p class="comment-content">
-			{{ comment.content }}
-		    </p>
-		    <p>
-			<span class="comment-timestamp">
-			    {{ comment.timestamp | date }}
-			</span>
-			&bull;
-			<span class="comment-author">
-			    {{ comment.author.email }}
-			</span>
-		    </p>
-		</div>
-	    </li>
-	</ul>
-    </div>
+    </form>
+
+    <ul class="list-unstyled mb-2">
+	<li *ngFor="let comment of post.comments; last as isLast"
+	    class="media post-comment border-bottom border-gray py-2"
+	    [class.border-bottom-0]="isLast">
+	    <div class="media-body ml-3">
+		<p class="comment-content mb-1">
+		    {{ comment.content }}
+		</p>
+		<span class="small">
+		    <span class="comment-timestamp">
+			{{ comment.timestamp | date }}
+		    </span>
+		    &bull;
+		    <span class="comment-author">
+			{{ comment.author.email }}
+		    </span>
+		</span>
+	    </div>
+	</li>
+    </ul>
 </div>
+

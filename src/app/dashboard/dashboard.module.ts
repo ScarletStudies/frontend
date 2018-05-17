@@ -15,6 +15,7 @@ import { CourseComponent } from './course/course.component';
 import { PostListComponent } from './post-list/post-list.component';
 import { PostListItemComponent } from './post-list/post-list-item/post-list-item.component';
 import { ViewPostModalComponent } from './post-list/view-post-modal/view-post-modal.component';
+import { CheerImageComponent } from './post-list/cheer-image/cheer-image.component';
 
 @NgModule({
     imports: [
@@ -33,7 +34,8 @@ import { ViewPostModalComponent } from './post-list/view-post-modal/view-post-mo
         CourseComponent,
         PostListComponent,
         PostListItemComponent,
-        ViewPostModalComponent
+        ViewPostModalComponent,
+        CheerImageComponent
     ],
     entryComponents: [
         ViewPostModalComponent

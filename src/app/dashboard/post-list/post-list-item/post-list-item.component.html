@@ -1,31 +1,59 @@
-<div class="media text-muted post-listing pt-3 px-2">
-    <div class="media-body small border rounded p-1 border-gray">
-	<div class="d-flex mb-2 align-content-center">
-	    <strong class="text-gray-dark post-title">
+<div class="media post-listing pt-1 px-2 border-bottom border-gray"
+     [class.border-bottom-0]="options.hideBorderBottom">
+    <app-cheer-image class="mr-3 align-self-center"
+		     [count]="post.cheers_count"></app-cheer-image>
+
+    <div class="media-body p-1">
+	<div class="d-flex mb-2">
+	    <strong class="text-gray-dark post-title mr-auto">
 		{{ post.title }}
 	    </strong>
-	    <span class="badge badge-info ml-auto post-course">
+	    <span class="badge bg-green post-course"
+		  *ngIf="!options.hideCourseName">
 		{{ post.course.name }}
 	    </span>
-	    <span class="badge badge-info ml-1 post-category">
+	    <span class="badge bg-aqua ml-1 post-category">
 		{{ post.category.name }}
 	    </span>
-	    <span class="badge badge-info ml-1 post-semester">
+	    <span class="badge bg-teal ml-1 post-semester">
 		{{ post.semester.season }} {{ post.semester.year }}
 	    </span>
 	</div>
+
         <p class="mb-2 post-content">
 	    {{ post.content }}
 	</p>
+
 	<div class="font-weight-light d-flex">
-	    <span>
-		{{ post.cheers_count }} cheers &bull; {{ post.comments_count }} comments &bull; {{ post.timestamp | date }} &bull; <span class="post-author">{{ post.author.email }}</span>
+	    <span class="small">
+		{{ post.timestamp | date }}
+		&bull;
+		<span class="post-author">
+		    {{ post.author.email }}
+		</span>
+		&bull;
+		<span class="cheer-count">
+		    {{ post.cheers_count }} cheer(s)
+		</span>
+		&bull;
+		{{ post.comments_count }} comment(s)
 	    </span>
-	    <button type="button"
-		    class="btn btn-sm ml-auto open-view-post-modal"
-		    (click)="open()">
-		View Post
-	    </button>
+
+	    <ng-container [ngSwitch]="options.action">
+		<button *ngSwitchDefault
+			type="button"
+			class="btn btn-sm ml-auto open-view-post-modal"
+			(click)="open()">
+		    View Post
+		</button>
+
+		<button *ngSwitchCase="'cheer'"
+			type="button"
+			class="btn btn-primary btn-sm ml-auto cheer"
+			(click)="cheer.emit()">
+		    Cheer Post
+		</button>
+	    </ng-container>
 	</div>
     </div>
 </div>

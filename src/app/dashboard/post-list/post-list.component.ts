@@ -4,6 +4,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { ICourse, IPost } from '../../models';
 import { PostService, IPostQueryParameters } from '../../services';
+import { IPostListItemOptions } from './post-list-item/post-list-item.component';
 
 export interface IRefreshEvent {
     type: 'refresh';
@@ -40,6 +41,9 @@ export class PostListComponent implements OnInit, OnDestroy {
             )
         );
     }
+
+    @Input()
+    public itemOptions: IPostListItemOptions = {};
 
     public posts$: Observable<IPost[]> = null;
 

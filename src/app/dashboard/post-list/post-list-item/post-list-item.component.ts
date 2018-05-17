@@ -1,9 +1,15 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { ViewPostModalComponent } from '../view-post-modal/view-post-modal.component';
 
 import { IPost } from '../../../models';
+
+export interface IPostListItemOptions {
+    hideBorderBottom?: boolean;
+    hideCourseName?: boolean;
+    action?: 'view' | 'cheer';
+}
 
 @Component({
     selector: 'app-post-list-item',
@@ -14,6 +20,12 @@ export class PostListItemComponent implements OnInit {
 
     @Input()
     public post: IPost = null;
+
+    @Input()
+    public options: IPostListItemOptions = {};
+
+    @Output()
+    public cheer = new EventEmitter<void>();
 
     constructor(private modalService: NgbModal) { }
 
@@ -26,6 +38,6 @@ export class PostListItemComponent implements OnInit {
             { size: 'lg', backdropClass: 'backdrop' }
         );
 
-        modalRef.componentInstance.post = this.post;
+        modalRef.componentInstance.postId = this.post.id;
     }
 }
