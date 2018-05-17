@@ -23,58 +23,10 @@
 	    </span>
 	    <button type="button"
 		    class="btn btn-sm ml-auto open-view-post-modal"
-		    (click)="open(content)">
+		    (click)="open()">
 		View Post
 	    </button>
 	</div>
     </div>
 </div>
 
-<ng-template #content let-c="close" let-d="dismiss">
-    <div class="modal-header">
-	<h4 class="modal-title">View Post</h4>
-	<button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-	    <span aria-hidden="true">&times;</span>
-	</button>
-    </div>
-    <div class="modal-body view-post-modal-body">
-	<div class="media text-muted post-listing pt-3 px-2">
-	    <div class="media-body small border rounded p-1 border-gray">
-		<div class="d-flex mb-2 align-content-center">
-		    <strong class="text-gray-dark post-title">
-			{{ post.title }}
-		    </strong>
-		    <span class="badge badge-info ml-auto post-course">
-			{{ post.course.name }}
-		    </span>
-		    <span class="badge badge-info ml-1 post-category">
-			{{ post.category.name }}
-		    </span>
-		    <span class="badge badge-info ml-1 post-semester">
-			{{ post.semester.season }} {{ post.semester.year }}
-		    </span>
-		</div>
-		<p class="mb-2 post-content">
-		    {{ post.content }}
-		</p>
-		<div class="font-weight-light">
-		    {{ post.cheers_count }} cheers &bull; {{ post.comments_count }} comments &bull; {{ post.timestamp | date }} &bull; <span class="post-author">{{ post.author.email }}</span>
-		</div>
-	    </div>
-	</div>
-	<ul class="list-unstyled">
-	    <li class="media post-comment">
-		<div class="media-body">
-		    <p class="comment-content">
-			Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-		    </p>
-		    <p>
-			<span class="comment-timestamp">May 16, 2018</span>
-			&bull;
-			<span class="comment-author">commenter@example.com</span>
-		    </p>
-		</div>
-	    </li>
-	</ul>
-    </div>
-</ng-template>

@@ -215,7 +215,7 @@ describe('dashboard course overview', () => {
 
         // should only display posts from the selected course
         let posts = await AppDashboardCourseOverview.posts.get.all();
-        const postCourseNames = posts.map(post => post.course);
+        const postCourseNames = posts.map(p => p.course);
 
         for (const postCourseName of postCourseNames) {
             expect(postCourseName)
@@ -243,13 +243,15 @@ describe('dashboard course overview', () => {
         await expect(AppDashboardPostView.post.get())
             .toEqual(post, 'viewed post does not equal expected post');
 
-        // todo should add a comment
+        const comment = {
+            content: 'I am a comment',
+            author: TEST_CREDENTIALS.email
+        };
 
-        // todo should view the post comments
-        const comment = await AppDashboardPostView.comments.get.byIndex(0);
+        await AppDashboardPostView.comments.add(comment);
 
-        await expect(comment.content)
-            .toBeTruthy('comment content not displayed');
+        await expect(AppDashboardPostView.comments.get.byIndex(0))
+            .toEqual(comment, 'comment content not displayed');
     });
 });
 

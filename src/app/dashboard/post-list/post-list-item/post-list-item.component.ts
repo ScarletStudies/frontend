@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
+import { ViewPostModalComponent } from '../view-post-modal/view-post-modal.component';
+
 import { IPost } from '../../../models';
 
 @Component({
@@ -18,7 +20,12 @@ export class PostListItemComponent implements OnInit {
     ngOnInit() {
     }
 
-    public open(content): void {
-        this.modalService.open(content, { size: 'lg', backdropClass: 'backdrop' });
+    public open(): void {
+        const modalRef = this.modalService.open(
+            ViewPostModalComponent,
+            { size: 'lg', backdropClass: 'backdrop' }
+        );
+
+        modalRef.componentInstance.post = this.post;
     }
 }

@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 import { DashboardRoutingModule } from './dashboard-routing.module';
 
 import { ManageCoursesComponent } from './manage-courses/manage-courses.component';
@@ -12,14 +14,15 @@ import { ManageCoursesAddComponent } from './manage-courses/manage-courses-add/m
 import { CourseComponent } from './course/course.component';
 import { PostListComponent } from './post-list/post-list.component';
 import { PostListItemComponent } from './post-list/post-list-item/post-list-item.component';
-
+import { ViewPostModalComponent } from './post-list/view-post-modal/view-post-modal.component';
 
 @NgModule({
     imports: [
         CommonModule,
         DashboardRoutingModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        NgbModule
     ],
     declarations: [
         ManageCoursesComponent,
@@ -29,7 +32,11 @@ import { PostListItemComponent } from './post-list/post-list-item/post-list-item
         ManageCoursesAddComponent,
         CourseComponent,
         PostListComponent,
-        PostListItemComponent
+        PostListItemComponent,
+        ViewPostModalComponent
+    ],
+    entryComponents: [
+        ViewPostModalComponent
     ]
 })
 export class DashboardModule { }

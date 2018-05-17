@@ -382,10 +382,16 @@ export class AppDashboardPostView {
 
                 return {
                     content: await commentRef.element(by.css('.comment-content')).getText(),
-                    timestamp: await commentRef.element(by.css('.comment-timestamp')).getText(),
                     author: await commentRef.element(by.css('.comment-author')).getText()
                 };
             }
+        },
+        add({ content }) {
+            return element(by.css('.view-post-modal-body textarea#comment-content'))
+                .sendKeys(content)
+                .then(
+                    () => element(by.css('.view-post-modal-body button#comment-submit')).click()
+                );
         }
     };
 }

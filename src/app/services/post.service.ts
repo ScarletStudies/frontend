@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 
-import { IPost, ICourse, ICategory } from '../models';
+import { IPost, IPostWithComments, ICourse, ICategory } from '../models';
 
 export interface IPostQueryParameters {
     courses?: ICourse[];
@@ -20,7 +20,23 @@ export interface IPostQueryParameters {
 export class PostService {
     constructor(private http: HttpClient) { }
 
-    public get(queryParams: IPostQueryParameters = {}): Observable<IPost[]> {
+    public one(id: string): Observable<IPostWithComments> {
+        return this.http
+            .get<IPostWithComments>(
+                `${environment.api}/posts/${id}`
+            );
+    }
+
+
+    public comment(post_id: string, content: string): Observable<void> {
+        return this.http
+            .post<void>(
+                `${environment.api}/posts/${post_id}/comments/`,
+                { content }
+            );
+    }
+
+    public many(queryParams: IPostQueryParameters = {}): Observable<IPost[]> {
         let params = new HttpParams();
 
         if (queryParams.courses) {
