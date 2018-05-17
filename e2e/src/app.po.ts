@@ -128,17 +128,32 @@ export class AppRegister {
     static fields = {
         email: {
             edit(text: string) {
-                return element(by.css('app-root app-register input#email')).sendKeys(text);
+                return element(by.css('app-root app-register input#email'))
+                    .sendKeys(text);
+            },
+            get() {
+                return element(by.css('app-root app-register input#email'))
+                    .getAttribute('value');
             }
         },
         password: {
             edit(text: string) {
-                return element(by.css('app-root app-register input#password')).sendKeys(text);
+                return element(by.css('app-root app-register input#password'))
+                    .sendKeys(text);
+            },
+            get() {
+                return element(by.css('app-root app-register input#password'))
+                    .getAttribute('value');
             }
         },
         passwordConfirmation: {
             edit(text: string) {
-                return element(by.css('app-root app-register input#passwordConfirmation')).sendKeys(text);
+                return element(by.css('app-root app-register input#passwordConfirmation'))
+                    .sendKeys(text);
+            },
+            get() {
+                return element(by.css('app-root app-register input#passwordConfirmation'))
+                    .getAttribute('value');
             }
         },
     };
@@ -305,6 +320,8 @@ export class AppDashboardCourseOverview {
                         course: await postRef.element(by.css('.post-course')).getText(),
                         title: await postRef.element(by.css('.post-title')).getText(),
                         content: await postRef.element(by.css('.post-content')).getText(),
+                        author: await postRef.element(by.css('.post-author')).getText(),
+                        category: await postRef.element(by.css('.post-category')).getText(),
                     });
                 }
 
@@ -318,6 +335,8 @@ export class AppDashboardCourseOverview {
                     course: await postRef.element(by.css('.post-course')).getText(),
                     title: await postRef.element(by.css('.post-title')).getText(),
                     content: await postRef.element(by.css('.post-content')).getText(),
+                    author: await postRef.element(by.css('.post-author')).getText(),
+                    category: await postRef.element(by.css('.post-category')).getText(),
                 };
             }
         },
@@ -348,7 +367,9 @@ export class AppDashboardPostView {
             return {
                 course: await element(by.css('.view-post-modal-body .post-course')).getText(),
                 title: await element(by.css('.view-post-modal-body .post-title')).getText(),
-                content: await element(by.css('.view-post-modal-body .post-content')).getText()
+                content: await element(by.css('.view-post-modal-body .post-content')).getText(),
+                author: await element(by.css('.view-post-modal-body .post-author')).getText(),
+                category: await element(by.css('.view-post-modal-body .post-category')).getText()
             };
         }
     };

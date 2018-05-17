@@ -14,143 +14,89 @@ import {
     TEST_CREDENTIALS
 } from './app.po';
 
-describe('home page', () => {
-    it('should display welcome message', async () => {
+describe('app sanity', () => {
+    it('should load the home page and display a welcome message and signup button', async () => {
         await AppPage.navigateTo();
-        await expect(AppHome.getJumbotronHeader()).toEqual('Scarlet Studies');
-    });
+        await expect(AppHome.getJumbotronHeader())
+            .toEqual('Scarlet Studies', 'app probably does not load');
 
-    it('should link to the register page in the jumbotron', async () => {
-        await AppPage.navigateTo();
+        // attempt to navigate using home page signup link
         await AppHome.navigateToRegister();
-        await expect(AppPage.currentUrl()).toContain('register');
+        await expect(AppPage.currentUrl())
+            .toContain('register', 'register link does not work');
     });
 });
 
-describe('app header', () => {
-    it('should update the header when user is logged in', async () => {
-        // login
-        await AppLogin.doTestCredentialsLogin();
-
-        // user info, logout link, dashboard link should be displayed
-        await expect(AppHeader.currentUser.isLoggedIn()).toBeTruthy();
-        await expect(AppHeader.currentUser.get()).toContain(TEST_CREDENTIALS.email);
-        await expect(AppHeader.logout.isPresent()).toBeTruthy();
-        await expect(AppHeader.dashboard.isPresent()).toBeTruthy();
-
-        // login and register should be hidden
-        await expect(AppHeader.login.isPresent()).toBeFalsy();
-        await expect(AppHeader.register.isPresent()).toBeFalsy();
-    });
-
-    it('should update the header when user is not logged in', async () => {
-        // login and then logout to be sure state is logged out
-        await AppLogin.doTestCredentialsLogin();
-        await AppHeader.logout.do();
-
-        // login and register should be displayed
-        await expect(AppHeader.login.isPresent()).toBeTruthy();
-        await expect(AppHeader.register.isPresent()).toBeTruthy();
-
-        // user info and logout link should be hidden
-        await expect(AppHeader.currentUser.isLoggedIn()).toBeFalsy();
-        await expect(AppHeader.logout.isPresent()).toBeFalsy();
-        await expect(AppHeader.dashboard.isPresent()).toBeFalsy();
-    });
-});
-
-describe('app footer', () => {
-    it('should display on all pages', async () => {
-        await AppPage.navigateTo();
-
-        await expect(AppFooter.isPresent()).toBeTruthy();
-
-        await AppLogin.navigateTo();
-
-        await expect(AppFooter.isPresent()).toBeTruthy();
-
-        await AppRegister.navigateTo();
-
-        await expect(AppFooter.isPresent()).toBeTruthy();
-    });
-});
-
-describe('sign up', () => {
-    afterEach(async () => {
-        try {
-            await AppHeader.logout.do();
-        } catch (e) { }
-    });
-
-    it('should accept an email and password', async () => {
-        await AppLogin.navigateTo();
-        await AppLogin.fields.email.edit('example@example.com');
-        await AppLogin.fields.password.edit('password123'); // don't make this your password
-    });
-
+describe('login', () => {
     it('should login', async () => {
         await AppLogin.navigateTo();
 
+        // check header before login
+        await expect(AppHeader.login.isPresent())
+            .toBeTruthy('login link not displayed in header when not logged in');
+        await expect(AppHeader.currentUser.isLoggedIn())
+            .toBeFalsy('user logged in when not logged in, according to header');
+        await expect(AppHeader.logout.isPresent())
+            .toBeFalsy('logout link displayed in header when not logged in');
+
         // test credentials
         await AppLogin.fields.email.edit(TEST_CREDENTIALS.email);
         await AppLogin.fields.password.edit(TEST_CREDENTIALS.password);
         await AppLogin.doLogin();
 
         // should contain user email in header after successful login
-        await expect(AppHeader.currentUser.get()).toContain(TEST_CREDENTIALS.email);
+        await expect(AppHeader.currentUser.get())
+            .toContain(TEST_CREDENTIALS.email, 'user email not displayed in header');
+
+        // check header after login
+        await expect(AppHeader.login.isPresent())
+            .toBeFalsy('login link in header displayed after successful login');
+        await expect(AppHeader.logout.isPresent())
+            .toBeTruthy('logout link not displayed in header after successful login');
 
         // should navigate to the dashboard after successful login
-        await expect(AppPage.currentUrl()).toContain('dashboard');
-    });
+        await expect(AppPage.currentUrl())
+            .toContain('dashboard', 'login did not redirect to dashboard');
 
-    it('should persist login through page refresh', async () => {
-        await AppLogin.navigateTo();
-
-        // test credentials
-        await AppLogin.fields.email.edit(TEST_CREDENTIALS.email);
-        await AppLogin.fields.password.edit(TEST_CREDENTIALS.password);
-        await AppLogin.doLogin();
-
-        // should contain user email in header after successful login
-        await expect(AppHeader.currentUser.get()).toContain(TEST_CREDENTIALS.email);
-
+        // should persist login state through page refresh
         await AppPage.refresh();
 
         // confirm still logged in
-        await expect(AppHeader.currentUser.get()).toContain(TEST_CREDENTIALS.email);
-    });
+        await expect(AppHeader.currentUser.get())
+            .toContain(TEST_CREDENTIALS.email, 'login state not persisted after page refresh');
 
-    it('should logout', async () => {
-        await AppLogin.navigateTo();
-
-        // test credentials
-        await AppLogin.fields.email.edit(TEST_CREDENTIALS.email);
-        await AppLogin.fields.password.edit(TEST_CREDENTIALS.password);
-        await AppLogin.doLogin();
-
-        // should contain user email in header after successful login
-        await expect(AppHeader.currentUser.get()).toContain(TEST_CREDENTIALS.email);
-
-        // perform logout
+        // should logout
         await AppHeader.logout.do();
 
         // confirm logged out
-        await expect(AppHeader.currentUser.isLoggedIn()).toBeFalsy();
-    });
+        await expect(AppHeader.currentUser.isLoggedIn())
+            .toBeFalsy('user did not get logged out');
 
-    it('should navigate to the register page', async () => {
-        await AppLogin.navigateTo();
-        await AppLogin.navigateToRegister();
-        await expect(AppPage.currentUrl()).toContain('register');
+        // should persist logged out state through page refresh
+        await AppPage.refresh();
+
+        await expect(AppHeader.currentUser.isLoggedIn())
+            .toBeFalsy('user did not stay logged out through page refresh');
     });
 });
 
 describe('register', () => {
     it('should accept an email, password and password verification', async () => {
         await AppRegister.navigateTo();
-        await AppRegister.fields.email.edit('example@example.com');
-        await AppRegister.fields.password.edit('password123');
-        await AppRegister.fields.passwordConfirmation.edit('password123');
+
+        const email = 'example@example.com';
+        await AppRegister.fields.email.edit(email);
+        await expect(AppRegister.fields.email.get())
+            .toEqual(email, 'email field not receiving input');
+
+        const pass = 'password123';
+        await AppRegister.fields.password.edit(pass);
+        await expect(AppRegister.fields.password.get())
+            .toEqual(pass, 'password field not receiving input');
+
+        await AppRegister.fields.passwordConfirmation.edit(pass);
+        await expect(AppRegister.fields.passwordConfirmation.get())
+            .toEqual(pass, 'password confirmation field not receiving input');
     });
 });
 
@@ -158,44 +104,35 @@ describe('manage courses', () => {
     beforeEach(async () => {
         await AppLogin.doTestCredentialsLogin();
         await AppDashboardSideBar.navigateToManageCourses();
+
+        // start tests with a blank slate of zero courses in user schedule
         await AppManageCourses.courses.schedule.remove.all();
     });
 
-    it('should navigate to manage courses', async () => {
-        await expect(AppPage.currentUrl()).toContain('manage');
+    afterEach(async () => {
+        await AppDashboardSideBar.navigateToManageCourses();
+
+        // end tests with a blank slate of zero courses in user schedule
+        await AppManageCourses.courses.schedule.remove.all();
     });
 
-    it('should add a course', async () => {
+    it('should add and remove a course', async () => {
         const courseName = await AppManageCourses.courses.available.get.byIndex(0);
 
-        // before add
-        await expect(AppManageCourses.courses.schedule.get.all()).not.toContain(courseName);
-
+        // should add a course
         await AppManageCourses.courses.available.add.byIndex(0);
+        await expect(AppManageCourses.courses.schedule.get.byIndex(0))
+            .toContain(courseName, 'incorrect or no course added');
 
-        // after add
-        await expect(AppManageCourses.courses.schedule.get.all()).toContain(courseName);
-    });
+        // should persist after page refresh
+        await AppPage.refresh();
+        await expect(AppManageCourses.courses.schedule.get.byIndex(0))
+            .toContain(courseName, 'user schedule not persisted after page refresh');
 
-    it('should remove a course', async () => {
-        const courseName = await AppManageCourses.courses.available.get.byIndex(0);
-
-        // before add
-        await expect(AppManageCourses.courses.schedule.get.all()).not.toContain(courseName);
-
-        await AppManageCourses.courses.available.add.byIndex(0);
-
+        // should remove a course
         await AppManageCourses.courses.schedule.remove.byIndex(0);
-
-        // after remove
-        await expect(AppManageCourses.courses.schedule.get.all()).not.toContain(courseName);
-    });
-
-    it('should display a list of courses to add', async () => {
-        const courses_count = await AppManageCourses.courses.available.count();
-
-        // default 10 results
-        await expect(courses_count).toEqual(10);
+        await expect(AppManageCourses.courses.schedule.count())
+            .toEqual(0, 'course not removed');
     });
 
     it('should search for a course to add', async () => {
@@ -203,36 +140,8 @@ describe('manage courses', () => {
         const courseName = 'Numerical Analysis';
 
         await AppManageCourses.fields.search.edit(courseName);
-
-        await expect(AppManageCourses.courses.available.get.all()).toContain(courseName);
-    });
-
-    it('should list the user\'s courses', async () => {
-        // add a course if semester is empty
-        const courseCount = await AppManageCourses.courses.schedule.count();
-
-        if (courseCount === 0) {
-            await AppManageCourses.courses.available.add.byIndex(0);
-        }
-
-        // course to look for
-        const courseName = await AppManageCourses.courses.available.get.byIndex(0);
-
-        // logout and login
-        await AppHeader.logout.do();
-        await AppLogin.doTestCredentialsLogin();
-        await AppDashboardSideBar.navigateToManageCourses();
-
-        // confirm presence of course in user list
-        await expect(AppManageCourses.courses.schedule.count()).toEqual(1);
-        await expect(AppManageCourses.courses.schedule.get.all()).toContain(courseName);
-    });
-});
-
-describe('dashboard', () => {
-    it('should navigate to the dashboard', async () => {
-        await AppDashboard.navigateTo();
-        await expect(AppPage.currentUrl()).toContain('dashboard');
+        await expect(AppManageCourses.courses.available.get.all())
+            .toContain(courseName, 'course not found during search');
     });
 });
 
@@ -249,123 +158,98 @@ describe('dashboard side bar', () => {
     });
 
     it('should display a list of the user\'s courses', async () => {
-        await expect(AppDashboardSideBar.courses.count()).toEqual(3);
+        await expect(AppDashboardSideBar.courses.count())
+            .toEqual(3, 'did not display the correct amount of courses');
     });
 });
 
 
 describe('dashboard semester overview', () => {
-    let courses = [];
-
-    beforeEach(async () => {
+    it('should display posts from multiple courses', async () => {
+        // start with a blank slate
         await AppLogin.doTestCredentialsLogin();
         await AppDashboardSideBar.navigateToManageCourses();
         await AppManageCourses.courses.schedule.remove.all();
 
-        // add test courses for viewing posts in overview
+        // should display a message and no posts when the user has no courses in semester
+        await AppDashboardSideBar.navigateToDashboardOverview();
+        await expect(AppDashboardOverview.posts.get.count())
+            .toEqual(0, 'posts displayed when user semester empty');
+        await expect(AppDashboardOverview.message.get())
+            .toContain('Your semester is empty', 'message not displayed when user semester empty');
+
+        // should display posts from multiple courses
+        await AppDashboardSideBar.navigateToManageCourses();
+
+        // add courses
         await AppManageCourses.courses.available.add.byIndex(0);
         await AppManageCourses.courses.available.add.byIndex(1);
         await AppManageCourses.courses.available.add.byIndex(2);
 
         // remember course names
-        courses = await AppManageCourses.courses.schedule.get.all();
-
+        const courseNames = await AppManageCourses.courses.schedule.get.all();
         await AppDashboardSideBar.navigateToDashboardOverview();
-    });
 
-    it('should display a list of posts', async () => {
-        await expect(AppDashboardOverview.posts.get.count()).toBeGreaterThan(0);
-    });
-
-    it('should display posts from multiple courses', async () => {
         const posts = await AppDashboardOverview.posts.get.all();
-        const postCourses = posts.map(post => post.course);
+        const postCourseNames = posts.map(post => post.course);
 
-        for (const course of courses) {
-            expect(postCourses).toContain(course);
+        for (const courseName of courseNames) {
+            expect(postCourseNames)
+                .toContain(courseName, `course ${courseName} has no posts in dashboard`);
         }
-    });
-
-    it('should display a message when the user has no courses in semester', async () => {
-        await AppDashboardSideBar.navigateToManageCourses();
-        await AppManageCourses.courses.schedule.remove.all();
-        await AppDashboardSideBar.navigateToDashboardOverview();
-
-        // no posts displayed
-        await expect(AppDashboardOverview.posts.get.count()).toEqual(0);
-
-        // message
-        await expect(AppDashboardOverview.message.get()).toContain('Your semester is empty');
     });
 });
 
 describe('dashboard course overview', () => {
-    let course;
-
-    beforeEach(async () => {
+    it('should interact', async () => {
         await AppLogin.doTestCredentialsLogin();
         await AppDashboardSideBar.navigateToManageCourses();
         await AppManageCourses.courses.schedule.remove.all();
 
-        // add test courses for viewing posts in overview
+        // add course and remember name
         await AppManageCourses.courses.available.add.byIndex(0);
-        await AppManageCourses.courses.available.add.byIndex(1);
-        await AppManageCourses.courses.available.add.byIndex(2);
-
-        // remember course name
-        course = await AppManageCourses.courses.schedule.get.byIndex(0);
+        const courseName = await AppManageCourses.courses.schedule.get.byIndex(0);
 
         // navigate to that course overview
-        await AppDashboardSideBar.navigateToCourse.byName(course);
-    });
+        await AppDashboardSideBar.navigateToCourse.byName(courseName);
 
+        // should only display posts from the selected course
+        let posts = await AppDashboardCourseOverview.posts.get.all();
+        const postCourseNames = posts.map(post => post.course);
 
-    it('should display a list of posts', async () => {
-        await expect(AppDashboardCourseOverview.posts.get.count()).toBeGreaterThan(0);
-    });
-
-    it('should display posts from a single courses', async () => {
-        const posts = await AppDashboardCourseOverview.posts.get.all();
-        const postCourses = posts.map(post => post.course);
-
-        for (const postCourse of postCourses) {
-            expect(postCourse).toContain(course);
+        for (const postCourseName of postCourseNames) {
+            expect(postCourseName)
+                .toContain(courseName, 'posts from another course displayed');
         }
-    });
 
-    it('should add a post', async () => {
+        // should add a post with randomized data to prevent duplication in subsequent tests
         const post = {
-            title: 'I am an e2e title',
-            content: 'I am an e2e content',
-            category: 'Exam'
+            title: `I am an e2e title ${Math.random()}`,
+            content: `I am an e2e content ${Math.random()}`,
+            category: 'Exam',
+            author: TEST_CREDENTIALS.email,
+            course: courseName
         };
 
         await AppDashboardCourseOverview.posts.add(post);
+        posts = await AppDashboardCourseOverview.posts.get.all();
 
-        const posts = await AppDashboardCourseOverview.posts.get.all();
+        await expect(posts)
+            .toContain(post, 'did not find newly created post');
 
-        const found = posts.find(potential => potential.title === post.title && potential.content === post.content);
-
-        await expect(found).toBeTruthy();
-    });
-
-    it('should view a post', async () => {
-        const post = await AppDashboardCourseOverview.posts.get.byIndex(0);
+        // should view a post
         await AppDashboardCourseOverview.posts.open.byIndex(0);
 
-        await expect(AppDashboardPostView.post.get()).toEqual(post);
-    });
+        await expect(AppDashboardPostView.post.get())
+            .toEqual(post, 'viewed post does not equal expected post');
 
-    it('should view the comments of a post', async () => {
-        // todo combine with add a comment
+        // todo should add a comment
 
-        await AppDashboardCourseOverview.posts.open.byIndex(0);
-
+        // todo should view the post comments
         const comment = await AppDashboardPostView.comments.get.byIndex(0);
 
-        await expect(comment.content).toBeTruthy();
-        await expect(comment.timestamp).toBeTruthy();
-        await expect(comment.author).toBeTruthy();
+        await expect(comment.content)
+            .toBeTruthy('comment content not displayed');
     });
 });
 

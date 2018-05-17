@@ -19,7 +19,7 @@
 	</p>
 	<div class="font-weight-light d-flex">
 	    <span>
-		{{ post.cheers_count }} cheers &bull; {{ post.comments_count }} comments &bull; {{ post.timestamp | date }} &bull; {{ post.author.email }}
+		{{ post.cheers_count }} cheers &bull; {{ post.comments_count }} comments &bull; {{ post.timestamp | date }} &bull; <span class="post-author">{{ post.author.email }}</span>
 	    </span>
 	    <button type="button"
 		    class="btn btn-sm ml-auto open-view-post-modal"
@@ -58,7 +58,7 @@
 		    {{ post.content }}
 		</p>
 		<div class="font-weight-light">
-		    {{ post.cheers_count }} cheers &bull; {{ post.comments_count }} comments &bull; {{ post.timestamp | date }} &bull; {{ post.author.email }}
+		    {{ post.cheers_count }} cheers &bull; {{ post.comments_count }} comments &bull; {{ post.timestamp | date }} &bull; <span class="post-author">{{ post.author.email }}</span>
 		</div>
 	    </div>
 	</div>
