@@ -237,12 +237,18 @@ describe('dashboard course overview', () => {
         await expect(posts)
             .toContain(post, 'did not find newly created post');
 
-        // should view a post
+        // should view the post
         await AppDashboardCourseOverview.posts.open.byIndex(0);
 
         await expect(AppDashboardPostView.post.get())
             .toEqual(post, 'viewed post does not equal expected post');
 
+        // should cheer the post
+        await AppDashboardPostView.cheers.do();
+        await expect(AppDashboardPostView.cheers.get())
+            .toEqual('1 cheer(s)', 'post did not get cheered');
+
+        // should add a comment
         const comment = {
             content: 'I am a comment',
             author: TEST_CREDENTIALS.email
@@ -250,6 +256,7 @@ describe('dashboard course overview', () => {
 
         await AppDashboardPostView.comments.add(comment);
 
+        // should display the new comment
         await expect(AppDashboardPostView.comments.get.byIndex(0))
             .toEqual(comment, 'comment content not displayed');
     });

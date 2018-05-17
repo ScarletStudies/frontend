@@ -394,4 +394,13 @@ export class AppDashboardPostView {
                 );
         }
     };
+
+    static cheers = {
+        do() {
+            return element(by.css('.view-post-modal-body button.cheer')).click();
+        },
+        get() {
+            return element(by.css('.view-post-modal-body .cheer-count')).getText();
+        }
+    };
 }

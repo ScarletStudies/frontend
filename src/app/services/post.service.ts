@@ -36,6 +36,14 @@ export class PostService {
             );
     }
 
+    public cheer(post_id: string): Observable<void> {
+        return this.http
+            .post<void>(
+                `${environment.api}/posts/${post_id}/cheers/`,
+                ''
+            );
+    }
+
     public many(queryParams: IPostQueryParameters = {}): Observable<IPost[]> {
         let params = new HttpParams();
 

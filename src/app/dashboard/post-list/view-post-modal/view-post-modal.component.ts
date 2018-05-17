@@ -49,4 +49,14 @@ export class ViewPostModalComponent implements OnInit, OnDestroy {
                 )
         );
     }
+
+    public cheer(): void {
+        this.subscriptions.push(
+            this.postService
+                .cheer(this.postId)
+                .subscribe(
+                    this.refresh.bind(this)
+                )
+        );
+    }
 }
