@@ -25,7 +25,8 @@ export class ViewPostModalComponent implements OnInit, OnDestroy {
     public itemOptions: IPostListItemOptions = {
         action: 'cheer',
         hideBorderBottom: true,
-        hideCourseName: false
+        hideCourseName: false,
+        showPostContent: true
     };
 
     private _postId: string;

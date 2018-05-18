@@ -3,7 +3,7 @@
     <app-cheer-image class="mr-3 align-self-center"
 		     [count]="post.cheers_count"></app-cheer-image>
 
-    <div class="media-body p-1">
+    <div class="media-body p-1 d-flex flex-column justify-content-around">
 	<div class="d-flex mb-2">
 	    <strong class="text-gray-dark post-title mr-auto">
 		{{ post.title }}
@@ -19,10 +19,6 @@
 		{{ post.semester.season }} {{ post.semester.year }}
 	    </span>
 	</div>
-
-        <p class="mb-2 post-content">
-	    {{ post.content }}
-	</p>
 
 	<div class="font-weight-light d-flex">
 	    <span class="small">
@@ -54,7 +50,13 @@
 		    Cheer Post
 		</button>
 	    </ng-container>
+
 	</div>
+
+        <p class="mb-2 post-content"
+	   *ngIf="options.showPostContent">
+	    {{ post.content }}
+	</p>
     </div>
 </div>
 

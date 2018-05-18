@@ -8,6 +8,7 @@ import { IPost } from '../../../models';
 export interface IPostListItemOptions {
     hideBorderBottom?: boolean;
     hideCourseName?: boolean;
+    showPostContent?: boolean;
     action?: 'view' | 'cheer';
 }
 

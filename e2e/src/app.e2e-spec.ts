@@ -225,13 +225,17 @@ describe('dashboard course overview', () => {
         // should add a post with randomized data to prevent duplication in subsequent tests
         const post = {
             title: `I am an e2e title ${Math.random()}`,
-            content: `I am an e2e content ${Math.random()}`,
             category: 'Exam',
             author: TEST_CREDENTIALS.email,
             course: courseName
         };
 
-        await AppDashboardCourseOverview.posts.add(post);
+        const postWithContent = {
+            ...post,
+            content: `I am an e2e content ${Math.random()}`
+        };
+
+        await AppDashboardCourseOverview.posts.add(postWithContent);
         posts = await AppDashboardCourseOverview.posts.get.all();
 
         await expect(posts)
@@ -241,7 +245,7 @@ describe('dashboard course overview', () => {
         await AppDashboardCourseOverview.posts.open.byIndex(0);
 
         await expect(AppDashboardPostView.post.get())
-            .toEqual(post, 'viewed post does not equal expected post');
+            .toEqual(postWithContent, 'viewed post does not equal expected post');
 
         // should cheer the post
         await AppDashboardPostView.cheers.do();

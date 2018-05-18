@@ -319,7 +319,6 @@ export class AppDashboardCourseOverview {
                     posts.push({
                         course: await postRef.element(by.css('.post-course')).getText(),
                         title: await postRef.element(by.css('.post-title')).getText(),
-                        content: await postRef.element(by.css('.post-content')).getText(),
                         author: await postRef.element(by.css('.post-author')).getText(),
                         category: await postRef.element(by.css('.post-category')).getText(),
                     });
@@ -334,7 +333,6 @@ export class AppDashboardCourseOverview {
                 return {
                     course: await postRef.element(by.css('.post-course')).getText(),
                     title: await postRef.element(by.css('.post-title')).getText(),
-                    content: await postRef.element(by.css('.post-content')).getText(),
                     author: await postRef.element(by.css('.post-author')).getText(),
                     category: await postRef.element(by.css('.post-category')).getText(),
                 };

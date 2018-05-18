@@ -14,7 +14,7 @@ export class CheerImageComponent implements OnInit, AfterViewInit {
 
     @Input()
     public set count(count: number) {
-        this.dataSrc = `holder.js/64x64?theme=sky&text=${count}`;
+        this.dataSrc = `holder.js/64x64?theme=social&text=${count} 📣`;
     }
 
     public dataSrc = 'holder.js/64x64?theme=sky&text=...';
