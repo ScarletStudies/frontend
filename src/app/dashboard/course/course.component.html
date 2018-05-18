@@ -24,37 +24,47 @@
 	</button>
     </div>
     <div class="modal-body new-post-modal-body">
-	<form (submit)="submit(title.value, category.value, content.value)">
+	<form [formGroup]="form"
+	      (ngSubmit)="submit()">
 	    <div class="form-group">
-		<label for="newPostTitle">Title</label>
-		<input #title
+		<label for="newPostTitle">
+		    Title
+		</label>
+		<input formControlName="title"
 		       type="text"
 		       class="form-control"
 		       id="newPostTitle"
 		       placeholder="Title...">
 	    </div>
+
 	    <div class="form-group">
-		<label for="newPostCategory">Category</label>
-		<select #category
-		    class="form-control" 
-			   id="newPostCategory">
+		<label for="newPostCategory">
+		    Category
+		</label>
+		<select formControlName="category"
+			class="form-control" 
+			id="newPostCategory">
 		    <option *ngFor="let category of categories$ | async"
 			    [value]="category.id">
 			{{ category.name }}
 		    </option>
 		</select>
 	    </div>
+
 	    <div class="form-group">
-		<label for="newPostContent">Content</label>
-		<textarea #content
-			  class="form-control" 
+		<label for="newPostContent">
+		    Content
+		</label>
+		<textarea formControlName="content"
+			  class="form-control"
 			  id="newPostContent" 
 			  rows="5"
 			  placeholder="Content..."></textarea>
 	    </div>
 
 	    <button type="submit"
-		    class="btn btn-primary">
+		    class="btn btn-primary"
+		    [disabled]="form.invalid">
 		Submit
 	    </button>
 	</form>

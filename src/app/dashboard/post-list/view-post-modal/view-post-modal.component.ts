@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, Subscription } from 'rxjs';
 
@@ -29,13 +30,20 @@ export class ViewPostModalComponent implements OnInit, OnDestroy {
         showPostContent: true
     };
 
+    public commentForm: FormGroup = null;
+
     private _postId: string;
     private subscriptions: Subscription[] = [];
 
     constructor(public activeModal: NgbActiveModal,
+        private fb: FormBuilder,
         private postService: PostService) { }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.commentForm = this.fb.group({
+            content: ['', Validators.required]
+        });
+    }
 
     ngOnDestroy() {
         for (const sub of this.subscriptions) {
@@ -47,12 +55,18 @@ export class ViewPostModalComponent implements OnInit, OnDestroy {
         this.post$ = this.postService.one(this._postId);
     }
 
-    public comment(content: string): void {
+    public comment(): void {
+        const { content } = this.commentForm.value;
+
         this.subscriptions.push(
             this.postService
                 .comment(this._postId, content)
                 .subscribe(
-                    this.refresh.bind(this)
+                    () => {
+                        this.commentForm.reset();
+
+                        this.refresh();
+                    }
                 )
         );
     }

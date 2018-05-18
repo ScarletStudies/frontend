@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 import { IAppState } from '../models';
 
 import * as LoginActions from '../actions/user.actions';
@@ -11,12 +13,19 @@ import * as LoginActions from '../actions/user.actions';
 })
 export class LoginComponent implements OnInit {
 
-    constructor(private store: Store<IAppState>) { }
+    public form: FormGroup = null;
+
+    constructor(private store: Store<IAppState>,
+        private fb: FormBuilder) { }
 
     ngOnInit() {
+        this.form = this.fb.group({
+            email: ['', Validators.required],
+            password: ['', Validators.required]
+        });
     }
 
-    public login(email: string, password: string): void {
-        this.store.dispatch(new LoginActions.AttemptLoginAction({ email, password }));
+    public login(): void {
+        this.store.dispatch(new LoginActions.AttemptLoginAction(this.form.value));
     }
 }

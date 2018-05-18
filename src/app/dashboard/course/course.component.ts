@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -23,15 +24,23 @@ export class CourseComponent implements OnInit, OnDestroy {
     public categories$: Observable<ICategory[]> = null;
     public course: ICourse = null;
     public refreshEvents = new EventEmitter<IRefreshEvent>();
+    public form: FormGroup = null;
 
     constructor(private store: Store<IAppState>,
         private route: ActivatedRoute,
         private modalService: NgbModal,
         private postService: PostService,
-        private categoryService: CategoryService) { }
+        private categoryService: CategoryService,
+        private fb: FormBuilder) { }
 
     ngOnInit() {
         this.categories$ = this.categoryService.get();
+
+        this.form = this.fb.group({
+            title: ['', Validators.required],
+            content: ['', Validators.required],
+            category: ['', Validators.required]
+        });
 
         this.subscriptions.push(
             this.route
@@ -64,8 +73,10 @@ export class CourseComponent implements OnInit, OnDestroy {
         this.modalRef = this.modalService.open(content, { backdropClass: 'backdrop' });
     }
 
-    submit(title: string, category_id: string, content: string): void {
-        this.postService.add(title, content, this.course.id, category_id, )
+    submit(): void {
+        const { title, content, category } = this.form.value;
+
+        this.postService.add(title, content, this.course.id, category)
             .subscribe(
                 () => {
                     this.modalRef.close();
