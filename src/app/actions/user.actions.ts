@@ -26,6 +26,7 @@ export class LoginSuccessAction implements Action {
 
 export class LoginFailedAction implements Action {
     readonly type = ActionTypes.LOGIN_FAILED;
+    readonly error = true;
 
     constructor(public payload: { message: string }) { }
 }

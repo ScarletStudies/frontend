@@ -30,7 +30,7 @@ export class UserEffects {
                             )
                         ),
                         // If request fails, dispatch failed action
-                        catchError(err => of(new UserActions.LoginFailedAction(err.message)))
+                        catchError(err => of(new UserActions.LoginFailedAction(err)))
                     )
         )
     );

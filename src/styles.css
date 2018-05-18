@@ -8,3 +8,8 @@ body {
 .backdrop {
     background-color: #DDDDDD;
 }
+
+#loading-bar-spinner {
+    left: calc(100% - 25px);
+}
+	

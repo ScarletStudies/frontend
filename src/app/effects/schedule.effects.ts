@@ -23,7 +23,7 @@ export class ScheduleEffects {
                             (data: ICourse[]) => new ScheduleActions.SetCoursesAction(data)
                         ),
                         // If request fails, dispatch failed action
-                        catchError(err => of(new ScheduleActions.AddCourseFailedAction(err.message)))
+                        catchError(err => of(new ScheduleActions.AddCourseFailedAction(err)))
                     )
         )
     );
@@ -40,7 +40,7 @@ export class ScheduleEffects {
                             (data: ICourse[]) => new ScheduleActions.SetCoursesAction(data)
                         ),
                         // If request fails, dispatch failed action
-                        catchError(err => of(new ScheduleActions.RemoveCourseFailedAction(err.message)))
+                        catchError(err => of(new ScheduleActions.RemoveCourseFailedAction(err)))
                     )
         )
     );
@@ -57,7 +57,7 @@ export class ScheduleEffects {
                             (data: ICourse[]) => new ScheduleActions.SetCoursesAction(data)
                         ),
                         // If request fails, dispatch failed action
-                        catchError(err => of(new ScheduleActions.GetCoursesFailedAction(err.message)))
+                        catchError(err => of(new ScheduleActions.GetCoursesFailedAction(err)))
                     )
         )
     );

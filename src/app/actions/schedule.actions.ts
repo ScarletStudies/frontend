@@ -30,6 +30,7 @@ export class AddCourseAttemptAction implements Action {
 
 export class AddCourseFailedAction implements Action {
     readonly type = ActionTypes.ADD_COURSE_FAILED;
+    readonly error = true;
 
     constructor(public payload: { message: string }) { }
 }
@@ -42,6 +43,7 @@ export class RemoveCourseAttemptAction implements Action {
 
 export class RemoveCourseFailedAction implements Action {
     readonly type = ActionTypes.REMOVE_COURSE_FAILED;
+    readonly error = true;
 
     constructor(public payload: { message: string }) { }
 }
@@ -54,6 +56,7 @@ export class GetCoursesAttemptAction implements Action {
 
 export class GetCoursesFailedAction implements Action {
     readonly type = ActionTypes.GET_COURSES_FAILED;
+    readonly error = true;
 
     constructor(public payload: { message: string }) { }
 }

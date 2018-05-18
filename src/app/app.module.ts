@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -11,6 +12,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
+
+import { ToastrModule } from 'ngx-toastr';
 
 import { take } from 'rxjs/operators';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -106,6 +109,8 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
                 deps: [Store]
             }
         }),
+        BrowserAnimationsModule,
+        ToastrModule.forRoot()
     ],
     providers: [
         ...APP_SERVICES
