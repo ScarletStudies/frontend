@@ -34,6 +34,7 @@ import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { userReducer } from './reducers/user.reducer';
 
 export function jwtOptionsFactory(store: Store<IAppState>) {
     return {
@@ -42,7 +43,15 @@ export function jwtOptionsFactory(store: Store<IAppState>) {
                 (resolve, reject) => {
                     const sub = store
                         .pipe(
-                            select(state => state.user.jwt),
+                            select(
+                                state => {
+                                    if (state && state.user && state.user.jwt) {
+                                        return state.user.jwt;
+                                    }
+
+                                    return null;
+                                }
+                            ),
                             take(1)
                         )
                         .subscribe(resolve);
@@ -75,6 +84,21 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
+        StoreModule.forRoot(
+            reducers,
+            { metaReducers }
+        ),
+        EffectsModule.forRoot(APP_EFFECTS),
+        StoreRouterConnectingModule.forRoot({
+            stateKey: 'router' // name of reducer key
+        }),
+        StoreDevtoolsModule.instrument({
+            maxAge: 25, // retains last 25 states
+            //            logOnly: environment.production
+        }),
+        NgbModule.forRoot(),
+        LoadingBarHttpClientModule,
+        LoadingBarRouterModule,
         JwtModule.forRoot({
             jwtOptionsProvider: {
                 provide: JWT_OPTIONS,
@@ -82,22 +106,6 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
                 deps: [Store]
             }
         }),
-        StoreModule.forRoot({
-            router: routerReducer,
-            ...reducers
-        },
-            { metaReducers }),
-        EffectsModule.forRoot(APP_EFFECTS),
-        StoreRouterConnectingModule.forRoot({
-            stateKey: 'router' // name of reducer key
-        }),
-        StoreDevtoolsModule.instrument({
-            maxAge: 25, // retains last 25 states
-            logOnly: environment.production
-        }),
-        NgbModule.forRoot(),
-        LoadingBarHttpClientModule,
-        LoadingBarRouterModule
     ],
     providers: [
         ...APP_SERVICES

@@ -1,3 +1,5 @@
+import { RouterReducerState } from '@ngrx/router-store';
+
 import {
     IUser,
     ICourse
@@ -6,4 +8,5 @@ import {
 export interface IAppState {
     user: IUser;
     schedule: ICourse[];
+    router: RouterReducerState;
 }
