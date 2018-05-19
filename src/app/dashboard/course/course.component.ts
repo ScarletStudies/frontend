@@ -29,7 +29,7 @@ export class CourseComponent implements OnInit, OnDestroy {
         toolbar: [
             [{ header: [1, 2, false] }],
             ['bold', 'italic', 'underline', 'strike'],
-            ['image', 'code-block']
+            ['blockquote', 'link', 'code-block']
         ]
     };
 

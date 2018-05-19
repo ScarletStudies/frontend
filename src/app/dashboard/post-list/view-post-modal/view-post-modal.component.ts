@@ -31,6 +31,13 @@ export class ViewPostModalComponent implements OnInit, OnDestroy {
     };
 
     public commentForm: FormGroup = null;
+    public quillModules = {
+        toolbar: [
+            [{ header: [1, 2, false] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'link', 'code-block']
+        ]
+    };
 
     private _postId: string;
     private subscriptions: Subscription[] = [];

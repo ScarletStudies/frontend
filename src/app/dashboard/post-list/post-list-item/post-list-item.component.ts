@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { ViewPostModalComponent } from '../view-post-modal/view-post-modal.component';
@@ -28,9 +29,13 @@ export class PostListItemComponent implements OnInit {
     @Output()
     public cheer = new EventEmitter<void>();
 
-    constructor(private modalService: NgbModal) { }
+    public safePostContent: SafeHtml = null;
+
+    constructor(private modalService: NgbModal,
+        private sanitizer: DomSanitizer) { }
 
     ngOnInit() {
+        this.safePostContent = this.sanitizer.bypassSecurityTrustHtml(this.post.content);
     }
 
     public open(): void {

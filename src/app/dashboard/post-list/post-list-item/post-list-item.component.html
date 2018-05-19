@@ -1,6 +1,6 @@
 <div class="media post-listing pt-1 px-2 border-bottom border-gray"
      [class.border-bottom-0]="options.hideBorderBottom">
-    <app-cheer-image class="mr-3 align-self-center"
+    <app-cheer-image class="mr-3 align-self-top"
 		     [count]="post.cheers_count"></app-cheer-image>
 
     <div class="media-body p-1 d-flex flex-column justify-content-around">
@@ -53,10 +53,12 @@
 
 	</div>
 
-        <div class="mb-2 post-content"
-	     *ngIf="options.showPostContent">
-	    {{ post.content }}
-	</div>
     </div>
+
 </div>
 
+<div class="card m-2"
+     *ngIf="options.showPostContent">
+    <div class="card-body post-content pb-0"
+	 [innerHtml]="safePostContent"></div>
+</div>

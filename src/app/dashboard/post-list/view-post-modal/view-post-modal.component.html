@@ -13,12 +13,17 @@
     <form class="media-body p-2"
 	  [formGroup]="commentForm"
 	  (ngSubmit)="comment()">
+
 	<div class="input-group">
-	    <textarea formControlName="content"
-		      id="comment-content"
-		      class="form-control"
-		      rows="3"
-		      placeholder="Add comment..."></textarea>
+
+	    <quill-editor formControlName="content"
+			  id="comment-content"
+			  placeholder="Comment content..."
+			  class="form-control"
+			  style="border: 0;"
+			  [style]="{height: '100px'}"
+			  [modules]="quillModules"></quill-editor>
+
 	    <div class="input-group-append">
 		<button id="comment-submit"
 			type="submit"
