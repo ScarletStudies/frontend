@@ -25,6 +25,13 @@ export class CourseComponent implements OnInit, OnDestroy {
     public course: ICourse = null;
     public refreshEvents = new EventEmitter<IRefreshEvent>();
     public form: FormGroup = null;
+    public quillModules = {
+        toolbar: [
+            [{ header: [1, 2, false] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            ['image', 'code-block']
+        ]
+    };
 
     constructor(private store: Store<IAppState>,
         private route: ActivatedRoute,
@@ -70,7 +77,7 @@ export class CourseComponent implements OnInit, OnDestroy {
     }
 
     open(content): void {
-        this.modalRef = this.modalService.open(content, { backdropClass: 'backdrop' });
+        this.modalRef = this.modalService.open(content, { backdropClass: 'backdrop', size: 'lg' });
     }
 
     submit(): void {

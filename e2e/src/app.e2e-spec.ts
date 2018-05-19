@@ -237,15 +237,20 @@ describe('dashboard course overview', () => {
 
         await AppDashboardCourseOverview.posts.add(postWithContent);
         posts = await AppDashboardCourseOverview.posts.get.all();
+        let found = posts.find(p => p.title === post.title);
 
-        await expect(posts)
-            .toContain(post, 'did not find newly created post');
+        await expect(found)
+            .toEqual(post, 'did not find newly created post');
 
         // should view the post
         await AppDashboardCourseOverview.posts.open.byIndex(0);
 
-        await expect(AppDashboardPostView.post.get())
-            .toEqual(postWithContent, 'viewed post does not equal expected post');
+        found = await AppDashboardPostView.post.get();
+
+        for (const field of ['title', 'category', 'author', 'course']) {
+            await expect(found[field])
+                .toContain(postWithContent[field], `viewed post does not equal expected post, key: ${field}`);
+        }
 
         // should cheer the post
         await AppDashboardPostView.cheers.do();

@@ -28,7 +28,7 @@
 	      (ngSubmit)="submit()">
 	    <div class="form-group">
 		<label for="newPostTitle">
-		    Title
+		    Title *
 		</label>
 		<input formControlName="title"
 		       type="text"
@@ -39,7 +39,7 @@
 
 	    <div class="form-group">
 		<label for="newPostCategory">
-		    Category
+		    Category *
 		</label>
 		<select formControlName="category"
 			class="form-control" 
@@ -53,13 +53,14 @@
 
 	    <div class="form-group">
 		<label for="newPostContent">
-		    Content
+		    Content *
 		</label>
-		<textarea formControlName="content"
-			  class="form-control"
-			  id="newPostContent" 
-			  rows="5"
-			  placeholder="Content..."></textarea>
+
+		<quill-editor formControlName="content"
+			      id="newPostContent"
+			      placeholder="Post content..."
+			      [style]="{height: '200px'}"
+			      [modules]="quillModules"></quill-editor>
 	    </div>
 
 	    <button type="submit"

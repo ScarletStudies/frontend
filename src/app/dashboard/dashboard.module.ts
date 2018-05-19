@@ -6,6 +6,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 
+import { QuillModule } from 'ngx-quill';
+
 import { ManageCoursesComponent } from './manage-courses/manage-courses.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overview.component';
@@ -23,7 +25,8 @@ import { CheerImageComponent } from './post-list/cheer-image/cheer-image.compone
         DashboardRoutingModule,
         FormsModule,
         ReactiveFormsModule,
-        NgbModule
+        NgbModule,
+        QuillModule
     ],
     declarations: [
         ManageCoursesComponent,

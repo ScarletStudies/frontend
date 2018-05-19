@@ -15,6 +15,8 @@ import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 
 import { ToastrModule } from 'ngx-toastr';
 
+import { QuillModule } from 'ngx-quill';
+
 import { take } from 'rxjs/operators';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { routerReducer, StoreRouterConnectingModule } from '@ngrx/router-store';
@@ -110,7 +112,8 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
             }
         }),
         BrowserAnimationsModule,
-        ToastrModule.forRoot()
+        ToastrModule.forRoot(),
+        QuillModule
     ],
     providers: [
         ...APP_SERVICES
