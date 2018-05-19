@@ -24,9 +24,16 @@
 		    </a>
 		</h6>
 
-		<ul class="nav flex-column mb-2">
+		<ul class="nav flex-column mb-2"
+		    *ngIf="semesterCourses$ | async; let courses">
 		    <li class="nav-item"
-			*ngFor="let course of semesterCourses$ | async">
+			       *ngIf="courses.length === 0">
+			<span class="nav-link">
+			    Nothing here.
+			</span>
+		    </li>
+		    <li class="nav-item"
+			*ngFor="let course of courses">
 			<a class="nav-link course"
 			   [routerLink]="['/dashboard', 'course', course.id]"
 			   routerLinkActive="active"

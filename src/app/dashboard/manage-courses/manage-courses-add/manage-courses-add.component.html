@@ -7,30 +7,36 @@
 	   placeholder="Search...">
 </div>
 
-<table class="table table-striped mt-2">
-    <thead>
-	<tr>
-	    <th scope="col">Course Name</th>
-	    <th scope="col">Course ID</th>
-	    <th scope="col">Actions</th>
-	</tr>
-    </thead>
-    <tbody>
-	<tr class="course available"
-	    *ngFor="let course of availableCourses$ | async">
-	    <td class="course-name">
-		{{ course.name }}
-	    </td>
-	    <td>
-		{{ course.offering_unit }}:{{ course.subject }}:{{ course.course_number }}
-	    </td>
-	    <td>
-		<button type="button"
-			class="btn btn-secondary btn-sm add"
-			(click)="addCourseToSchedule(course)">
-		    Add
-		</button>
-	    </td>
-	</tr>
-    </tbody>
-</table>	
+<div *ngIf="availableCourses$ | async; let courses">
+    <table class="table table-striped mt-2">
+	<thead>
+	    <tr>
+		<th scope="col">Course Name</th>
+		<th scope="col">Course ID</th>
+		<th scope="col">Actions</th>
+	    </tr>
+	</thead>
+	<tbody>
+	    <tr class="course available"
+		*ngFor="let course of courses">
+		<td class="course-name">
+		    {{ course.name }}
+		</td>
+		<td>
+		    {{ course.offering_unit }}:{{ course.subject }}:{{ course.course_number }}
+		</td>
+		<td>
+		    <button type="button"
+				  class="btn btn-secondary btn-sm add"
+				  (click)="addCourseToSchedule(course)">
+			Add
+		    </button>
+		</td>
+	    </tr>
+	</tbody>
+    </table>
+
+    <p *ngIf="courses.length === 0">
+	No courses available.
+    </p>
+</div>
