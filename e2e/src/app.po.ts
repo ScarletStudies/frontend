@@ -342,7 +342,7 @@ export class AppDashboardCourseOverview {
             await element(by.css('app-root app-course .open-new-post-modal')).click();
 
             // input data
-            await element(by.css('.new-post-modal-body #newPostContent div[contenteditable]')).sendKeys(content);
+            await element(by.css('.new-post-modal-body #newPostContent div.ql-editor[contenteditable]')).sendKeys(content);
             await element(by.css('.new-post-modal-body input#newPostTitle')).sendKeys(title);
 
             await element(by.cssContainingText('.new-post-modal-body #newPostCategory option', category)).click();
@@ -385,7 +385,7 @@ export class AppDashboardPostView {
             }
         },
         add({ content }) {
-            return element(by.css('.view-post-modal-body textarea#comment-content'))
+            return element(by.css('.view-post-modal-body #comment-content div.ql-editor[contenteditable]'))
                 .sendKeys(content)
                 .then(
                     () => element(by.css('.view-post-modal-body button#comment-submit')).click()

@@ -11,7 +11,7 @@ import { IAppState, ICourse } from '../../models';
 })
 export class DashboardOverviewComponent implements OnInit {
 
-    public semesterCourses$: Observable<ICourse[]>;
+    public semesterCourses$: Observable<ICourse[]> = null;
 
     constructor(private store: Store<IAppState>) { }
 

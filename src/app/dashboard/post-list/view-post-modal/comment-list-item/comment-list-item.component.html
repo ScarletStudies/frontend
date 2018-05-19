@@ -1,0 +1,14 @@
+<div class="card m-2">
+    <div class="card-body pb-0 comment-content"
+	 [innerHtml]="safeCommentContent">
+    </div>
+    <div class="card-footer small text-muted">
+	<span class="comment-timestamp">
+	    {{ comment.timestamp | date }}
+	</span>
+	&bull;
+	<span class="comment-author">
+	    {{ comment.author.email }}
+	</span>
+    </div>
+</div>

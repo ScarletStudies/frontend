@@ -37,22 +37,8 @@
 
     <ul class="list-unstyled mb-2">
 	<li *ngFor="let comment of post.comments; last as isLast"
-	    class="media post-comment border-bottom border-gray py-2"
-	    [class.border-bottom-0]="isLast">
-	    <div class="media-body ml-3">
-		<p class="comment-content mb-1">
-		    {{ comment.content }}
-		</p>
-		<span class="small">
-		    <span class="comment-timestamp">
-			{{ comment.timestamp | date }}
-		    </span>
-		    &bull;
-		    <span class="comment-author">
-			{{ comment.author.email }}
-		    </span>
-		</span>
-	    </div>
+	    class="post-comment">
+	    <app-comment-list-item [comment]="comment"></app-comment-list-item>
 	</li>
     </ul>
 </div>

@@ -3,9 +3,10 @@
 	Recent updates
     </h6>
 
-    <app-post-list-item *ngFor="let post of posts$ | async"
+    <app-post-list-item *ngFor="let post of posts; trackBy: trackByFn"
 				[post]="post"
-				[options]="itemOptions">
+				[options]="itemOptions"
+				(view)="viewPost(post.id)">
     </app-post-list-item>
 
     <small class="d-block text-center mt-3">

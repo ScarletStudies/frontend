@@ -18,6 +18,8 @@ import { PostListComponent } from './post-list/post-list.component';
 import { PostListItemComponent } from './post-list/post-list-item/post-list-item.component';
 import { ViewPostModalComponent } from './post-list/view-post-modal/view-post-modal.component';
 import { CheerImageComponent } from './post-list/cheer-image/cheer-image.component';
+import { CommentListItemComponent } from './post-list/view-post-modal/comment-list-item/comment-list-item.component';
+import { NewPostModalComponent } from './course/new-post-modal/new-post-modal.component';
 
 @NgModule({
     imports: [
@@ -38,10 +40,13 @@ import { CheerImageComponent } from './post-list/cheer-image/cheer-image.compone
         PostListComponent,
         PostListItemComponent,
         ViewPostModalComponent,
-        CheerImageComponent
+        CheerImageComponent,
+        CommentListItemComponent,
+        NewPostModalComponent
     ],
     entryComponents: [
-        ViewPostModalComponent
+        ViewPostModalComponent,
+        NewPostModalComponent
     ]
 })
 export class DashboardModule { }

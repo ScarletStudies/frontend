@@ -1,10 +1,12 @@
 import { Component, OnInit, Input, OnDestroy, EventEmitter } from '@angular/core';
 import { Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { ICourse, IPost } from '../../models';
 import { PostService, IPostQueryParameters } from '../../services';
 import { IPostListItemOptions } from './post-list-item/post-list-item.component';
+import { ViewPostModalComponent } from './view-post-modal/view-post-modal.component';
 
 export interface IRefreshEvent {
     type: 'refresh';
@@ -45,13 +47,13 @@ export class PostListComponent implements OnInit, OnDestroy {
     @Input()
     public itemOptions: IPostListItemOptions = {};
 
-    public posts$: Observable<IPost[]> = null;
+    public posts: IPost[] = [];
 
     private queryParams$ = new BehaviorSubject<IPostQueryParameters>({});
-
     private subscriptions: Subscription[] = [];
 
-    constructor(private postService: PostService) { }
+    constructor(private postService: PostService,
+        private modalService: NgbModal) { }
 
     ngOnInit() {
         this.subscriptions.push(
@@ -72,7 +74,26 @@ export class PostListComponent implements OnInit, OnDestroy {
         }
     }
 
+    public trackByFn(index: number, post: IPost): string {
+        return post.id;
+    }
+
+    public viewPost(id: string): void {
+        const modalRef = this.modalService.open(
+            ViewPostModalComponent,
+            { size: 'lg', backdropClass: 'backdrop' }
+        );
+
+        modalRef.componentInstance.postId = id;
+    }
+
     private updatePosts(queryParams?: IPostQueryParameters) {
-        this.posts$ = this.postService.many(queryParams);
+        this.subscriptions.push(
+            this.postService
+                .many(queryParams)
+                .subscribe(
+                    posts => this.posts = posts
+                )
+        );
     }
 }
