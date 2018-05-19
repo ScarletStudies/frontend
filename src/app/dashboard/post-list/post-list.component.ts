@@ -1,16 +1,13 @@
 import { Component, OnInit, Input, OnDestroy, EventEmitter } from '@angular/core';
 import { Observable, Subscription, BehaviorSubject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Store, select } from '@ngrx/store';
 
-import { ICourse, IPost } from '../../models';
-import { PostService, IPostQueryParameters } from '../../services';
+import { IAppState, ICourse, IPost, IPostQueryParameters } from '../../models';
 import { IPostListItemOptions } from './post-list-item/post-list-item.component';
 import { ViewPostModalComponent } from './view-post-modal/view-post-modal.component';
-
-export interface IRefreshEvent {
-    type: 'refresh';
-}
+import { GetPostsAttemptAction } from '../../actions/post.actions';
 
 @Component({
     selector: 'app-post-list',
@@ -36,15 +33,6 @@ export class PostListComponent implements OnInit, OnDestroy {
     }
 
     @Input()
-    public set refreshEvents(events: EventEmitter<IRefreshEvent>) {
-        this.subscriptions.push(
-            events.subscribe(
-                () => this.updatePosts(this.queryParams$.value)
-            )
-        );
-    }
-
-    @Input()
     public itemOptions: IPostListItemOptions = {};
 
     public posts: IPost[] = [];
@@ -52,7 +40,7 @@ export class PostListComponent implements OnInit, OnDestroy {
     private queryParams$ = new BehaviorSubject<IPostQueryParameters>({});
     private subscriptions: Subscription[] = [];
 
-    constructor(private postService: PostService,
+    constructor(private store: Store<IAppState>,
         private modalService: NgbModal) { }
 
     ngOnInit() {
@@ -63,7 +51,14 @@ export class PostListComponent implements OnInit, OnDestroy {
                     debounceTime(250)
                 )
                 .subscribe(
-                    this.updatePosts.bind(this)
+                    queryParams => this.store.dispatch(new GetPostsAttemptAction(queryParams))
+                ),
+            this.store
+                .pipe(
+                    select(state => state.posts)
+                )
+                .subscribe(
+                    posts => this.posts = posts
                 )
         );
     }
@@ -85,15 +80,5 @@ export class PostListComponent implements OnInit, OnDestroy {
         );
 
         modalRef.componentInstance.postId = id;
-    }
-
-    private updatePosts(queryParams?: IPostQueryParameters) {
-        this.subscriptions.push(
-            this.postService
-                .many(queryParams)
-                .subscribe(
-                    posts => this.posts = posts
-                )
-        );
     }
 }

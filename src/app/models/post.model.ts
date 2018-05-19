@@ -6,15 +6,19 @@ export interface IPost {
     readonly content: string;
     readonly timestamp: string;
     readonly is_archived: boolean;
-    readonly cheers_count: number;
-    readonly comments_count: number;
+    readonly cheers: number;
 
     readonly category: ICategory;
     readonly course: ICourse;
     readonly semester: ISemester;
     readonly author: IUser;
+    readonly comments: IComment[];
 }
 
-export interface IPostWithComments extends IPost {
-    readonly comments?: IComment[]; /* comments not always returned */
+export interface IPostQueryParameters {
+    courses?: ICourse[];
+    categories?: ICategory[];
+    query?: string;
+    limit?: number;
+    offset?: number;
 }

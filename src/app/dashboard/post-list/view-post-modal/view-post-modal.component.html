@@ -5,7 +5,7 @@
     </button>
 </div>
 <div class="modal-body view-post-modal-body p-1"
-     *ngIf="post$ | async; let post">
+     *ngIf="post">
     <app-post-list-item [post]="post"
 			[options]="itemOptions"
 			(cheer)="cheer()"></app-post-list-item>

@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import { PostService, CategoryService } from '../../../services';
-import { ICategory } from '../../../models';
+import { CategoryService } from '../../../services';
+import { ICategory, IAppState } from '../../../models';
+import { CreatePostAttemptAction } from '../../../actions/post.actions';
 
 @Component({
     selector: 'app-new-post-modal',
@@ -26,8 +28,8 @@ export class NewPostModalComponent implements OnInit {
 
     constructor(public activeModal: NgbActiveModal,
         private categoryService: CategoryService,
-        private postService: PostService,
-        private fb: FormBuilder) { }
+        private fb: FormBuilder,
+        private store: Store<IAppState>) { }
 
     ngOnInit() {
         this.categories$ = this.categoryService.get();
@@ -41,13 +43,8 @@ export class NewPostModalComponent implements OnInit {
     }
 
     submit(): void {
-        const { title, content, category } = this.form.value;
+        this.store.dispatch(new CreatePostAttemptAction(this.form.value));
 
-        this.postService.add(title, content, this.courseId, category)
-            .subscribe(
-                () => {
-                    this.activeModal.close();
-                }
-            );
+        // TODO close modal upon successful post, maybe open view post for given post?
     }
 }
