@@ -15,12 +15,12 @@ export enum ActionTypes {
     CREATE_POST_FAILED = '[Post] Add Post Failed',
 
     // success results in update_post
-    CHEER_POST_ATTEMPT = '[Post] Add Post Attempt',
-    CHEER_POST_FAILED = '[Post] Add Post Failed',
+    CHEER_POST_ATTEMPT = '[Post] Cheer Post Attempt',
+    CHEER_POST_FAILED = '[Post] Cheer Post Failed',
 
     // success results in update_post
-    COMMENT_POST_ATTEMPT = '[Post] Add Post Attempt',
-    COMMENT_POST_FAILED = '[Post] Add Post Failed',
+    COMMENT_POST_ATTEMPT = '[Post] Comment Post Attempt',
+    COMMENT_POST_FAILED = '[Post] Comment Post Failed',
 
     ADD_POST = '[Post] Add Post',
     UPDATE_POST = '[Post] Update Post',
@@ -53,7 +53,8 @@ export class CreatePostAttemptAction implements Action {
 
 export class CreatePostFailedAction implements Action {
     readonly type = ActionTypes.CREATE_POST_FAILED;
-    readonly error = true;
+
+    readonly error = 'Create post failed';
 
     constructor(public payload: { message: string }) { }
 }
@@ -66,7 +67,7 @@ export class CheerPostAttemptAction implements Action {
 
 export class CheerPostFailedAction implements Action {
     readonly type = ActionTypes.CHEER_POST_FAILED;
-    readonly error = true;
+    readonly error = 'Cheer post failed';
 
     constructor(public payload: { message: string }) { }
 }
@@ -79,7 +80,7 @@ export class CommentPostAttemptAction implements Action {
 
 export class CommentPostFailedAction implements Action {
     readonly type = ActionTypes.COMMENT_POST_FAILED;
-    readonly error = true;
+    readonly error = 'Comment failed';
 
     constructor(public payload: { message: string }) { }
 }
@@ -92,7 +93,7 @@ export class GetPostsAttemptAction implements Action {
 
 export class GetPostsFailedAction implements Action {
     readonly type = ActionTypes.GET_POSTS_FAILED;
-    readonly error = true;
+    readonly error = 'Get posts failed';
 
     constructor(public payload: { message: string }) { }
 }

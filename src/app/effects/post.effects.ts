@@ -59,14 +59,14 @@ export class PostEffects {
 
     @Effect()
     addPost$: Observable<Action> = this.actions$.pipe(
-        ofType(PostActions.ActionTypes.ADD_POST),
+        ofType(PostActions.ActionTypes.CREATE_POST_ATTEMPT),
         mergeMap(
             (action: PostActions.CreatePostAttemptAction) =>
                 this.http.post(`${environment.api}/posts/`, action.payload)
                     .pipe(
                         // If successful, dispatch success action with result
                         map(
-                            (data: IPost[]) => new PostActions.SetPostsAction(data)
+                            (data: IPost) => new PostActions.AddPostAction(data)
                         ),
                         // If request fails, dispatch failed action
                         catchError(err => of(new PostActions.CreatePostFailedAction(err)))
@@ -83,7 +83,7 @@ export class PostEffects {
                     .pipe(
                         // If successful, dispatch success action with result
                         map(
-                            (data: IPost[]) => new PostActions.SetPostsAction(data)
+                            (data: IPost) => new PostActions.UpdatePostAction(data)
                         ),
                         // If request fails, dispatch failed action
                         catchError(err => of(new PostActions.CheerPostFailedAction(err)))

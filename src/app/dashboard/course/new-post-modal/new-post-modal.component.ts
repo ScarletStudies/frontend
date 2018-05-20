@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { CategoryService } from '../../../services';
-import { ICategory, IAppState } from '../../../models';
+import { ICategory, IAppState, IPost, ICourse } from '../../../models';
 import { CreatePostAttemptAction } from '../../../actions/post.actions';
 
 @Component({
@@ -43,7 +43,19 @@ export class NewPostModalComponent implements OnInit {
     }
 
     submit(): void {
-        this.store.dispatch(new CreatePostAttemptAction(this.form.value));
+        const { title, content, category } = this.form.value;
+        const post: Partial<IPost> = {
+            content,
+            title,
+            category: {
+                id: category
+            } as ICategory,
+            course: {
+                id: this.courseId
+            } as ICourse
+        };
+
+        this.store.dispatch(new CreatePostAttemptAction(post));
 
         // TODO close modal upon successful post, maybe open view post for given post?
     }
