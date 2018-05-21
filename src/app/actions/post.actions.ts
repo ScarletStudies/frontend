@@ -1,3 +1,4 @@
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Action } from '@ngrx/store';
 import { IPost, IPostQueryParameters, IComment } from '../models';
 
@@ -13,6 +14,7 @@ export enum ActionTypes {
     // success results in add_post
     CREATE_POST_ATTEMPT = '[Post] Add Post Attempt',
     CREATE_POST_FAILED = '[Post] Add Post Failed',
+    CREATE_POST_SUCCESS = '[Post] Add Post Success',
 
     // success results in update_post
     CHEER_POST_ATTEMPT = '[Post] Cheer Post Attempt',
@@ -48,7 +50,7 @@ export class UpdatePostAction implements Action {
 export class CreatePostAttemptAction implements Action {
     readonly type = ActionTypes.CREATE_POST_ATTEMPT;
 
-    constructor(public payload: Partial<IPost>) { }
+    constructor(public payload: { post: Partial<IPost>, modal: NgbActiveModal }) { }
 }
 
 export class CreatePostFailedAction implements Action {
@@ -57,6 +59,12 @@ export class CreatePostFailedAction implements Action {
     readonly error = 'Create post failed';
 
     constructor(public payload: { message: string }) { }
+}
+
+export class CreatePostSuccessAction implements Action {
+    readonly type = ActionTypes.CREATE_POST_SUCCESS;
+
+    constructor(public payload: { modal: NgbActiveModal }) { }
 }
 
 export class CheerPostAttemptAction implements Action {
@@ -103,6 +111,7 @@ export type Actions = SetPostsAction
     | UpdatePostAction
     | CreatePostAttemptAction
     | CreatePostFailedAction
+    | CreatePostSuccessAction
     | CheerPostAttemptAction
     | CheerPostFailedAction
     | CommentPostAttemptAction

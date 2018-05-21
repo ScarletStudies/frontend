@@ -1,7 +1,7 @@
 <div class="media post-listing pt-1 px-2 border-bottom border-gray"
      [class.border-bottom-0]="options.hideBorderBottom">
     <app-cheer-image class="mr-3 align-self-top"
-		     [count]="post.cheers_count"></app-cheer-image>
+		     [count]="post.cheers.length"></app-cheer-image>
 
     <div class="media-body p-1 d-flex flex-column justify-content-around">
 	<div class="d-flex mb-2">
@@ -29,10 +29,10 @@
 		</span>
 		&bull;
 		<span class="cheer-count">
-		    {{ post.cheers_count }} cheer(s)
+		    {{ post.cheers.length }} cheer(s)
 		</span>
 		&bull;
-		{{ post.comments_count }} comment(s)
+		{{ post.comments.length }} comment(s)
 	    </span>
 
 	    <ng-container [ngSwitch]="options.action">

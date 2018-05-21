@@ -62,11 +62,16 @@ export class PostEffects {
         ofType(PostActions.ActionTypes.CREATE_POST_ATTEMPT),
         mergeMap(
             (action: PostActions.CreatePostAttemptAction) =>
-                this.http.post(`${environment.api}/posts/`, action.payload)
+                this.http.post(`${environment.api}/posts/`, action.payload.post)
                     .pipe(
                         // If successful, dispatch success action with result
-                        map(
-                            (data: IPost) => new PostActions.AddPostAction(data)
+                        mergeMap(
+                            (data: IPost) => from(
+                                [
+                                    new PostActions.AddPostAction(data),
+                                    new PostActions.CreatePostSuccessAction(action.payload)
+                                ]
+                            )
                         ),
                         // If request fails, dispatch failed action
                         catchError(err => of(new PostActions.CreatePostFailedAction(err)))

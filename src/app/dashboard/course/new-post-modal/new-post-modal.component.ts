@@ -55,8 +55,6 @@ export class NewPostModalComponent implements OnInit {
             } as ICourse
         };
 
-        this.store.dispatch(new CreatePostAttemptAction(post));
-
-        // TODO close modal upon successful post, maybe open view post for given post?
+        this.store.dispatch(new CreatePostAttemptAction({ post, modal: this.activeModal }));
     }
 }
