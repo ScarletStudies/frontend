@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { IUser } from '../models';
+import { IAuthUser } from '../models';
 
 /**********
 * User Actions
@@ -21,7 +21,7 @@ export class AttemptLoginAction implements Action {
 export class LoginSuccessAction implements Action {
     readonly type = ActionTypes.LOGIN_SUCCESS;
 
-    constructor(public payload: IUser) { }
+    constructor(public payload: IAuthUser) { }
 }
 
 export class LoginFailedAction implements Action {

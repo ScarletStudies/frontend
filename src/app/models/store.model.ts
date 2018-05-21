@@ -1,13 +1,13 @@
 import { RouterReducerState } from '@ngrx/router-store';
 
 import {
-    IUser,
+    IAuthUser,
     ICourse,
     IPost
 } from '.';
 
 export interface IAppState {
-    user: IUser;
+    user: IAuthUser;
     schedule: ICourse[];
     posts: IPost[];
     router: RouterReducerState;

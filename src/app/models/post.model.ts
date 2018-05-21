@@ -6,7 +6,7 @@ export interface IPost {
     readonly content: string;
     readonly timestamp: string;
     readonly is_archived: boolean;
-    readonly cheers: number;
+    readonly cheers: IUser[];
 
     readonly category: ICategory;
     readonly course: ICourse;
