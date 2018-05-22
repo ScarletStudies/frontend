@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
@@ -6,7 +6,6 @@ import { switchMap } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IAppState, ICourse, ICategory } from '../../models';
-import { IRefreshEvent } from '../post-list/post-list.component';
 import { NewPostModalComponent } from './new-post-modal/new-post-modal.component';
 
 @Component({
@@ -17,7 +16,6 @@ import { NewPostModalComponent } from './new-post-modal/new-post-modal.component
 export class CourseComponent implements OnInit, OnDestroy {
 
     public course: ICourse = null;
-    public refreshEvents = new EventEmitter<IRefreshEvent>();
 
     private subscriptions: Subscription[] = [];
 
@@ -58,11 +56,5 @@ export class CourseComponent implements OnInit, OnDestroy {
             .open(NewPostModalComponent, { backdropClass: 'backdrop', size: 'lg' });
 
         modalRef.componentInstance.courseId = this.course.id;
-
-        modalRef
-            .result
-            .then(
-                () => this.refreshEvents.emit({ type: 'refresh' })
-            );
     }
 }

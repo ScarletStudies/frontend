@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import {
-    IUser,
+    IAuthUser,
     DEFAULT_USER_STATE
 } from '../models';
 import * as UserActions from '../actions/user.actions';
@@ -9,7 +9,7 @@ import * as UserActions from '../actions/user.actions';
 * User Reducer
 ********/
 
-export function userReducer(state: IUser = DEFAULT_USER_STATE, action: UserActions.Actions): IUser {
+export function userReducer(state: IAuthUser = DEFAULT_USER_STATE, action: UserActions.Actions): IAuthUser {
     switch (action.type) {
         case UserActions.ActionTypes.LOGIN_SUCCESS:
             return action.payload;

@@ -5,12 +5,11 @@ import { tap, filter } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 
 interface ErrorAction extends Action {
-    error: boolean;
+    error: string;
     payload: {
         error?: {
             message: string;
         };
-        message: string;
     };
 }
 
@@ -19,14 +18,14 @@ export class ErrorEffects {
 
     @Effect({ dispatch: false })
     display$ = this.actions$.pipe(
-        filter((action: ErrorAction) => action.error),
+        filter((action: ErrorAction) => !!action.error),
         tap(
             (action: ErrorAction) => {
-                let message = action.payload.message;
+                let message = action.error;
 
-                try {
+                if (action.payload.error && action.payload.error.message) {
                     message = action.payload.error.message;
-                } catch (e) { }
+                }
 
                 this.toastr.error(message, null, { timeOut: 0 });
             }

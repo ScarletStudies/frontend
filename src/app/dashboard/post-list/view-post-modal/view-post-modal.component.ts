@@ -2,10 +2,11 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, Subscription } from 'rxjs';
+import { Store, select } from '@ngrx/store';
 
-import { PostService } from '../../../services';
-import { IPost, IPostWithComments } from '../../../models';
+import { IPost, IAppState } from '../../../models';
 import { IPostListItemOptions } from '../post-list-item/post-list-item.component';
+import { CommentPostAttemptAction, CheerPostAttemptAction } from '../../../actions/post.actions';
 
 @Component({
     selector: 'app-view-post-modal',
@@ -15,22 +16,28 @@ import { IPostListItemOptions } from '../post-list-item/post-list-item.component
 export class ViewPostModalComponent implements OnInit, OnDestroy {
 
     @Input()
-    public set postId(postId: string) {
-        this._postId = postId;
+    public set postId(id: string) {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
 
-        this.refresh();
+        this.subscription = this.store
+            .pipe(
+                select(state => state.posts.find(p => p.id === id))
+            )
+            .subscribe(
+                post => this.post = post
+            );
     }
 
-    public post$: Observable<IPostWithComments> = null;
-
+    public post: IPost = null;
+    public commentForm: FormGroup = null;
     public itemOptions: IPostListItemOptions = {
         action: 'cheer',
         hideBorderBottom: true,
         hideCourseName: false,
         showPostContent: true
     };
-
-    public commentForm: FormGroup = null;
     public quillModules = {
         toolbar: [
             [{ header: [1, 2, false] }],
@@ -39,12 +46,11 @@ export class ViewPostModalComponent implements OnInit, OnDestroy {
         ]
     };
 
-    private _postId: string;
-    private subscriptions: Subscription[] = [];
+    private subscription: Subscription = null;
 
     constructor(public activeModal: NgbActiveModal,
         private fb: FormBuilder,
-        private postService: PostService) { }
+        private store: Store<IAppState>) { }
 
     ngOnInit() {
         this.commentForm = this.fb.group({
@@ -53,38 +59,20 @@ export class ViewPostModalComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        for (const sub of this.subscriptions) {
-            sub.unsubscribe();
+        if (this.subscription) {
+            this.subscription.unsubscribe();
         }
     }
 
-    private refresh(): void {
-        this.post$ = this.postService.one(this._postId);
-    }
-
     public comment(): void {
-        const { content } = this.commentForm.value;
+        const data = { post: this.post, comment: this.commentForm.value };
 
-        this.subscriptions.push(
-            this.postService
-                .comment(this._postId, content)
-                .subscribe(
-                    () => {
-                        this.commentForm.reset();
+        this.store.dispatch(new CommentPostAttemptAction(data));
 
-                        this.refresh();
-                    }
-                )
-        );
+        // TODO reset comment form after successful comment?
     }
 
     public cheer(): void {
-        this.subscriptions.push(
-            this.postService
-                .cheer(this._postId)
-                .subscribe(
-                    this.refresh.bind(this)
-                )
-        );
+        this.store.dispatch(new CheerPostAttemptAction(this.post));
     }
 }

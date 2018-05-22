@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 
 import * as UserActions from '../actions/user.actions';
 import * as RouterActions from '../actions/router.actions';
-import { IUser } from '../models';
+import { IAuthUser } from '../models';
 
 @Injectable()
 export class UserEffects {
@@ -22,7 +22,7 @@ export class UserEffects {
                     .pipe(
                         // If successful, dispatch success action with result
                         mergeMap(
-                            (data: IUser) => from(
+                            (data: IAuthUser) => from(
                                 [
                                     new UserActions.LoginSuccessAction(data),
                                     new RouterActions.Go({ path: ['/dashboard'] })
