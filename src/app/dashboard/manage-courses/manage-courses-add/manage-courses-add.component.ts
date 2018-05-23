@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { Observable, Subscription, combineLatest } from 'rxjs';
+import { debounceTime, map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { CourseService } from '../../../services';
@@ -21,7 +21,6 @@ export class ManageCoursesAddComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription[] = [];
 
     public availableCourses$: Observable<ICourse[]> = null;
-    public scheduleCourses$: Observable<ICourse[]> = null;
 
     public queryControl = new FormControl();
 
@@ -49,7 +48,21 @@ export class ManageCoursesAddComponent implements OnInit, OnDestroy {
     }
 
     private updateSearch(query: string = null): void {
-        this.availableCourses$ = this.courseService.availableCourses(query);
+        this.availableCourses$ = combineLatest(
+            this.courseService.availableCourses(query),
+            this.store.pipe(select(state => state.schedule))
+        )
+            .pipe(
+                map(
+                    ([available, schedule]) => {
+                        return available.filter(
+                            course => !schedule.find(
+                                c => c.id === course.id
+                            )
+                        );
+                    }
+                )
+            );
     }
 
     public addCourseToSchedule(course: ICourse): void {

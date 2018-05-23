@@ -1,61 +1,53 @@
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <a class="navbar-brand"
-       routerLink="/"
-       routerLinkActive="active"
-       [routerLinkActiveOptions]="{exact: true}">
-	Scarlet Studies
-    </a>
+    <div class="container">
+	<a class="navbar-brand"
+	   routerLink="/"
+	   routerLinkActive="active"
+	   [routerLinkActiveOptions]="{exact: true}">
+	    Scarlet Studies
+	</a>
 
-    <ul class="navbar-nav mr-auto">
-	<li class="nav-item">
-	    <a class="nav-link"
-	       routerLink="/"
-	       routerLinkActive="active"
-	       [routerLinkActiveOptions]="{exact: true}">
-		Home
-	    </a>
-	</li>
-    </ul>
+	<ul class="navbar-nav ml-auto">
+	    <ng-container *ngIf="!((user$ | async)?.email)">
+		<li class="nav-item">
+		    <a class="nav-link login"
+		       routerLink="/login"
+		       routerLinkActive="active"
+		       [routerLinkActiveOptions]="{exact: true}">
+			Login
+		    </a>
+		</li>
+		<li class="nav-item">
+		    <a class="nav-link register"
+		       routerLink="/register"
+		       routerLinkActive="active"
+		       [routerLinkActiveOptions]="{exact: true}">
+			Register
+		    </a>
+		</li>
+	    </ng-container>
+	    <ng-container *ngIf="(user$ | async)?.email; let email">
+		<li class="nav-item nav-link current-user">
+		    {{ email }}
+		</li>
+		<li class="nav-item">
+		    <a class="nav-link dashboard"
+		       routerLink="/dashboard"
+		       routerLinkActive="active"
+		       [routerLinkActiveOptions]="{exact: true}">
+			Dashboard
+		    </a>
+		</li>
+		<li class="nav-item">
+		    <a class="nav-link logout"
+		       routerLink="/"
+		       (click)="logout()">
+			Logout
+		    </a>
+		</li>
 
-    <ul class="navbar-nav">
-	<ng-container *ngIf="!((user$ | async)?.email)">
-	    <li class="nav-item">
-		<a class="nav-link login"
-		   routerLink="/login"
-		   routerLinkActive="active"
-		   [routerLinkActiveOptions]="{exact: true}">
-		    Login
-		</a>
-	    </li>
-	    <li class="nav-item">
-		<a class="nav-link register"
-		   routerLink="/register"
-		   routerLinkActive="active"
-		   [routerLinkActiveOptions]="{exact: true}">
-		    Register
-		</a>
-	    </li>
-	</ng-container>
-	<ng-container *ngIf="(user$ | async)?.email; let email">
-	    <li class="nav-item nav-link current-user">
-		{{ email }}
-	    </li>
-	    <li class="nav-item">
-		<a class="nav-link dashboard"
-		   routerLink="/dashboard"
-		   routerLinkActive="active"
-		   [routerLinkActiveOptions]="{exact: true}">
-		    Dashboard
-		</a>
-	    </li>
-	    <li class="nav-item">
-		<a class="nav-link logout"
-		   routerLink="/"
-		   (click)="logout()">
-		    Logout
-		</a>
-	    </li>
-
-	</ng-container>
-    </ul>
+	    </ng-container>
+	</ul>
+    </div>
 </nav>
+

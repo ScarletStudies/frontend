@@ -5,9 +5,11 @@
 
     <div class="media-body p-1 d-flex flex-column justify-content-around">
 	<div class="d-flex mb-2">
-	    <strong class="text-gray-dark post-title mr-auto">
-		{{ post.title }}
-	    </strong>
+	    <div class="overflow mr-auto">
+		<strong class="text-gray-dark post-title">
+		    {{ post.title }}
+		</strong>
+	    </div>
 	    <span class="badge bg-green post-course"
 		  *ngIf="!options.hideCourseName">
 		{{ post.course.name }}
