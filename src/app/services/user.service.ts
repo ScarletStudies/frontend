@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 
-import { ICourse } from '../models';
+import { IAuthUser } from '../models';
 
 @Injectable({
     providedIn: 'root'
@@ -18,6 +18,14 @@ export class UserService {
             .post<void>(
                 `${environment.api}/users/register`,
                 payload
+            );
+    }
+
+    public verify(jwt: string): Observable<IAuthUser> {
+        return this.http
+            .post<IAuthUser>(
+                `${environment.api}/users/register/verify`,
+                { jwt }
             );
     }
 }

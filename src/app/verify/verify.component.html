@@ -1,0 +1,20 @@
+<main>
+    <div class="jumbotron">
+	<div *ngIf="verified"
+	     class="container verification-success">
+	    <div class="display-5">
+		Verification success.
+	    </div>
+	    <p>
+		Navigate to <a routerLink="/dashboard">your dashboard</a> to get started.
+	    </p>
+	</div>
+
+	<div *ngIf="!verified"
+	     class="container">
+	    <div class="display-5">
+		Please wait, verifying...
+	    </div>
+	</div>	
+    </div>
+</main>

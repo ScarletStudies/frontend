@@ -11,7 +11,9 @@ import {
     AppLogin,
     AppManageCourses,
     AppRegister,
-    TEST_CREDENTIALS
+    AppVerify,
+    TEST_CREDENTIALS,
+    TEST_REGISTER_CREDENTIALS
 } from './app.po';
 
 describe('app sanity', () => {
@@ -80,27 +82,33 @@ describe('login', () => {
     });
 });
 
-fdescribe('register', () => {
+describe('register', () => {
     it('should register', async () => {
         await AppRegister.navigateTo();
 
-        const email = 'example@example.com';
-        await AppRegister.fields.email.edit(email);
+        // first register
+        await AppRegister.fields.email.edit(TEST_REGISTER_CREDENTIALS.email);
         await expect(AppRegister.fields.email.get())
-            .toEqual(email, 'email field not receiving input');
+            .toEqual(TEST_REGISTER_CREDENTIALS.email, 'email field not receiving input');
 
-        const pass = 'password123';
-        await AppRegister.fields.password.edit(pass);
+        await AppRegister.fields.password.edit(TEST_REGISTER_CREDENTIALS.password);
         await expect(AppRegister.fields.password.get())
-            .toEqual(pass, 'password field not receiving input');
+            .toEqual(TEST_REGISTER_CREDENTIALS.password, 'password field not receiving input');
 
-        await AppRegister.fields.passwordConfirmation.edit(pass);
+        await AppRegister.fields.passwordConfirmation.edit(TEST_REGISTER_CREDENTIALS.password);
         await expect(AppRegister.fields.passwordConfirmation.get())
-            .toEqual(pass, 'password confirmation field not receiving input');
+            .toEqual(TEST_REGISTER_CREDENTIALS.password, 'password confirmation field not receiving input');
 
         await AppRegister.doRegister();
 
-        await expect(AppRegister.messages.success()).toContain('Registration complete');
+        await expect(AppRegister.messages.success()).toContain('Registration success');
+
+        // then verify the account
+        const verification_code = TEST_REGISTER_CREDENTIALS.verification;
+
+        await AppVerify.navigateTo(verification_code);
+
+        await expect(AppVerify.messages.success()).toContain('Verification success');
     });
 });
 
