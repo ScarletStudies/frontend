@@ -40,6 +40,7 @@ import { RegisterComponent } from './register/register.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { userReducer } from './reducers/user.reducer';
+import { VerifyComponent } from './verify/verify.component';
 
 export function jwtOptionsFactory(store: Store<IAppState>) {
     return {
@@ -82,6 +83,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
         RegisterComponent,
         HeaderComponent,
         FooterComponent,
+        VerifyComponent,
     ],
     imports: [
         BrowserModule,

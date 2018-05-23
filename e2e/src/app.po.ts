@@ -1,8 +1,15 @@
 import { browser, by, element } from 'protractor';
+import * as fs from 'fs';
 
 export const TEST_CREDENTIALS = {
     email: 'test@example.com',
     password: 'password123'
+};
+
+export const TEST_REGISTER_CREDENTIALS = {
+    email: 'test@rutgers.edu',
+    password: 'stringstring',
+    verification: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.QzXsVYhb03aYF0BmRyl_yKl8GVpNlz5OFzpAshUit1w'
 };
 
 export class AppPage {
@@ -158,8 +165,30 @@ export class AppRegister {
         },
     };
 
+    static messages = {
+        success() {
+            return element(by.css('app-root app-register .registration-success')).getText();
+        }
+    };
+
     static navigateTo() {
         return browser.get('/register');
+    }
+
+    static doRegister() {
+        return element(by.css('app-root app-register button[type=submit]')).click();
+    }
+}
+
+export class AppVerify {
+    static messages = {
+        success() {
+            return element(by.css('app-root app-verify .verification-success')).getText();
+        }
+    };
+
+    static navigateTo(code: string) {
+        return browser.get(`/verify/${code}`);
     }
 }
 
