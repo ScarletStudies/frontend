@@ -28,4 +28,13 @@ export class UserService {
                 { jwt }
             );
     }
+
+    public refresh(jwt: string): Observable<IAuthUser> {
+        console.log('refresh called');
+        return this.http
+            .get<IAuthUser>(
+                `${environment.api}/users/refresh`,
+                { headers: { 'Authorization': `Bearer ${jwt}` } }
+            );
+    }
 }

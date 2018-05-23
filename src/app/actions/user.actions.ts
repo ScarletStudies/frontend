@@ -9,7 +9,8 @@ export enum ActionTypes {
     LOGIN_ATTEMPT = '[User] Attempt Login',
     LOGIN_SUCCESS = '[User] Do Login',
     LOGIN_FAILED = '[User] Fail Login',
-    LOGOUT = '[User] Logout'
+    LOGOUT = '[User] Logout',
+    REFRESH = '[User] Refresh'
 }
 
 export class AttemptLoginAction implements Action {
@@ -35,4 +36,14 @@ export class LogoutAction implements Action {
     readonly type = ActionTypes.LOGOUT;
 }
 
-export type Actions = AttemptLoginAction | LoginSuccessAction | LoginFailedAction | LogoutAction;
+export class RefreshJwtAction implements Action {
+    readonly type = ActionTypes.REFRESH;
+
+    constructor(public payload: string) { }
+}
+
+export type Actions = AttemptLoginAction |
+    LoginSuccessAction |
+    LoginFailedAction |
+    LogoutAction |
+    RefreshJwtAction;

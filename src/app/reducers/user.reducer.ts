@@ -13,6 +13,11 @@ export function userReducer(state: IAuthUser = DEFAULT_USER_STATE, action: UserA
     switch (action.type) {
         case UserActions.ActionTypes.LOGIN_SUCCESS:
             return action.payload;
+        case UserActions.ActionTypes.REFRESH:
+            return {
+                ...state,
+                jwt: action.payload
+            };
         case UserActions.ActionTypes.LOGOUT:
             return DEFAULT_USER_STATE;
     }

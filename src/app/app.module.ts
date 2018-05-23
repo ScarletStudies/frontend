@@ -17,7 +17,8 @@ import { ToastrModule } from 'ngx-toastr';
 
 import { QuillModule } from 'ngx-quill';
 
-import { take } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { take, mergeMap, tap, catchError } from 'rxjs/operators';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { routerReducer, StoreRouterConnectingModule } from '@ngrx/router-store';
 
@@ -25,13 +26,14 @@ import { StoreModule, Store, select, MetaReducer, ActionReducer } from '@ngrx/st
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { reducers } from './reducers';
 import { IAppState } from './models';
+import { LoginSuccessAction, RefreshJwtAction } from './actions/user.actions';
 
 import { EffectsModule } from '@ngrx/effects';
 import { APP_EFFECTS } from './effects';
 
-import { JwtModule, JWT_OPTIONS, JwtModuleOptions } from '@auth0/angular-jwt';
+import { JwtModule, JWT_OPTIONS, JwtModuleOptions, JwtHelperService } from '@auth0/angular-jwt';
 
-import { APP_SERVICES } from './services';
+import { APP_SERVICES, UserService } from './services';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -42,10 +44,10 @@ import { FooterComponent } from './footer/footer.component';
 import { userReducer } from './reducers/user.reducer';
 import { VerifyComponent } from './verify/verify.component';
 
-export function jwtOptionsFactory(store: Store<IAppState>) {
+export function jwtOptionsFactory(store: Store<IAppState>, userService: UserService) {
     return {
         tokenGetter: () => {
-            return new Promise(
+            return new Promise<string>(
                 (resolve, reject) => {
                     const sub = store
                         .pipe(
@@ -58,14 +60,41 @@ export function jwtOptionsFactory(store: Store<IAppState>) {
                                     return null;
                                 }
                             ),
-                            take(1)
+                            take(1),
+                            mergeMap(
+                                jwt => {
+                                    const helper = new JwtHelperService();
+
+                                    if (!jwt) {
+                                        return of({ jwt: null });
+                                    } else if (helper.isTokenExpired(jwt)) {
+                                        return userService
+                                            .refresh(jwt)
+                                            .pipe(
+                                                tap(
+                                                    ({ jwt }) => store.dispatch(new RefreshJwtAction(jwt))
+                                                )
+                                            );
+                                    }
+
+                                    return of({ jwt });
+                                }
+                            ),
+                            catchError(
+                                err => {
+                                    return of({ jwt: null });
+                                }
+                            )
                         )
-                        .subscribe(resolve);
+                        .subscribe(
+                            ({ jwt }) => resolve(jwt)
+                        );
                 }
             );
         },
         whitelistedDomains: environment.whitelistedDomains,
-        blacklistedRoutes: environment.blacklistedRoutes
+        blacklistedRoutes: environment.blacklistedRoutes,
+        skipWhenExpired: true
     };
 }
 
@@ -110,7 +139,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
             jwtOptionsProvider: {
                 provide: JWT_OPTIONS,
                 useFactory: jwtOptionsFactory,
-                deps: [Store]
+                deps: [Store, UserService]
             }
         }),
         BrowserAnimationsModule,
