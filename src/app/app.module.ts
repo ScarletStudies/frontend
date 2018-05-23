@@ -62,14 +62,14 @@ export function jwtOptionsFactory(store: Store<IAppState>, userService: UserServ
                             ),
                             take(1),
                             mergeMap(
-                                jwt => {
+                                token => {
                                     const helper = new JwtHelperService();
 
-                                    if (!jwt) {
+                                    if (!token) {
                                         return of({ jwt: null });
-                                    } else if (helper.isTokenExpired(jwt)) {
+                                    } else if (helper.isTokenExpired(token)) {
                                         return userService
-                                            .refresh(jwt)
+                                            .refresh(token)
                                             .pipe(
                                                 tap(
                                                     ({ jwt }) => store.dispatch(new RefreshJwtAction(jwt))
@@ -77,7 +77,7 @@ export function jwtOptionsFactory(store: Store<IAppState>, userService: UserServ
                                             );
                                     }
 
-                                    return of({ jwt });
+                                    return of({ jwt: token });
                                 }
                             ),
                             catchError(
