@@ -158,8 +158,18 @@ export class AppRegister {
         },
     };
 
+    static messages = {
+        success() {
+            return element(by.css('app-root app-register .registration-success')).getText();
+        }
+    };
+
     static navigateTo() {
         return browser.get('/register');
+    }
+
+    static doRegister() {
+        return element(by.css('app-root app-register button[type=submit]')).click();
     }
 }
 

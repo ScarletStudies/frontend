@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { tap, filter } from 'rxjs/operators';
-import { ToastrService } from 'ngx-toastr';
+
+import { AlertService } from '../services';
 
 interface ErrorAction extends Action {
     error: string;
@@ -23,16 +24,16 @@ export class ErrorEffects {
             (action: ErrorAction) => {
                 let message = action.error;
 
-                if (action.payload.error && action.payload.error.message) {
+                if (action.payload && action.payload.error && action.payload.error.message) {
                     message = action.payload.error.message;
                 }
 
-                this.toastr.error(message, null, { timeOut: 0 });
+                this.alertService.error(message);
             }
         )
     );
 
 
     constructor(private actions$: Actions,
-        private toastr: ToastrService) { }
+        private alertService: AlertService) { }
 }

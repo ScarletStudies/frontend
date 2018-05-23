@@ -1,6 +1,7 @@
 <!-- thanks to https://getbootstrap.com/docs/4.1/examples/sign-in/ -->
 <form class="form-signin mt-3"
-      [formGroup]="form">
+      [formGroup]="form"
+      (ngSubmit)="submit()">
     <h1 class="h3 mb-3 font-weight-normal">Register</h1>
 
     <label for="inputEmail"
@@ -39,6 +40,13 @@
 	Create account
     </button>
 </form>
+
+<div *ngIf="registered"
+     class="alert alert-success registration-success"
+     role="alert">
+    Registration success. Please check your email for an activation link.
+    You will not be able to login until the account has been verified.
+</div>
 
 <div class="form-signin">
     <p>

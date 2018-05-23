@@ -80,8 +80,8 @@ describe('login', () => {
     });
 });
 
-describe('register', () => {
-    it('should accept an email, password and password verification', async () => {
+fdescribe('register', () => {
+    it('should register', async () => {
         await AppRegister.navigateTo();
 
         const email = 'example@example.com';
@@ -97,6 +97,10 @@ describe('register', () => {
         await AppRegister.fields.passwordConfirmation.edit(pass);
         await expect(AppRegister.fields.passwordConfirmation.get())
             .toEqual(pass, 'password confirmation field not receiving input');
+
+        await AppRegister.doRegister();
+
+        await expect(AppRegister.messages.success()).toContain('Registration complete');
     });
 });
 
