@@ -30,7 +30,11 @@ function passwordEquivalenceValidator(control: AbstractControl): { [key: string]
 export class RegisterComponent implements OnInit {
 
     public form: FormGroup = null;
+    public resendForm: FormGroup = null;
+
     public registered = false;
+    public resent = false;
+    public isCollapsed = true;
 
     constructor(private fb: FormBuilder,
         private userService: UserService,
@@ -47,6 +51,12 @@ export class RegisterComponent implements OnInit {
                 validator: passwordEquivalenceValidator
             }
         );
+
+        this.resendForm = this.fb.group(
+            {
+                email: ['', Validators.required],
+            }
+        );
     }
 
     public submit(): void {
@@ -56,6 +66,20 @@ export class RegisterComponent implements OnInit {
             .subscribe(
                 () => {
                     this.registered = true;
+                },
+                err => {
+                    this.store.dispatch(new ErrorAction(err));
+                }
+            );
+    }
+
+    public resendSubmit(): void {
+        const { email } = this.resendForm.value;
+        this.userService
+            .resend({ email })
+            .subscribe(
+                () => {
+                    this.resent = true;
                 },
                 err => {
                     this.store.dispatch(new ErrorAction(err));

@@ -37,4 +37,12 @@ export class UserService {
                 { headers: { 'Authorization': `Bearer ${jwt}` } }
             );
     }
+
+    public resend(payload: { email: string }): Observable<void> {
+        return this.http
+            .post<void>(
+                `${environment.api}/users/register/resend`,
+                payload
+            );
+    }
 }

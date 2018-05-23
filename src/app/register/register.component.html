@@ -34,7 +34,7 @@
 	   class="form-control"
 	   placeholder="Password Confirmation *">
 
-    <button class="btn btn-lg btn-primary btn-block"
+    <button class="btn btn-lg btn-primary btn-block register-submit"
 	    type="submit"
 	    [disabled]="form.invalid">
 	Create account
@@ -51,8 +51,47 @@
     </div>
 </div>
 
-<div class="form-signin">
+<div class="form-signin pb-0">
     <p>
-	Have an account? <a class="register" routerLink="/login">Login</a>.
+	Have an account? <a class="register" routerLink="/login">Login</a>
     </p>
+    <p class="mb-0">
+	Missing the verification email?
+	<button type="button"
+		      class="btn btn-link ml-0 resend-open"
+		      (click)="isCollapsed = !isCollapsed">
+	    Resend
+	</button>
+    </p>
+</div>
+
+<form class="form-signin"
+      [ngbCollapse]="isCollapsed"
+      [formGroup]="resendForm"
+      (ngSubmit)="resendSubmit()">
+    <label for="inputEmail"
+	   class="sr-only">
+	Email address
+    </label>
+    <input formControlName="email"
+	   type="email"
+	   id="resendEmail"
+	   class="form-control"
+	   placeholder="Email address *">
+
+    <button class="btn btn-lg btn-primary btn-block resend-submit"
+	    type="submit"
+	    [disabled]="resendForm.invalid">
+	Resend
+    </button>
+</form>
+
+<div *ngIf="resent"
+     class="d-flex justify-content-center">
+    <div class="alert alert-success resend-success"
+	 style="max-width: 20rem;"
+	 role="alert">
+	<strong>Verification email sent.</strong> Please check your email for an activation link.
+	You will not be able to login until the account has been verified.
+    </div>
 </div>

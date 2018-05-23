@@ -103,12 +103,33 @@ describe('register', () => {
 
         await expect(AppRegister.messages.success()).toContain('Registration success');
 
+        // resend email
+        await AppRegister.reset.open();
+
+        await AppRegister.reset.fields.email.edit(TEST_REGISTER_CREDENTIALS.email);
+
+        await AppRegister.reset.submit();
+
+        await expect(AppRegister.reset.messages.success()).toContain('Verification email sent');
+
         // then verify the account
         const verification_code = TEST_REGISTER_CREDENTIALS.verification;
 
         await AppVerify.navigateTo(verification_code);
 
         await expect(AppVerify.messages.success()).toContain('Verification success');
+
+        // confirm that user can now login
+        await AppLogin.navigateTo();
+
+        // test credentials
+        await AppLogin.fields.email.edit(TEST_REGISTER_CREDENTIALS.email);
+        await AppLogin.fields.password.edit(TEST_REGISTER_CREDENTIALS.password);
+        await AppLogin.doLogin();
+
+        // should contain user email in header after successful login
+        await expect(AppHeader.currentUser.get())
+            .toContain(TEST_REGISTER_CREDENTIALS.email, 'user email not displayed in header');
     });
 });
 

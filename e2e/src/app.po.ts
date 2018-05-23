@@ -7,7 +7,7 @@ export const TEST_CREDENTIALS = {
 };
 
 export const TEST_REGISTER_CREDENTIALS = {
-    email: 'test@rutgers.edu',
+    email: `${Math.random()}@fakerutgers.edu`,
     password: 'stringstring',
     verification: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.QzXsVYhb03aYF0BmRyl_yKl8GVpNlz5OFzpAshUit1w'
 };
@@ -171,12 +171,37 @@ export class AppRegister {
         }
     };
 
+    static reset = {
+        fields: {
+            email: {
+                edit(text: string) {
+                    return element(by.css('app-root app-register input#resendEmail'))
+                        .sendKeys(text);
+                }
+            }
+        },
+
+        messages: {
+            success() {
+                return element(by.css('app-root app-register .resend-success')).getText();
+            }
+        },
+
+        open() {
+            return element(by.css('app-root app-register .resend-open')).click();
+        },
+
+        submit() {
+            return element(by.css('app-root app-register .resend-submit')).click();
+        }
+    };
+
     static navigateTo() {
         return browser.get('/register');
     }
 
     static doRegister() {
-        return element(by.css('app-root app-register button[type=submit]')).click();
+        return element(by.css('app-root app-register button.register-submit')).click();
     }
 }
 
