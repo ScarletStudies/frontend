@@ -409,6 +409,14 @@ export class AppDashboardCourseOverview {
                     .get(index)
                     .click();
             }
+        },
+        loadMore: {
+            do() {
+                return element(by.css('app-root app-course app-post-list .load-more')).click();
+            },
+            isPresent() {
+                return element(by.css('app-root app-course app-post-list .load-more')).isPresent();
+            }
         }
     };
 }

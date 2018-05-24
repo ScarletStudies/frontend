@@ -302,5 +302,54 @@ describe('dashboard course overview', () => {
         await expect(AppDashboardPostView.comments.get.byIndex(0))
             .toEqual(comment, 'comment content not displayed');
     });
+
+    it('should load more', async () => {
+        await AppLogin.doTestCredentialsLogin();
+        await AppDashboardSideBar.navigateToManageCourses();
+        await AppManageCourses.courses.schedule.remove.all();
+
+        // add course and remember name
+        await AppManageCourses.courses.available.add.byIndex(5);
+        const courseName = await AppManageCourses.courses.schedule.get.byIndex(0);
+
+        // navigate to that course overview
+        await AppDashboardSideBar.navigateToCourse.byName(courseName);
+
+        const addPost = async () => {
+            // should add a post with randomized data to prevent duplication in subsequent tests
+            const post = {
+                title: `I am an e2e title ${Math.random()}`,
+                content: `I am an e2e content ${Math.random()}`,
+                category: 'Exam',
+                author: TEST_CREDENTIALS.email,
+                course: courseName
+            };
+
+            await AppDashboardCourseOverview.posts.add(post);
+        };
+
+        // count courses beforehand to avoid issues
+        const existing_count = await AppDashboardCourseOverview.posts.get.count();
+        const default_count = 10;
+        const full_count = 15;
+
+        for (let i = 0; i < full_count; i++) {
+            await addPost();
+        }
+
+        // refresh to get back to default count
+        await AppPage.refresh();
+
+        // default count is 10
+        await expect(AppDashboardCourseOverview.posts.get.count()).toEqual(default_count);
+
+        // load more
+        await AppDashboardCourseOverview.posts.loadMore.do();
+
+        // expect full 15+ now
+        await expect(AppDashboardCourseOverview.posts.get.count()).toEqual(existing_count + full_count);
+        // load more should now be hidden
+        await expect(AppDashboardCourseOverview.posts.loadMore.isPresent()).toBeFalsy();
+    });
 });
 

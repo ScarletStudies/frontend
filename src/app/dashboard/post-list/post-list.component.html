@@ -10,6 +10,11 @@
     </app-post-list-item>
 
     <small class="d-block text-center mt-3">
-        <a href="#">Load more</a>
+	<button *ngIf="queryParams$.value.limit === posts.length"
+		type="button"
+		class="btn btn-link btn-sm load-more"
+		(click)="loadMore()">
+	    Load More
+	</button>
     </small>
 </div>

@@ -7,7 +7,7 @@
 <div *ngIf="semesterCourses$ | async; let courses">
     <app-post-list *ngIf="courses?.length > 0"
 		   [courses]="courses"
-		   [limit]="10"></app-post-list>
+		   [limit]="15"></app-post-list>
 
     <div *ngIf="courses?.length === 0"
 	 class="empty-message">

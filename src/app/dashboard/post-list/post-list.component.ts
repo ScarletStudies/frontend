@@ -18,6 +18,12 @@ export class PostListComponent implements OnInit, OnDestroy {
 
     @Input()
     public set courses(courses: ICourse[]) {
+        courses = courses.filter(course => !!course);
+
+        if (courses.length === 0) {
+            return;
+        }
+
         this.queryParams$.next({
             ...this.queryParams$.value,
             courses
@@ -80,5 +86,13 @@ export class PostListComponent implements OnInit, OnDestroy {
         );
 
         modalRef.componentInstance.postId = id;
+    }
+
+    public loadMore(): void {
+        const current = this.queryParams$.value;
+        this.queryParams$.next({
+            ...current,
+            limit: current.limit * 2
+        });
     }
 }

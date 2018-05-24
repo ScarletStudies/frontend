@@ -12,7 +12,8 @@
     </div>
 </div>
 
-<app-post-list [courses]="[course]"
+<app-post-list *ngIf="course"
+	       [courses]="[course]"
 	       [limit]="10"></app-post-list>
 
 
