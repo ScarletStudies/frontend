@@ -39,6 +39,30 @@ export class PostListComponent implements OnInit, OnDestroy {
     }
 
     @Input()
+    public set sort(sort: 'time' | 'activity') {
+        this.queryParams$.next({
+            ...this.queryParams$.value,
+            sort
+        });
+    }
+
+    @Input()
+    public set category(id: string) {
+        this.queryParams$.next({
+            ...this.queryParams$.value,
+            categories: [{ id }].filter(c => !!c.id)
+        });
+    }
+
+    @Input()
+    public set query(query: string) {
+        this.queryParams$.next({
+            ...this.queryParams$.value,
+            query
+        });
+    }
+
+    @Input()
     public itemOptions: IPostListItemOptions = {};
 
     public posts: IPost[] = [];

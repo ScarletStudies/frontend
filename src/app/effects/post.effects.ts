@@ -44,6 +44,10 @@ export class PostEffects {
                     params = params.set('query', queryParams.query);
                 }
 
+                if (queryParams.sort) {
+                    params = params.set('sort', queryParams.sort);
+                }
+
                 return this.http.get(`${environment.api}/posts/`, { params })
                     .pipe(
                         // If successful, dispatch success action with result

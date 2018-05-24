@@ -3,17 +3,73 @@
         <h6 class="mb-0 lh-100">{{ course?.name }}</h6>
     </div>
 
-    <div class="ml-auto mr-2">
-	<button type="button"
-		class="btn open-new-post-modal"
-		(click)="open()">
-	    New Post
-	</button>
+    <div class="ml-auto btn-toolbar" role="toolbar">
+	<div class="btn-group mr-2" role="group">
+	    <button type="button"
+		    class="btn btn-light"
+		    (click)="isSortCollapsed = !isSortCollapsed">
+		Filter and Sort
+	    </button>
+	</div>
+	<div class="btn-group">
+	    <button type="button"
+		    class="btn btn-primary open-new-post-modal"
+		    (click)="open()">
+		New Post
+	    </button>
+	</div>
     </div>
 </div>
 
+<form class="card"
+      [ngbCollapse]="isSortCollapsed"
+      [formGroup]="sortForm">
+    <div class="card-body">
+	<div class="form-group">
+	    <label>Sort</label>
+	    <select class="custom-select"
+		    formControlName="sort">
+		<option selected value="time">New</option>
+		<option value="activity">Recent Activity</option>
+	    </select>
+	</div>
+
+	<div class="form-group">
+	    <label>Category</label>
+	    <select class="custom-select"
+		    formControlName="category">
+		<option selected [ngValue]="null">None</option>
+		<option *ngFor="let category of categories$ | async"
+				[value]="category.id">
+		    {{ category.name }}
+		</option>
+	    </select>
+	</div>
+
+	<div class="form-group">
+	    <label>Semester</label>
+	    <select class="custom-select"
+		    disabled="disabled">
+		<option selected>Current</option>
+	    </select>
+	</div>
+
+	<div class="form-group">
+	    <label for="search">Search</label>
+	    <input formControlName="query"
+		   type="text"
+		   class="form-control"
+		   id="search"
+		   placeholder="...">
+	</div>
+    </div>
+</form>
+
 <app-post-list *ngIf="course"
 	       [courses]="[course]"
-	       [limit]="10"></app-post-list>
+	       [limit]="10"
+	       [sort]="sortForm?.value.sort"
+	       [category]="sortForm?.value.category"
+	       [query]="sortForm?.value.query"></app-post-list>
 
 

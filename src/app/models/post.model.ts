@@ -17,8 +17,9 @@ export interface IPost {
 
 export interface IPostQueryParameters {
     courses?: ICourse[];
-    categories?: ICategory[];
+    categories?: Partial<ICategory>[];
     query?: string;
     limit?: number;
     offset?: number;
+    sort?: 'time' | 'activity';
 }
