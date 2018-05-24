@@ -4,7 +4,10 @@
     <input [formControl]="queryControl"
 	   type="text"
 	   class="form-control search"
-	   placeholder="Search...">
+	   placeholder="Try 'calculus' or '01:750:229'">
+    <p class="text-muted small pt-1 pl-1 mb-0">
+	Search in course name or by whole course ID.
+    </p>
 </div>
 
 <div *ngIf="availableCourses$ | async; let courses">
