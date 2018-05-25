@@ -1,20 +1,18 @@
-<div class="my-3 p-3 bg-white">
-    <h6 class="border-bottom border-gray pb-2 mb-0">
-	Recent updates
-    </h6>
-
-    <app-post-list-item *ngFor="let post of posts; trackBy: trackByFn"
-				[post]="post"
-				[options]="itemOptions"
-				(view)="viewPost(post.id)">
-    </app-post-list-item>
-
-    <small class="d-block text-center mt-3">
-	<button *ngIf="queryParams$.value.limit === posts.length"
-		type="button"
-		class="btn btn-link btn-sm load-more"
-		(click)="loadMore()">
-	    Load More
-	</button>
-    </small>
+<div class="list-group">
+    <a *ngFor="let post of posts"
+       class="list-group-item list-group-item-action"
+       (click)="viewPost(post.id)">
+	<app-post-list-item [post]="post"
+			    [options]="itemOptions"></app-post-list-item>
+    </a>
 </div>
+
+<small class="d-block text-center mt-3">
+    <button *ngIf="loadMore && queryParams$.value.limit === posts.length"
+		   type="button"
+		   class="btn btn-link btn-sm load-more"
+		   (click)="loadMore()">
+	Load More
+    </button>
+</small>
+

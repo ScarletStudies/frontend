@@ -65,9 +65,12 @@ export class PostListComponent implements OnInit, OnDestroy {
     @Input()
     public itemOptions: IPostListItemOptions = {};
 
-    public posts: IPost[] = [];
+    @Input()
+    public showLoadMore = true;
 
-    private queryParams$ = new BehaviorSubject<IPostQueryParameters>({});
+    public posts: IPost[] = [];
+    public queryParams$ = new BehaviorSubject<IPostQueryParameters>({});
+
     private subscriptions: Subscription[] = [];
 
     constructor(private store: Store<IAppState>,

@@ -20,6 +20,8 @@ import { ViewPostModalComponent } from './post-list/view-post-modal/view-post-mo
 import { CheerImageComponent } from './post-list/cheer-image/cheer-image.component';
 import { CommentListItemComponent } from './post-list/view-post-modal/comment-list-item/comment-list-item.component';
 import { NewPostModalComponent } from './course/new-post-modal/new-post-modal.component';
+import { SemesterCoursesComponent } from './semester-courses/semester-courses.component';
+import { UserSettingsComponent } from './user-settings/user-settings.component';
 
 @NgModule({
     imports: [
@@ -42,7 +44,9 @@ import { NewPostModalComponent } from './course/new-post-modal/new-post-modal.co
         ViewPostModalComponent,
         CheerImageComponent,
         CommentListItemComponent,
-        NewPostModalComponent
+        NewPostModalComponent,
+        SemesterCoursesComponent,
+        UserSettingsComponent
     ],
     entryComponents: [
         ViewPostModalComponent,

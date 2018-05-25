@@ -34,6 +34,7 @@
 						"@ngx-loading-bar/router": "2.0.0",
 						"bootstrap": "4.1.1",
 						"core-js": "2.5.4",
+						"font-awesome": "^4.7.0",
 						"holderjs": "2.9.4",
 						"mocka-placeholder": "^1.0.2",
 						"ngrx-store-localstorage": "5.0.0",

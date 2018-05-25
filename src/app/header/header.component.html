@@ -27,8 +27,13 @@
 		</li>
 	    </ng-container>
 	    <ng-container *ngIf="(user$ | async)?.email; let email">
-		<li class="nav-item nav-link current-user">
-		    {{ email }}
+		<li class="nav-item current-user">
+		    <a class="nav-link dashboard"
+		       routerLink="/dashboard/user-settings"
+		       routerLinkActive="active"
+		       [routerLinkActiveOptions]="{exact: true}">
+			{{ email }}
+		    </a>
 		</li>
 		<li class="nav-item">
 		    <a class="nav-link dashboard"

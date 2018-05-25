@@ -5,6 +5,7 @@ import { ManageCoursesComponent } from './manage-courses/manage-courses.componen
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overview.component';
 import { CourseComponent } from './course/course.component';
+import { UserSettingsComponent } from './user-settings/user-settings.component';
 
 const routes: Routes = [
     {
@@ -18,6 +19,10 @@ const routes: Routes = [
             {
                 path: 'manage',
                 component: ManageCoursesComponent
+            },
+            {
+                path: 'user-settings',
+                component: UserSettingsComponent
             },
             {
                 path: 'course/:id',
