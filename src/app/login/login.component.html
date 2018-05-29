@@ -28,7 +28,7 @@
 	   placeholder="Password *"
 	   required>
 
-    <button class="btn btn-lg btn-primary btn-block"
+    <button class="btn btn-lg btn-primary btn-block login"
 	    type="submit"
 	    [disabled]="form.invalid && form.touched">
 	Sign in
@@ -55,7 +55,7 @@
       [formGroup]="forgotPasswordForm"
       (ngSubmit)="forgotPassword()">
 
-    <label for="inputEmail"
+    <label for="resendEmail"
 	   class="sr-only">
 	Email address
     </label>

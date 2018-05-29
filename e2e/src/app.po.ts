@@ -76,6 +76,9 @@ export class AppHeader {
     static dashboard = {
         isPresent() {
             return element(by.css('app-root app-header a.dashboard')).isPresent();
+        },
+        go() {
+            return element(by.css('app-root app-header a.dashboard')).click();
         }
     };
 
@@ -114,7 +117,7 @@ export class AppLogin {
     }
 
     static doLogin() {
-        return element(by.css('app-root app-login button[type=submit]')).click();
+        return element(by.css('app-root app-login button.login')).click();
     }
 
     static doTestCredentialsLogin() {
@@ -310,22 +313,18 @@ export class AppDashboard {
 export class AppDashboardSideBar {
     static courses = {
         count() {
-            return element.all(by.css('app-root nav.sidebar a.course')).count();
+            return element.all(by.css('app-root app-semester-courses a.course')).count();
         }
     };
 
     static navigateToCourse = {
         byName(name: string) {
-            return element(by.cssContainingText('app-root nav.sidebar a.course', name)).click();
+            return element(by.cssContainingText('app-root app-semester-courses a.course', name)).click();
         }
     };
 
     static navigateToManageCourses() {
-        return element(by.css('app-root nav.sidebar a.manage')).click();
-    }
-
-    static navigateToDashboardOverview() {
-        return element(by.css('app-root nav.sidebar a.dashboard')).click();
+        return element(by.css('app-root app-semester-courses a.manage')).click();
     }
 }
 
@@ -425,11 +424,11 @@ export class AppDashboardPostView {
     static post = {
         async get() {
             return {
-                course: await element(by.css('.view-post-modal-body .post-course')).getText(),
-                title: await element(by.css('.view-post-modal-body .post-title')).getText(),
-                content: await element(by.css('.view-post-modal-body .post-content')).getText(),
-                author: await element(by.css('.view-post-modal-body .post-author')).getText(),
-                category: await element(by.css('.view-post-modal-body .post-category')).getText()
+                course: await element(by.css('app-root app-view-post .post-course')).getText(),
+                title: await element(by.css('app-root app-view-post .post-title')).getText(),
+                content: await element(by.css('app-root app-view-post .post-content')).getText(),
+                author: await element(by.css('app-root app-view-post .post-author')).getText(),
+                category: await element(by.css('app-root app-view-post .post-category')).getText()
             };
         }
     };
@@ -437,7 +436,7 @@ export class AppDashboardPostView {
     static comments = {
         get: {
             async byIndex(index: number) {
-                const commentRef = await element.all(by.css('.view-post-modal-body .post-comment'))
+                const commentRef = await element.all(by.css('app-root app-view-post .post-comment'))
                     .get(index);
 
                 return {
@@ -447,20 +446,20 @@ export class AppDashboardPostView {
             }
         },
         add({ content }) {
-            return element(by.css('.view-post-modal-body #comment-content div.ql-editor[contenteditable]'))
+            return element(by.css('app-root app-view-post #comment-content div.ql-editor[contenteditable]'))
                 .sendKeys(content)
                 .then(
-                    () => element(by.css('.view-post-modal-body button#comment-submit')).click()
+                    () => element(by.css('app-root app-view-post button#comment-submit')).click()
                 );
         }
     };
 
     static cheers = {
         do() {
-            return element(by.css('.view-post-modal-body button.cheer')).click();
+            return element(by.css('app-root app-view-post app-cheer-image')).click();
         },
         get() {
-            return element(by.css('.view-post-modal-body .cheer-count')).getText();
+            return element(by.css('app-root app-view-post .cheer-count')).getText();
         }
     };
 }

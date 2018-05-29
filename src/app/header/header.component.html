@@ -28,7 +28,7 @@
 	    </ng-container>
 	    <ng-container *ngIf="(user$ | async)?.email; let email">
 		<li class="nav-item current-user">
-		    <a class="nav-link dashboard"
+		    <a class="nav-link user-settings"
 		       routerLink="/dashboard/user-settings"
 		       routerLinkActive="active"
 		       [routerLinkActiveOptions]="{exact: true}">

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
@@ -27,7 +28,8 @@ export class NewPostModalComponent implements OnInit {
     constructor(public activeModal: NgbActiveModal,
         private categoryService: CategoryService,
         private fb: FormBuilder,
-        private postService: PostService) { }
+        private postService: PostService,
+        private router: Router) { }
 
     ngOnInit() {
         this.categories$ = this.categoryService.get();
@@ -54,7 +56,10 @@ export class NewPostModalComponent implements OnInit {
 
         this.postService.addPost(post)
             .subscribe(
-                /* TODO navigate to newly created post by id */
+                post => {
+                    this.activeModal.close();
+                    this.router.navigate(['/dashboard', 'post', post.id]);
+                }
             );
     }
 }

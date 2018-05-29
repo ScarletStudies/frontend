@@ -6,7 +6,7 @@
     <div *ngIf="post"
 	 class="col-9">
 	<div class="card">
-	    <h6 class="card-header">
+	    <h6 class="card-header post-title">
 		{{ post.title }}
 	    </h6>
 	    <div class="card-body">
@@ -14,7 +14,7 @@
 		    <app-cheer-image class="mr-3 align-self-top"
 				     [count]="post.cheers.length"
 				     (click)="cheer()"></app-cheer-image>
-		    <div class="media-body"
+		    <div class="media-body post-content"
 			 [innerHtml]="postSafeHtml"></div>
 		</div>
 	    </div>
