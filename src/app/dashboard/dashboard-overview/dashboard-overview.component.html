@@ -1,19 +1,28 @@
-<div class="d-flex align-items-center p-3 my-3 bg-silver rounded box-shadow">
-    <div class="ml-2 lh-100">
-        <h6 class="mb-0 lh-100">Semester Overview</h6>
+<div class="row mt-4">
+    <div class="col-3">
+	<app-semester-courses></app-semester-courses>
+    </div>
+    <div *ngIf="semesterCourses$ | async; let courses"
+	 class="col-9">
+
+	<ng-container *ngIf="courses?.length > 0">
+	    <h4>
+		Recent Activity
+	    </h4>
+
+	    <app-post-list *ngIf="courses?.length > 0"
+			   [courses]="courses"
+			   [sort]="'activity'"
+			   [limit]="10"
+			   [showLoadMore]="false"></app-post-list>
+	</ng-container>
+
+	<div *ngIf="courses?.length === 0"
+	     class="empty-message">
+	    <h4 class="title">Your semester is empty!</h4>
+	    <p class="subtitle">Navigate to <a routerLink="/dashboard/manage">course manager</a> and add your current courses.</p>
+	</div>
     </div>
 </div>
 
-<div *ngIf="semesterCourses$ | async; let courses">
-    <app-post-list *ngIf="courses?.length > 0"
-		   [courses]="courses"
-		   [limit]="15"></app-post-list>
-
-    <div *ngIf="courses?.length === 0"
-	 class="empty-message">
-	<h3>Your semester is empty!</h3>
-	<p>Navigate to <a routerLink="/dashboard/manage">course manager</a> and add your current courses.</p>
-    </div>
-
-</div>
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
-import { IComment } from '../../../../models';
+import { IComment } from '../../../models';
 
 @Component({
     selector: 'app-comment-list-item',

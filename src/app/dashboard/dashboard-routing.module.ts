@@ -5,6 +5,8 @@ import { ManageCoursesComponent } from './manage-courses/manage-courses.componen
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overview.component';
 import { CourseComponent } from './course/course.component';
+import { ViewPostComponent } from './view-post/view-post.component';
+import { UserSettingsComponent } from './user-settings/user-settings.component';
 
 const routes: Routes = [
     {
@@ -20,8 +22,16 @@ const routes: Routes = [
                 component: ManageCoursesComponent
             },
             {
+                path: 'user-settings',
+                component: UserSettingsComponent
+            },
+            {
                 path: 'course/:id',
                 component: CourseComponent
+            },
+            {
+                path: 'post/:id',
+                component: ViewPostComponent
             }
         ]
     },

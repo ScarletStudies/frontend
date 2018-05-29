@@ -1,8 +1,7 @@
-<h2>Course Schedule</h2>
+<h5>Course Schedule</h5>
 
-<div class=""
-     *ngIf="scheduleCourses$ | async; let courses">
-    <table class="table table-striped">
+<div *ngIf="scheduleCourses$ | async; let courses">
+    <table class="table">
 	<thead>
 	    <tr>
 		<th scope="col">Course Name</th>

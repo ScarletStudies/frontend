@@ -1,6 +1,6 @@
-<h2>Add Course</h2>
+<h5>Add Course</h5>
 
-<div class="form-row">
+<div class="form-group my-3">
     <input [formControl]="queryControl"
 	   type="text"
 	   class="form-control search"
@@ -11,7 +11,7 @@
 </div>
 
 <div *ngIf="availableCourses$ | async; let courses">
-    <table class="table table-striped mt-2">
+    <table class="table mt-2">
 	<thead>
 	    <tr>
 		<th scope="col">Course Name</th>

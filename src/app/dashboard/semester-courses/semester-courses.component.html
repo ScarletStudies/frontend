@@ -1,0 +1,26 @@
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+	<span class="font-weight-bold">Semester</span>
+	<a routerLink="/dashboard/manage"
+	   class="card-link manage">
+	    Manage
+	</a>
+    </div>
+    <ul *ngIf="semesterCourses$ | async; let courses"
+	       class="list-group list-group-flush">
+	<a *ngFor="let course of courses"
+	   class="list-group-item list-group-item-action course"
+	   [routerLink]="['/dashboard', 'course', course.id]"
+	   routerLinkActive="active">
+	    <i class="fa fa-book fa-fw"></i>
+	    &nbsp;
+	    {{ course.name }}
+	</a>
+	<li *ngIf="courses?.length === 0"
+	    class="list-group-item">
+	    <i class="fa fa-exclamation fa-fw"></i>
+	    &nbsp;
+	    No Courses
+	</li>
+    </ul>
+</div>

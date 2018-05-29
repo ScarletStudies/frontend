@@ -28,18 +28,56 @@
 	   placeholder="Password *"
 	   required>
 
-    <button class="btn btn-lg btn-primary btn-block"
+    <button class="btn btn-lg btn-primary btn-block login"
 	    type="submit"
 	    [disabled]="form.invalid && form.touched">
 	Sign in
     </button>
 </form>
 
-<div class="form-signin">
+<div class="form-signin pb-0">
     <p>
-	Need an account? <a class="register" routerLink="/register">Register</a>.
+	Need an account?
+	<a class="register" routerLink="/register">Register</a>
     </p>
-    <p>
-	Forgot your password? <a class="forgot" routerLink="/forgot">Reset it</a>.
+    <p class="mb-0">
+	Forgot your password?
+	<button type="button"
+		class="btn btn-link ml-0 reset-open"
+		(click)="isCollapsed = !isCollapsed">
+	    Reset it
+	</button>
     </p>
+</div>
+
+<form class="form-signin"
+      [ngbCollapse]="isCollapsed"
+      [formGroup]="forgotPasswordForm"
+      (ngSubmit)="forgotPassword()">
+
+    <label for="resendEmail"
+	   class="sr-only">
+	Email address
+    </label>
+
+    <input formControlName="email"
+	   type="email"
+	   id="resendEmail"
+	   class="form-control"
+	   placeholder="Email address *">
+
+    <button class="btn btn-lg btn-primary btn-block resend-submit"
+	    type="submit"
+	    [disabled]="forgotPasswordForm.invalid">
+	Reset
+    </button>
+</form>
+
+<div *ngIf="forgotPasswordDone"
+     class="d-flex justify-content-center">
+    <div class="alert alert-success forgot-success"
+	 style="max-width: 20rem;"
+	 role="alert">
+	<strong>Reset password email sent.</strong> Please check your email.
+    </div>
 </div>

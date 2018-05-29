@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import { CategoryService } from '../../../services';
+import { CategoryService, PostService } from '../../../services';
 import { ICategory, IAppState, IPost, ICourse } from '../../../models';
-import { CreatePostAttemptAction } from '../../../actions/post.actions';
 
 @Component({
     selector: 'app-new-post-modal',
@@ -29,7 +28,8 @@ export class NewPostModalComponent implements OnInit {
     constructor(public activeModal: NgbActiveModal,
         private categoryService: CategoryService,
         private fb: FormBuilder,
-        private store: Store<IAppState>) { }
+        private postService: PostService,
+        private router: Router) { }
 
     ngOnInit() {
         this.categories$ = this.categoryService.get();
@@ -39,7 +39,6 @@ export class NewPostModalComponent implements OnInit {
             content: ['', Validators.required],
             category: ['', Validators.required]
         });
-
     }
 
     submit(): void {
@@ -55,6 +54,12 @@ export class NewPostModalComponent implements OnInit {
             } as ICourse
         };
 
-        this.store.dispatch(new CreatePostAttemptAction({ post, modal: this.activeModal }));
+        this.postService.addPost(post)
+            .subscribe(
+                p => {
+                    this.activeModal.close();
+                    this.router.navigate(['/dashboard', 'post', p.id]);
+                }
+            );
     }
 }

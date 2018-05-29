@@ -143,6 +143,7 @@ describe('manage courses', () => {
     });
 
     afterEach(async () => {
+        await AppDashboard.navigateTo();
         await AppDashboardSideBar.navigateToManageCourses();
 
         // end tests with a blank slate of zero courses in user schedule
@@ -186,8 +187,10 @@ describe('dashboard side bar', () => {
 
         // add test courses for view in side bar
         await AppManageCourses.courses.available.add.byIndex(0);
-        await AppManageCourses.courses.available.add.byIndex(1);
-        await AppManageCourses.courses.available.add.byIndex(2);
+        await AppManageCourses.courses.available.add.byIndex(0);
+        await AppManageCourses.courses.available.add.byIndex(0);
+
+        await AppDashboard.navigateTo();
     });
 
     it('should display a list of the user\'s courses', async () => {
@@ -195,7 +198,6 @@ describe('dashboard side bar', () => {
             .toEqual(3, 'did not display the correct amount of courses');
     });
 });
-
 
 describe('dashboard semester overview', () => {
     it('should display posts from multiple courses', async () => {
@@ -205,7 +207,7 @@ describe('dashboard semester overview', () => {
         await AppManageCourses.courses.schedule.remove.all();
 
         // should display a message and no posts when the user has no courses in semester
-        await AppDashboardSideBar.navigateToDashboardOverview();
+        await AppHeader.dashboard.go();
         await expect(AppDashboardOverview.posts.get.count())
             .toEqual(0, 'posts displayed when user semester empty');
         await expect(AppDashboardOverview.message.get())
@@ -221,7 +223,7 @@ describe('dashboard semester overview', () => {
 
         // remember course names
         const courseNames = await AppManageCourses.courses.schedule.get.all();
-        await AppDashboardSideBar.navigateToDashboardOverview();
+        await AppHeader.dashboard.go();
 
         const posts = await AppDashboardOverview.posts.get.all();
         const postCourseNames = posts.map(post => post.course);
@@ -243,12 +245,16 @@ describe('dashboard course overview', () => {
         await AppManageCourses.courses.available.add.byIndex(0);
         const courseName = await AppManageCourses.courses.schedule.get.byIndex(0);
 
+        await AppHeader.dashboard.go();
+
         // navigate to that course overview
         await AppDashboardSideBar.navigateToCourse.byName(courseName);
 
         // should only display posts from the selected course
-        let posts = await AppDashboardCourseOverview.posts.get.all();
+        const posts = await AppDashboardCourseOverview.posts.get.all();
         const postCourseNames = posts.map(p => p.course);
+
+        expect(posts.length).toBeGreaterThan(0, 'no posts displayed for course');
 
         for (const postCourseName of postCourseNames) {
             expect(postCourseName)
@@ -269,16 +275,9 @@ describe('dashboard course overview', () => {
         };
 
         await AppDashboardCourseOverview.posts.add(postWithContent);
-        posts = await AppDashboardCourseOverview.posts.get.all();
-        let found = posts.find(p => p.title === post.title);
 
-        await expect(found)
-            .toEqual(post, 'did not find newly created post');
-
-        // should view the post
-        await AppDashboardCourseOverview.posts.open.byIndex(0);
-
-        found = await AppDashboardPostView.post.get();
+        // after post is created, app navigates to post view
+        const found = await AppDashboardPostView.post.get();
 
         for (const field of ['title', 'category', 'author', 'course']) {
             await expect(found[field])
@@ -312,6 +311,8 @@ describe('dashboard course overview', () => {
         await AppManageCourses.courses.available.add.byIndex(5);
         const courseName = await AppManageCourses.courses.schedule.get.byIndex(0);
 
+        await AppHeader.dashboard.go();
+
         // navigate to that course overview
         await AppDashboardSideBar.navigateToCourse.byName(courseName);
 
@@ -326,6 +327,7 @@ describe('dashboard course overview', () => {
             };
 
             await AppDashboardCourseOverview.posts.add(post);
+            await AppDashboardSideBar.navigateToCourse.byName(courseName);
         };
 
         // count courses beforehand to avoid issues
