@@ -35,6 +35,8 @@ import { JwtModule, JWT_OPTIONS, JwtModuleOptions, JwtHelperService } from '@aut
 
 import { APP_SERVICES, UserService } from './services';
 
+import { AuthGuard } from './auth-guard.service';
+
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
@@ -147,7 +149,8 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
         QuillModule
     ],
     providers: [
-        ...APP_SERVICES
+        ...APP_SERVICES,
+        AuthGuard
     ],
     bootstrap: [AppComponent]
 })

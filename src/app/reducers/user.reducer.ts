@@ -18,6 +18,11 @@ export function userReducer(state: IAuthUser = DEFAULT_USER_STATE, action: UserA
                 ...state,
                 jwt: action.payload
             };
+        case UserActions.ActionTypes.SET_REDIRECT_URL:
+            return {
+                ...state,
+                redirectUrl: action.payload
+            };
         case UserActions.ActionTypes.LOGOUT:
             return DEFAULT_USER_STATE;
     }

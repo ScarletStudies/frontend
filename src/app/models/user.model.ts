@@ -4,9 +4,11 @@ export interface IUser {
 
 export interface IAuthUser extends IUser {
     readonly jwt: string;
+    readonly redirectUrl: string;
 }
 
 export const DEFAULT_USER_STATE: IAuthUser = {
     email: null,
-    jwt: null
+    jwt: null,
+    redirectUrl: null
 };

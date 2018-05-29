@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Action } from '@ngrx/store';
+import { Action, Store, select } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of, from } from 'rxjs';
-import { catchError, mergeMap } from 'rxjs/operators';
+import { catchError, mergeMap, withLatestFrom } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 
 import * as UserActions from '../actions/user.actions';
 import * as RouterActions from '../actions/router.actions';
-import { IAuthUser } from '../models';
+import { IAuthUser, IAppState } from '../models';
 
 @Injectable()
 export class UserEffects {
@@ -21,11 +21,16 @@ export class UserEffects {
                 this.http.post(`${environment.api}/users/login`, action.payload)
                     .pipe(
                         // If successful, dispatch success action with result
+
+                        // check for redirect url
+                        withLatestFrom<IAuthUser, string>(this.store.pipe(select(state => state.user.redirectUrl))),
                         mergeMap(
-                            (data: IAuthUser) => from(
+                            ([data, redirectUrl]: [IAuthUser, String]) => from(
                                 [
                                     new UserActions.LoginSuccessAction(data),
-                                    new RouterActions.Go({ path: ['/dashboard'] })
+                                    new RouterActions.Go(
+                                        { path: redirectUrl ? [redirectUrl] : ['/dashboard'] }
+                                    )
                                 ]
                             )
                         ),
@@ -35,5 +40,7 @@ export class UserEffects {
         )
     );
 
-    constructor(private http: HttpClient, private actions$: Actions) { }
+    constructor(private http: HttpClient,
+        private actions$: Actions,
+        private store: Store<IAppState>) { }
 }

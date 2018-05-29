@@ -83,6 +83,10 @@ describe('login', () => {
 });
 
 describe('register', () => {
+    afterEach(async () => {
+        await AppHeader.logout.do();
+    });
+
     it('should register', async () => {
         await AppRegister.navigateTo();
 
@@ -130,6 +134,21 @@ describe('register', () => {
         // should contain user email in header after successful login
         await expect(AppHeader.currentUser.get())
             .toContain(TEST_REGISTER_CREDENTIALS.email, 'user email not displayed in header');
+    });
+});
+
+describe('dashboard authorization protection', () => {
+    it('should prevent unauthorized access and remember the page you were attempting to visit', async () => {
+        await AppManageCourses.navigateTo();
+
+        await expect(AppPage.currentUrl()).not.toContain('manage', 'routed when not logged in');
+
+        // at login, perform login
+        AppLogin.fields.email.edit(TEST_CREDENTIALS.email);
+        AppLogin.fields.password.edit(TEST_CREDENTIALS.password);
+        AppLogin.doLogin();
+
+        await expect(AppPage.currentUrl()).toContain('manage', 'did not remember route after login');
     });
 });
 
