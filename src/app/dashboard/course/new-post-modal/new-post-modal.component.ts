@@ -56,9 +56,9 @@ export class NewPostModalComponent implements OnInit {
 
         this.postService.addPost(post)
             .subscribe(
-                post => {
+                p => {
                     this.activeModal.close();
-                    this.router.navigate(['/dashboard', 'post', post.id]);
+                    this.router.navigate(['/dashboard', 'post', p.id]);
                 }
             );
     }

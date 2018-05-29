@@ -251,7 +251,7 @@ describe('dashboard course overview', () => {
         await AppDashboardSideBar.navigateToCourse.byName(courseName);
 
         // should only display posts from the selected course
-        let posts = await AppDashboardCourseOverview.posts.get.all();
+        const posts = await AppDashboardCourseOverview.posts.get.all();
         const postCourseNames = posts.map(p => p.course);
 
         expect(posts.length).toBeGreaterThan(0, 'no posts displayed for course');
