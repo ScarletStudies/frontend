@@ -1,13 +1,10 @@
 import { Component, OnInit, Input, OnDestroy, EventEmitter } from '@angular/core';
 import { Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Store, select } from '@ngrx/store';
 
 import { IAppState, ICourse, IPost, IPostQueryParameters } from '../../models';
+import { PostService } from '../../services';
 import { IPostListItemOptions } from './post-list-item/post-list-item.component';
-import { ViewPostModalComponent } from './view-post-modal/view-post-modal.component';
-import { GetPostsAttemptAction } from '../../actions/post.actions';
 
 @Component({
     selector: 'app-post-list',
@@ -68,31 +65,26 @@ export class PostListComponent implements OnInit, OnDestroy {
     @Input()
     public showLoadMore = true;
 
-    public posts: IPost[] = [];
+    public posts: IPost[] = null;
     public queryParams$ = new BehaviorSubject<IPostQueryParameters>({});
 
     private subscriptions: Subscription[] = [];
 
-    constructor(private store: Store<IAppState>,
-        private modalService: NgbModal) { }
+    constructor(private postService: PostService) { }
 
     ngOnInit() {
         this.subscriptions.push(
             this.queryParams$
                 .pipe(
                     distinctUntilChanged(),
-                    debounceTime(250)
-                )
-                .subscribe(
-                    queryParams => this.store.dispatch(new GetPostsAttemptAction(queryParams))
-                ),
-            this.store
-                .pipe(
-                    select(state => state.posts)
-                )
+                    debounceTime(250),
+                    switchMap(
+                        queryParams => this.postService.getAll(queryParams)
+                    ),
+            )
                 .subscribe(
                     posts => this.posts = posts
-                )
+                ),
         );
     }
 
@@ -104,15 +96,6 @@ export class PostListComponent implements OnInit, OnDestroy {
 
     public trackByFn(index: number, post: IPost): string {
         return post.id;
-    }
-
-    public viewPost(id: string): void {
-        const modalRef = this.modalService.open(
-            ViewPostModalComponent,
-            { size: 'lg', backdropClass: 'backdrop' }
-        );
-
-        modalRef.componentInstance.postId = id;
     }
 
     public loadMore(): void {

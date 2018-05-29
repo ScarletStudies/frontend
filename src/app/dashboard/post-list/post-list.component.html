@@ -1,18 +1,23 @@
-<div class="list-group">
-    <a *ngFor="let post of posts"
-       class="list-group-item list-group-item-action"
-       (click)="viewPost(post.id)">
-	<app-post-list-item [post]="post"
-			    [options]="itemOptions"></app-post-list-item>
-    </a>
+<div *ngIf="posts?.length > 0">
+    <div class="list-group">
+	<a *ngFor="let post of posts"
+	   class="list-group-item list-group-item-action"
+	   [routerLink]="['/dashboard', 'post', post.id]">
+	    <app-post-list-item [post]="post"
+				[options]="itemOptions"></app-post-list-item>
+	</a>
+    </div>
+
+    <small class="d-block text-center mt-3">
+	<button *ngIf="loadMore && queryParams$.value.limit === posts.length"
+		type="button"
+		class="btn btn-link btn-sm load-more"
+		(click)="loadMore()">
+	    Load More
+	</button>
+    </small>
 </div>
 
-<small class="d-block text-center mt-3">
-    <button *ngIf="loadMore && queryParams$.value.limit === posts.length"
-		   type="button"
-		   class="btn btn-link btn-sm load-more"
-		   (click)="loadMore()">
-	Load More
-    </button>
-</small>
-
+<div *ngIf="posts?.length === 0">
+    There doesn't seem to be anything here.
+</div>

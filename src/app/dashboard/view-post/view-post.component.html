@@ -1,0 +1,102 @@
+<div class="row mt-4">
+    <div class="col-3">
+	<app-semester-courses></app-semester-courses>
+    </div>
+
+    <div *ngIf="post"
+	 class="col-9">
+	<div class="card">
+	    <h6 class="card-header">
+		{{ post.title }}
+	    </h6>
+	    <div class="card-body">
+		<div class="media">
+		    <app-cheer-image class="mr-3 align-self-top"
+				     [count]="post.cheers.length"
+				     (click)="cheer()"></app-cheer-image>
+		    <div class="media-body"
+			 [innerHtml]="postSafeHtml"></div>
+		</div>
+	    </div>
+	    <ul class="list-group list-group-flush">
+		<a *ngFor="let link of safeLinks"
+		   class="list-group-item list-group-item-action"
+		   target="_blank"
+		   [href]="link.safeUrl">
+		    <i class="fa fa-link fa-fw"></i>
+		    &nbsp;
+		    {{ link.title }}
+
+		    <span class="text-muted small ml-2">
+			{{ link.url }}
+		    </span>
+		</a>
+	    </ul>
+	    <div class="card-footer font-weight-light small">
+		{{ post.timestamp | date:'medium' }}
+		&bull;
+		<span class="post-author">
+		    {{ post.author.email }}
+		</span>
+		&bull;
+		<span class="cheer-count">
+		    {{ post.cheers.length }} cheer(s)
+		</span>
+		&bull;
+		{{ post.comments.length }} comment(s)
+		&nbsp;
+		<span class="badge badge-secondary post-course">
+		    {{ post.course.name }}
+		</span>
+		<span class="badge badge-secondary ml-1 post-category">
+		    {{ post.category.name }}
+		</span>
+		<span class="badge badge-secondary ml-1 post-semester">
+		    {{ post.semester.season }} {{ post.semester.year }}
+		</span>
+	    </div>
+	</div>
+
+	<hr>
+	
+	<form [formGroup]="commentForm"
+	      (ngSubmit)="comment()">
+	    <div class="text-muted">
+		Share your thoughts
+	    </div>
+	    <div class="form-group mb-0">
+		<div class="input-group">
+		    <quill-editor formControlName="content"
+				  id="comment-content"
+				  placeholder="Comment content..."
+				  class="form-control pl-0"
+				  style="border: 0;"
+				  [style]="{height: '100px'}"
+				  [modules]="quillModules"></quill-editor>
+
+		    <div class="input-group-append">
+			<button id="comment-submit"
+				type="submit"
+				class="btn btn-outline-secondary"
+				[disabled]="commentForm.invalid">
+			    <i class="fa fa-share"></i>
+			    Submit
+			</button>
+		    </div>
+		</div>
+	    </div>
+	</form>
+
+	<div *ngIf="post.comments.length > 0">
+	    <hr>
+
+	    <ul class="list-unstyled mb-2">
+		<li *ngFor="let comment of post.comments; last as isLast"
+			    class="post-comment">
+		    <app-comment-list-item [comment]="comment"></app-comment-list-item>
+		</li>
+	    </ul>
+	</div>
+    </div>
+</div>
+
