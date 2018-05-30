@@ -133,8 +133,6 @@ describe('register', () => {
         // then verify the account
         const verification_code = (await Inbox.getLatest()).verification;
 
-        console.log('code', verification_code);
-
         await AppVerify.navigateTo(verification_code);
         await expect(AppVerify.messages.success()).toContain('Verification success');
 
@@ -178,7 +176,7 @@ describe('dashboard authorization protection', () => {
     });
 });
 
-xdescribe('change password', () => {
+describe('change password', () => {
     it('should change the user password', async () => {
         // login with special credentials so as not to mess up other tests
         await AppLogin.doTestCredentialsLogin(TEST_CHANGE_PASSWORD_CREDENTIALS);
