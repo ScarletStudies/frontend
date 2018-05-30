@@ -45,4 +45,12 @@ export class UserService {
                 payload
             );
     }
+
+    public changePassword(payload: { old: string, new: string }): Observable<void> {
+        return this.http
+            .post<void>(
+                `${environment.api}/users/password/change`,
+                payload
+            );
+    }
 }

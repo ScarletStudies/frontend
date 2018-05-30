@@ -4,7 +4,8 @@
 
 	<h5>Change Password</h5>
 
-	<form [formGroup]="changePasswordForm"
+	<form class="change-password"
+	      [formGroup]="changePasswordForm"
 	      (ngSubmit)="changePassword()">
 	    <div class="form-group">
 		<label for="currentPassword">
@@ -28,7 +29,7 @@
 
 	    <div class="form-group">
 		<label for="newPasswordConfirmation">
-		    New Password *
+		    New Password Confirmation *
 		</label>
 		<input formControlName="newPasswordConfirmation"
 		       type="password"
@@ -37,9 +38,16 @@
 	    </div>
 
 	    <button type="submit"
-		    class="btn btn-primary">
+		    class="btn btn-primary"
+		    [disabled]="changePasswordForm.invalid">
 		Change Password
 	    </button>
+
+	    <div *ngIf="hasChangedPassword"
+		 class="alert alert-success mt-3"
+		 role="alert">
+		<strong>Password successfully changed.</strong>
+	    </div>
 	</form>
 
 	<hr>

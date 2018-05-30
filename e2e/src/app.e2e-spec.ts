@@ -11,10 +11,14 @@ import {
     AppLogin,
     AppManageCourses,
     AppRegister,
+    AppUserSettings,
     AppVerify,
     TEST_CREDENTIALS,
+    TEST_CHANGE_PASSWORD_CREDENTIALS,
     TEST_REGISTER_CREDENTIALS
 } from './app.po';
+
+import { Inbox } from './inbox';
 
 describe('app sanity', () => {
     it('should load the home page and display a welcome message and signup button', async () => {
@@ -83,8 +87,17 @@ describe('login', () => {
 });
 
 describe('register', () => {
+    beforeEach(async () => {
+        // clear inbox
+        await Inbox.cleanInbox();
+    });
+
     afterEach(async () => {
+        // logout
         await AppHeader.logout.do();
+
+        // clear inbox
+        await Inbox.cleanInbox();
     });
 
     it('should register', async () => {
@@ -105,6 +118,7 @@ describe('register', () => {
 
         await AppRegister.doRegister();
 
+        // check for confirmation message
         await expect(AppRegister.messages.success()).toContain('Registration success');
 
         // resend email
@@ -117,11 +131,15 @@ describe('register', () => {
         await expect(AppRegister.reset.messages.success()).toContain('Verification email sent');
 
         // then verify the account
-        const verification_code = TEST_REGISTER_CREDENTIALS.verification;
+        const verification_code = (await Inbox.getLatest()).verification;
+
+        console.log('code', verification_code);
 
         await AppVerify.navigateTo(verification_code);
-
         await expect(AppVerify.messages.success()).toContain('Verification success');
+
+        // logout
+        await AppHeader.logout.do();
 
         // confirm that user can now login
         await AppLogin.navigateTo();
@@ -138,6 +156,14 @@ describe('register', () => {
 });
 
 describe('dashboard authorization protection', () => {
+    beforeEach(async () => {
+        await AppPage.navigateTo();
+
+        if (await AppHeader.currentUser.isLoggedIn()) {
+            await AppHeader.logout.do();
+        }
+    });
+
     it('should prevent unauthorized access and remember the page you were attempting to visit', async () => {
         await AppManageCourses.navigateTo();
 
@@ -152,9 +178,47 @@ describe('dashboard authorization protection', () => {
     });
 });
 
+xdescribe('change password', () => {
+    it('should change the user password', async () => {
+        // login with special credentials so as not to mess up other tests
+        await AppLogin.doTestCredentialsLogin(TEST_CHANGE_PASSWORD_CREDENTIALS);
+
+        // navigate to the user settings page
+        await AppHeader.currentUser.go();
+
+        // change the password through the form
+        const newPass = 'example valid';
+
+        await AppUserSettings.changePassword.fields.old.edit(TEST_CHANGE_PASSWORD_CREDENTIALS.password);
+        await AppUserSettings.changePassword.fields.pass.edit(newPass);
+        await AppUserSettings.changePassword.fields.passRepeat.edit(newPass);
+
+        await AppUserSettings.changePassword.submit();
+
+        // check for the confirmation message
+        await expect(AppUserSettings.changePassword.message.get())
+            .toContain('Password successfully changed', 'Did not change user password');
+
+        // logout and then login with the new crendeitals
+        await AppHeader.logout.do();
+
+        await AppLogin.navigateTo();
+        await AppLogin.fields.email.edit(TEST_CHANGE_PASSWORD_CREDENTIALS.email);
+        await AppLogin.fields.password.edit(newPass);
+        await AppLogin.doLogin();
+
+        // confirm that new credentials are valid
+        await expect(AppHeader.currentUser.get())
+            .toEqual(TEST_CHANGE_PASSWORD_CREDENTIALS.email, 'User password change invalid');
+
+        // cleanup by logging out
+        await AppHeader.logout.do();
+    });
+});
+
 describe('manage courses', () => {
     beforeEach(async () => {
-        await AppLogin.doTestCredentialsLogin();
+        await AppLogin.doTestCredentialsLogin(TEST_CREDENTIALS);
         await AppDashboardSideBar.navigateToManageCourses();
 
         // start tests with a blank slate of zero courses in user schedule
@@ -200,7 +264,7 @@ describe('manage courses', () => {
 
 describe('dashboard side bar', () => {
     beforeEach(async () => {
-        await AppLogin.doTestCredentialsLogin();
+        await AppLogin.doTestCredentialsLogin(TEST_CREDENTIALS);
         await AppDashboardSideBar.navigateToManageCourses();
         await AppManageCourses.courses.schedule.remove.all();
 
@@ -221,7 +285,7 @@ describe('dashboard side bar', () => {
 describe('dashboard semester overview', () => {
     it('should display posts from multiple courses', async () => {
         // start with a blank slate
-        await AppLogin.doTestCredentialsLogin();
+        await AppLogin.doTestCredentialsLogin(TEST_CREDENTIALS);
         await AppDashboardSideBar.navigateToManageCourses();
         await AppManageCourses.courses.schedule.remove.all();
 
@@ -256,7 +320,7 @@ describe('dashboard semester overview', () => {
 
 describe('dashboard course overview', () => {
     it('should interact', async () => {
-        await AppLogin.doTestCredentialsLogin();
+        await AppLogin.doTestCredentialsLogin(TEST_CREDENTIALS);
         await AppDashboardSideBar.navigateToManageCourses();
         await AppManageCourses.courses.schedule.remove.all();
 
@@ -322,7 +386,7 @@ describe('dashboard course overview', () => {
     });
 
     it('should load more', async () => {
-        await AppLogin.doTestCredentialsLogin();
+        await AppLogin.doTestCredentialsLogin(TEST_CREDENTIALS);
         await AppDashboardSideBar.navigateToManageCourses();
         await AppManageCourses.courses.schedule.remove.all();
 

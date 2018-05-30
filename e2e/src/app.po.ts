@@ -1,5 +1,4 @@
 import { browser, by, element } from 'protractor';
-import * as fs from 'fs';
 
 export const TEST_CREDENTIALS = {
     email: 'test@example.com',
@@ -10,6 +9,11 @@ export const TEST_REGISTER_CREDENTIALS = {
     email: `${Math.random()}@fakerutgers.edu`,
     password: 'stringstring',
     verification: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.QzXsVYhb03aYF0BmRyl_yKl8GVpNlz5OFzpAshUit1w'
+};
+
+export const TEST_CHANGE_PASSWORD_CREDENTIALS = {
+    email: 'passwordchange@fakerutgers.edu',
+    password: 'strongstrong'
 };
 
 export class AppPage {
@@ -43,6 +47,9 @@ export class AppHeader {
         },
         isLoggedIn() {
             return element(by.css('app-root app-header .current-user')).isPresent();
+        },
+        go() {
+            return element(by.css('app-root app-header .current-user')).click();
         }
     };
 
@@ -120,13 +127,13 @@ export class AppLogin {
         return element(by.css('app-root app-login button.login')).click();
     }
 
-    static doTestCredentialsLogin() {
+    static doTestCredentialsLogin(credentials: { email: string, password: string }) {
         return AppLogin.navigateTo()
             .then(
-                () => AppLogin.fields.email.edit(TEST_CREDENTIALS.email)
+                () => AppLogin.fields.email.edit(credentials.email)
             )
             .then(
-                () => AppLogin.fields.password.edit(TEST_CREDENTIALS.password)
+                () => AppLogin.fields.password.edit(credentials.password)
             )
             .then(
                 () => AppLogin.doLogin()
@@ -460,6 +467,36 @@ export class AppDashboardPostView {
         },
         get() {
             return element(by.css('app-root app-view-post .cheer-count')).getText();
+        }
+    };
+}
+
+export class AppUserSettings {
+    static changePassword = {
+        fields: {
+            old: {
+                edit(text: string) {
+                    return element(by.css('app-root app-user-settings form.change-password #currentPassword')).sendKeys(text);
+                }
+            },
+            pass: {
+                edit(text: string) {
+                    return element(by.css('app-root app-user-settings form.change-password #newPassword')).sendKeys(text);
+                }
+            },
+            passRepeat: {
+                edit(text: string) {
+                    return element(by.css('app-root app-user-settings form.change-password #newPasswordConfirmation')).sendKeys(text);
+                }
+            }
+        },
+        message: {
+            get() {
+                return element(by.css('app-root app-user-settings form.change-password .alert')).getText();
+            }
+        },
+        submit() {
+            return element(by.css('app-root app-user-settings form.change-password button[type=submit]')).click();
         }
     };
 }
