@@ -6,6 +6,7 @@ import {
     AppDashboardPostView,
     AppDashboardSideBar,
     AppFooter,
+    AppForgot,
     AppHome,
     AppHeader,
     AppLogin,
@@ -95,9 +96,6 @@ describe('register', () => {
     afterEach(async () => {
         // logout
         await AppHeader.logout.do();
-
-        // clear inbox
-        await Inbox.cleanInbox();
     });
 
     it('should register', async () => {
@@ -131,9 +129,9 @@ describe('register', () => {
         await expect(AppRegister.reset.messages.success()).toContain('Verification email sent');
 
         // then verify the account
-        const verification_code = (await Inbox.getLatest()).verification;
+        const token = (await Inbox.getLatest()).token;
 
-        await AppVerify.navigateTo(verification_code);
+        await AppVerify.navigateTo(token);
         await expect(AppVerify.messages.success()).toContain('Verification success');
 
         // logout
@@ -211,6 +209,48 @@ describe('change password', () => {
 
         // cleanup by logging out
         await AppHeader.logout.do();
+    });
+});
+
+fdescribe('forgot password', () => {
+    beforeEach(async () => {
+        // clear inbox
+        await Inbox.cleanInbox();
+    });
+
+    afterEach(async () => {
+        // logout
+        await AppHeader.logout.do();
+    });
+
+    it('should help the user out a little bit', async () => {
+        // navigate to the login page
+        await AppLogin.navigateTo();
+
+        // open the reset panel
+        await AppLogin.forgot.open();
+
+        // add the user email
+        await AppLogin.forgot.fields.email.edit(TEST_CREDENTIALS.email);
+
+        // submit
+        await AppLogin.forgot.submit();
+
+        // wait for the email to be sent
+        await AppPage.delay(1000);
+
+        // grab key from email
+        const token = (await Inbox.getLatest()).token;
+
+        // navigate to the forgot link that will handle the token
+        await AppForgot.navigateTo(token);
+
+        // expect the user to be logged in
+        await expect(AppHeader.currentUser.get())
+            .toEqual(TEST_CREDENTIALS.email, 'User is not logged in after password bypass');
+
+        // expect the url to be the user settings page
+        await expect(AppPage.currentUrl()).toContain('settings');
     });
 });
 

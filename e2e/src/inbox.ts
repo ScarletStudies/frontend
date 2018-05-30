@@ -16,7 +16,7 @@ const headers = {
 
 export class Inbox {
     static getLatest() {
-        return new Promise<{ verification: string }>(
+        return new Promise<{ token: string }>(
             (resolve, reject) => {
                 const options = {
                     method: 'GET',
@@ -42,12 +42,12 @@ export class Inbox {
 
                         // Get the last email body
                         const html = messages[0].html_body;
-                        const re = /https:\/\/www\.scarletstudies\.org\/user\/verify\/([\w|\d|\.]+)/g;
+                        const re = /https:\/\/www\.scarletstudies\.org\/user\/(?:forgot|verify)\/([a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+)/g;
 
                         const match = re.exec(body);
 
                         if (match) {
-                            return resolve({ verification: match[1] });
+                            return resolve({ token: match[1] });
                         }
 
                         return reject();

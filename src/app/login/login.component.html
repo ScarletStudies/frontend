@@ -43,9 +43,9 @@
     <p class="mb-0">
 	Forgot your password?
 	<button type="button"
-		class="btn btn-link ml-0 reset-open"
+		class="btn btn-link ml-0 forgot-open"
 		(click)="isCollapsed = !isCollapsed">
-	    Reset it
+	    Get Magic Link
 	</button>
     </p>
 </div>
@@ -55,21 +55,21 @@
       [formGroup]="forgotPasswordForm"
       (ngSubmit)="forgotPassword()">
 
-    <label for="resendEmail"
+    <label for="forgotPasswordEmail"
 	   class="sr-only">
 	Email address
     </label>
 
     <input formControlName="email"
 	   type="email"
-	   id="resendEmail"
+	   id="forgotPasswordEmail"
 	   class="form-control"
 	   placeholder="Email address *">
 
-    <button class="btn btn-lg btn-primary btn-block resend-submit"
+    <button class="btn btn-lg btn-primary btn-block forgot-submit"
 	    type="submit"
 	    [disabled]="forgotPasswordForm.invalid">
-	Reset
+	Get Email
     </button>
 </form>
 
@@ -78,6 +78,6 @@
     <div class="alert alert-success forgot-success"
 	 style="max-width: 20rem;"
 	 role="alert">
-	<strong>Reset password email sent.</strong> Please check your email.
+	<strong>Email sent.</strong> Please check your email.
     </div>
 </div>

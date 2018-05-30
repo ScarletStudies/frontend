@@ -53,4 +53,12 @@ export class UserService {
                 payload
             );
     }
+
+    public forgotPassword(payload: { email: string }): Observable<void> {
+        return this.http
+            .post<void>(
+                `${environment.api}/users/password/forgot`,
+                payload
+            );
+    }
 }
