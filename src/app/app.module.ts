@@ -38,14 +38,10 @@ import { APP_SERVICES, UserService } from './services';
 import { AuthGuard } from './auth-guard.service';
 
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
-import { RegisterComponent } from './register/register.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { userReducer } from './reducers/user.reducer';
-import { VerifyComponent } from './verify/verify.component';
-import { ForgotComponent } from './forgot/forgot.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 export function jwtOptionsFactory(store: Store<IAppState>, userService: UserService) {
     return {
@@ -111,12 +107,9 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     declarations: [
         AppComponent,
         HomeComponent,
-        LoginComponent,
-        RegisterComponent,
         HeaderComponent,
         FooterComponent,
-        VerifyComponent,
-        ForgotComponent,
+        NotFoundComponent,
     ],
     imports: [
         BrowserModule,

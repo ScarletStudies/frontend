@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { IAppState } from '../models';
-import { UserService } from '../services';
+import { IAppState } from '../../models';
+import { UserService } from '../../services';
 
-import * as LoginActions from '../actions/user.actions';
-import { ErrorAction } from '../actions/error.actions';
+import * as LoginActions from '../../actions/user.actions';
+import { ErrorAction } from '../../actions/error.actions';
 
 @Component({
     selector: 'app-login',

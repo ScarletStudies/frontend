@@ -4,12 +4,12 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { IAuthUser, IAppState } from '../models';
-import { UserService } from '../services';
+import { IAuthUser, IAppState } from '../../models';
+import { UserService } from '../../services';
 
-import { ErrorAction } from '../actions/error.actions';
-import * as UserActions from '../actions/user.actions';
-import * as RouterActions from '../actions/router.actions';
+import { ErrorAction } from '../../actions/error.actions';
+import * as UserActions from '../../actions/user.actions';
+import * as RouterActions from '../../actions/router.actions';
 
 
 @Component({

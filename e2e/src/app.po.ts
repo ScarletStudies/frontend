@@ -141,7 +141,7 @@ export class AppLogin {
     };
 
     static navigateTo() {
-        return browser.get('/login');
+        return browser.get('/auth/login');
     }
 
     static navigateToRegister() {
@@ -232,7 +232,7 @@ export class AppRegister {
     };
 
     static navigateTo() {
-        return browser.get('/register');
+        return browser.get('/auth/register');
     }
 
     static doRegister() {
@@ -248,7 +248,7 @@ export class AppVerify {
     };
 
     static navigateTo(code: string) {
-        return browser.get(`/verify/${code}`);
+        return browser.get(`/auth/verify/${code}`);
     }
 }
 
@@ -549,6 +549,6 @@ export class AppAlerts {
 
 export class AppForgot {
     static navigateTo(token: string) {
-        return browser.get(`/forgot/${token}`);
+        return browser.get(`/auth/forgot/${token}`);
     }
 }

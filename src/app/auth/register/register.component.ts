@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 
-import { UserService } from '../services';
-import { IAppState } from '../models';
-import { ErrorAction } from '../actions/error.actions';
+import { UserService } from '../../services';
+import { IAppState } from '../../models';
+import { ErrorAction } from '../../actions/error.actions';
 
 function passwordEquivalenceValidator(control: AbstractControl): { [key: string]: any } {
     const formVal = control.value;
