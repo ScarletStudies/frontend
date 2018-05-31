@@ -212,7 +212,7 @@ describe('change password', () => {
     });
 });
 
-fdescribe('forgot password', () => {
+describe('forgot password', () => {
     beforeEach(async () => {
         // clear inbox
         await Inbox.cleanInbox();

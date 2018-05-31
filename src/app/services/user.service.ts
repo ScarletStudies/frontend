@@ -29,6 +29,14 @@ export class UserService {
             );
     }
 
+    public bypass(jwt: string): Observable<IAuthUser> {
+        return this.http
+            .post<IAuthUser>(
+                `${environment.api}/users/login/magic`,
+                { jwt }
+            );
+    }
+
     public refresh(jwt: string): Observable<IAuthUser> {
         console.log('refresh called');
         return this.http

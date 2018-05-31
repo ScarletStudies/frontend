@@ -7,6 +7,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { VerifyComponent } from './verify/verify.component';
+import { ForgotComponent } from './forgot/forgot.component';
 
 const routes: Routes = [
     {
@@ -24,6 +25,10 @@ const routes: Routes = [
     {
         path: 'verify/:code',
         component: VerifyComponent
+    },
+    {
+        path: 'forgot/:code',
+        component: ForgotComponent
     },
     {
         path: 'dashboard',

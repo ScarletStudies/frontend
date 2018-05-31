@@ -523,6 +523,6 @@ export class AppUserSettings {
 
 export class AppForgot {
     static navigateTo(token: string) {
-        return browser.get(`/user/forgot/${token}`);
+        return browser.get(`/forgot/${token}`);
     }
 }
