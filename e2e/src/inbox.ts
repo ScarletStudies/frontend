@@ -8,15 +8,15 @@ const MAILTRAP_API = process.env.MAILTRAP_API_KEY;
 const MAILTRAP_INBOX = process.env.MAILTRAP_INBOX;
 
 
-const baseURL = "https://mailtrap.io/api/v1/";
+const baseURL = 'https://mailtrap.io/api/v1/';
 const headers = {
-    "Content-Type": "application/json",
-    "Api-Token": MAILTRAP_API
+    'Content-Type': 'application/json',
+    'Api-Token': MAILTRAP_API
 };
 
 export class Inbox {
     static getLatest() {
-        return new Promise<{ verification: string }>(
+        return new Promise<{ token: string }>(
             (resolve, reject) => {
                 const options = {
                     method: 'GET',
@@ -42,12 +42,15 @@ export class Inbox {
 
                         // Get the last email body
                         const html = messages[0].html_body;
-                        const re = /https:\/\/www\.scarletstudies\.org\/user\/verify\/([\w|\d|\.]+)/g;
+
+                        // tslint:disable:max-line-length
+                        const re = /https:\/\/www\.scarletstudies\.org\/(?:forgot|verify)\/([a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+)/g;
+                        // tslint:enable:max-line-length
 
                         const match = re.exec(body);
 
                         if (match) {
-                            return resolve({ verification: match[1] });
+                            return resolve({ token: match[1] });
                         }
 
                         return reject();

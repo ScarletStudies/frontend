@@ -28,6 +28,10 @@ export class AppPage {
     static refresh() {
         return browser.refresh();
     }
+
+    static delay(ms: number) {
+        return browser.sleep(ms);
+    }
 }
 
 export class AppHome {
@@ -113,6 +117,22 @@ export class AppLogin {
                 return element(by.css('app-root app-login input#password')).sendKeys(text);
             }
         },
+    };
+
+    static forgot = {
+        open() {
+            return element(by.css('app-root app-login .forgot-open')).click();
+        },
+        fields: {
+            email: {
+                edit(text: string) {
+                    return element(by.css('app-root app-login input#forgotPasswordEmail')).sendKeys(text);
+                }
+            }
+        },
+        submit() {
+            return element(by.css('app-root app-login button.forgot-submit')).click();
+        }
     };
 
     static navigateTo() {
@@ -499,4 +519,10 @@ export class AppUserSettings {
             return element(by.css('app-root app-user-settings form.change-password button[type=submit]')).click();
         }
     };
+}
+
+export class AppForgot {
+    static navigateTo(token: string) {
+        return browser.get(`/forgot/${token}`);
+    }
 }

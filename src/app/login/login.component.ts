@@ -3,8 +3,10 @@ import { Store } from '@ngrx/store';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { IAppState } from '../models';
+import { UserService } from '../services';
 
 import * as LoginActions from '../actions/user.actions';
+import { ErrorAction } from '../actions/error.actions';
 
 @Component({
     selector: 'app-login',
@@ -19,7 +21,8 @@ export class LoginComponent implements OnInit {
     public forgotPasswordDone = false;
 
     constructor(private store: Store<IAppState>,
-        private fb: FormBuilder) { }
+        private fb: FormBuilder,
+        private userService: UserService) { }
 
     ngOnInit() {
         this.form = this.fb.group({
@@ -36,5 +39,12 @@ export class LoginComponent implements OnInit {
         this.store.dispatch(new LoginActions.AttemptLoginAction(this.form.value));
     }
 
-    public forgotPassword(): void { }
+    public forgotPassword(): void {
+        this.userService
+            .forgotPassword(this.forgotPasswordForm.value)
+            .subscribe(
+                () => this.forgotPasswordDone = true,
+                err => this.store.dispatch(new ErrorAction(err))
+            );
+    }
 }

@@ -29,6 +29,14 @@ export class UserService {
             );
     }
 
+    public bypass(jwt: string): Observable<IAuthUser> {
+        return this.http
+            .post<IAuthUser>(
+                `${environment.api}/users/login/magic`,
+                { jwt }
+            );
+    }
+
     public refresh(jwt: string): Observable<IAuthUser> {
         console.log('refresh called');
         return this.http
@@ -50,6 +58,14 @@ export class UserService {
         return this.http
             .post<void>(
                 `${environment.api}/users/password/change`,
+                payload
+            );
+    }
+
+    public forgotPassword(payload: { email: string }): Observable<void> {
+        return this.http
+            .post<void>(
+                `${environment.api}/users/password/forgot`,
                 payload
             );
     }
