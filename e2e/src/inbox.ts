@@ -16,7 +16,7 @@ const headers = {
 
 export class Inbox {
     static getLatest() {
-        return new Promise<{ token: string }>(
+        return new Promise<{ token: string, body: string }>(
             (resolve, reject) => {
                 const options = {
                     method: 'GET',
@@ -41,7 +41,7 @@ export class Inbox {
                         }
 
                         // Get the last email body
-                        const html = messages[0].html_body;
+                        const html = messages[0].text_body;
 
                         // tslint:disable:max-line-length
                         const re = /https:\/\/www\.scarletstudies\.org\/(?:forgot|verify)\/([a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+)/g;
@@ -50,10 +50,10 @@ export class Inbox {
                         const match = re.exec(body);
 
                         if (match) {
-                            return resolve({ token: match[1] });
+                            return resolve({ token: match[1], body: html });
                         }
 
-                        return reject();
+                        return resolve({ token: null, body: html });
                     });
             }
         );

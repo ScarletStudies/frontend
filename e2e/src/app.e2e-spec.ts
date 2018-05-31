@@ -1,4 +1,5 @@
 import {
+    AppAlerts,
     AppPage,
     AppDashboard,
     AppDashboardCourseOverview,
@@ -16,6 +17,7 @@ import {
     AppVerify,
     TEST_CREDENTIALS,
     TEST_CHANGE_PASSWORD_CREDENTIALS,
+    TEST_DELETE_ACCOUNT_CREDENTIALS,
     TEST_REGISTER_CREDENTIALS
 } from './app.po';
 
@@ -251,6 +253,53 @@ describe('forgot password', () => {
 
         // expect the url to be the user settings page
         await expect(AppPage.currentUrl()).toContain('settings');
+    });
+});
+
+describe('user delete account', () => {
+    beforeEach(async () => {
+        // clear inbox
+        await Inbox.cleanInbox();
+    });
+
+    it('should delete the users account', async () => {
+        // login with test account ready for deletion
+        await AppLogin.doTestCredentialsLogin(TEST_DELETE_ACCOUNT_CREDENTIALS);
+
+        // navigate to user settings
+        await AppHeader.currentUser.go();
+
+        // enter user password
+        await AppUserSettings.deleteAccount.fields.password.edit(TEST_DELETE_ACCOUNT_CREDENTIALS.password);
+
+        // submit
+        await AppUserSettings.deleteAccount.submit();
+
+        // confirm logged out
+        await expect(AppPage.currentUrl())
+            .not.toContain('dashboard', 'User did not get logged out after deletion');
+
+        // confirm delete account message
+        await expect(AppAlerts.latest())
+            .toContain('Account deleted', 'Did not receive correct alert after deletion');
+
+        // confirm user cannot login again
+        await AppLogin.navigateTo();
+        await AppLogin.fields.email.edit(TEST_DELETE_ACCOUNT_CREDENTIALS.email);
+        await AppLogin.fields.password.edit(TEST_DELETE_ACCOUNT_CREDENTIALS.password);
+        await AppLogin.doLogin();
+
+        await expect(AppPage.currentUrl())
+            .not.toContain('dashboard', 'User account not deleted');
+
+        // wait for email
+        await AppPage.delay(1000);
+
+        // check for latest email
+        const mail = await Inbox.getLatest();
+
+        expect(mail.body)
+            .toContain('account has been deleted', 'Email did not have correct data');
     });
 });
 

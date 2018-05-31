@@ -16,6 +16,11 @@ export const TEST_CHANGE_PASSWORD_CREDENTIALS = {
     password: 'strongstrong'
 };
 
+export const TEST_DELETE_ACCOUNT_CREDENTIALS = {
+    email: 'deleteaccount@fakerutgers.edu',
+    password: 'strongbad42'
+};
+
 export class AppPage {
     static navigateTo() {
         return browser.get('/');
@@ -519,6 +524,27 @@ export class AppUserSettings {
             return element(by.css('app-root app-user-settings form.change-password button[type=submit]')).click();
         }
     };
+
+    static deleteAccount = {
+        fields: {
+            password: {
+                edit(text: string) {
+                    return element(by.css('app-root app-user-settings form.delete-account #deleteAccountPassword')).sendKeys(text);
+                }
+            },
+        },
+        submit() {
+            return element(by.css('app-root app-user-settings form.delete-account button[type=submit]')).click();
+        }
+    };
+}
+
+export class AppAlerts {
+    static latest() {
+        return element.all(by.css('.toast-container'))
+            .get(0)
+            .getText();
+    }
 }
 
 export class AppForgot {

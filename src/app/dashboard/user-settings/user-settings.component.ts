@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 
-import { UserService } from '../../services';
+import { UserService, AlertService } from '../../services';
 import { IAppState } from '../../models';
 import { ErrorAction } from '../../actions/error.actions';
+import { LogoutAction } from '../../actions/user.actions';
+import * as RouterActions from '../../actions/router.actions';
 
 function passwordEquivalenceValidator(control: AbstractControl): { [key: string]: any } {
     const formVal = control.value;
@@ -35,6 +37,7 @@ export class UserSettingsComponent implements OnInit {
 
     constructor(private fb: FormBuilder,
         private userService: UserService,
+        private alertService: AlertService,
         private store: Store<IAppState>) { }
 
     ngOnInit() {
@@ -50,7 +53,8 @@ export class UserSettingsComponent implements OnInit {
         );
 
         this.deleteAccountForm = this.fb.group({
-            passwordCheck: ''
+            password: ['', Validators.required],
+            remove_content: false
         });
     }
 
@@ -65,5 +69,18 @@ export class UserSettingsComponent implements OnInit {
             );
     }
 
-    deleteAccount() { }
+    deleteAccount() {
+        const { password, remove_content } = this.deleteAccountForm.value;
+
+        this.userService
+            .deleteAccount({ password, remove_content })
+            .subscribe(
+                () => {
+                    this.store.dispatch(new RouterActions.Go({ path: ['/'] }));
+                    this.store.dispatch(new LogoutAction());
+                    this.alertService.success('Account deleted');
+                },
+                err => this.store.dispatch(new ErrorAction(err))
+            );
+    }
 }

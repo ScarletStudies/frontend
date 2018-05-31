@@ -12,7 +12,11 @@ export class AlertService {
 
     constructor(private toastr: ToastrService) { }
 
-    public error(message, title = null) {
+    public success(message: string, title: string = null) {
+        return this.toastr.success(message, title, TOASTR_CONFIG);
+    }
+
+    public error(message: string, title: string = null) {
         return this.toastr.error(message, title, TOASTR_CONFIG);
     }
 }

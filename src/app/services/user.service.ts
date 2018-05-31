@@ -69,4 +69,12 @@ export class UserService {
                 payload
             );
     }
+
+    public deleteAccount(payload: { password: string, remove_content: boolean }): Observable<void> {
+        return this.http
+            .post<void>(
+                `${environment.api}/users/remove`,
+                payload
+            );
+    }
 }
