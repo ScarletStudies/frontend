@@ -17,11 +17,11 @@ interface IAnchor {
 }
 
 @Component({
-    selector: 'app-view-post',
-    templateUrl: './view-post.component.html',
-    styleUrls: ['./view-post.component.css']
+    selector: 'app-post',
+    templateUrl: './post.component.html',
+    styleUrls: ['./post.component.css']
 })
-export class ViewPostComponent implements OnInit, OnDestroy {
+export class PostComponent implements OnInit, OnDestroy {
 
     public post: IPost = null;
     public postSafeHtml: SafeHtml = null;

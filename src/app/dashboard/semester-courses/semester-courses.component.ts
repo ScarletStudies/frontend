@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 
 import { IAppState, ICourse } from '../../models';
 
+import * as ScheduleActions from '../../actions/schedule.actions';
+
 @Component({
     selector: 'app-semester-courses',
     templateUrl: './semester-courses.component.html',
@@ -16,6 +18,7 @@ export class SemesterCoursesComponent implements OnInit {
     constructor(private store: Store<IAppState>) { }
 
     ngOnInit() {
+        this.store.dispatch(new ScheduleActions.GetCoursesAttemptAction());
         this.semesterCourses$ = this.store.pipe(select(state => state.schedule));
     }
 }

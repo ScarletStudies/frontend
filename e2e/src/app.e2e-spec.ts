@@ -393,15 +393,26 @@ describe('dashboard semester overview', () => {
 
         // remember course names
         const courseNames = await AppManageCourses.courses.schedule.get.all();
+
+        // navigate to dashboard
         await AppHeader.dashboard.go();
 
-        const posts = await AppDashboardOverview.posts.get.all();
-        const postCourseNames = posts.map(post => post.course);
+        // check for posts from multiple courses
+        // (as defined in e2e test data)
+        let posts = await AppDashboardOverview.posts.get.all();
+        let postCourseNames = posts.map(post => post.course);
 
         for (const courseName of courseNames) {
             expect(postCourseNames)
                 .toContain(courseName, `course ${courseName} has no posts in dashboard`);
         }
+
+        // switch to calendar view
+        await AppDashboardOverview.view.toCalendar();
+
+        // check for posts in calendar
+        // (as defined in e2e test data)
+        await expect(AppDashboardOverview.calendar.posts.count()).toBeGreaterThan(0)
     });
 });
 
@@ -415,9 +426,10 @@ describe('dashboard course overview', () => {
         await AppManageCourses.courses.available.add.byIndex(0);
         const courseName = await AppManageCourses.courses.schedule.get.byIndex(0);
 
+        // return to dashboard
         await AppHeader.dashboard.go();
 
-        // navigate to that course overview
+        // navigate to the course overview
         await AppDashboardSideBar.navigateToCourse.byName(courseName);
 
         // should only display posts from the selected course

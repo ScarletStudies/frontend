@@ -2,20 +2,20 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { ManageCoursesComponent } from './manage-courses/manage-courses.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { DashboardOverviewComponent } from './dashboard-overview/dashboard-overview.component';
+import { SemesterOverviewComponent } from './semester-overview/semester-overview.component';
 import { CourseComponent } from './course/course.component';
-import { ViewPostComponent } from './view-post/view-post.component';
+import { PostComponent } from './post/post.component';
 import { UserSettingsComponent } from './user-settings/user-settings.component';
+import { PostListComponent } from './post-list/post-list.component';
+import { PostCalendarComponent } from './post-calendar/post-calendar.component';
 
 const routes: Routes = [
     {
         path: '',
-        component: DashboardComponent,
         children: [
             {
-                path: '',
-                component: DashboardOverviewComponent
+                path: 'overview',
+                component: SemesterOverviewComponent
             },
             {
                 path: 'manage',
@@ -27,13 +27,17 @@ const routes: Routes = [
             },
             {
                 path: 'course/:id',
-                component: CourseComponent
+                component: CourseComponent,
             },
             {
                 path: 'post/:id',
-                component: ViewPostComponent
+                component: PostComponent
+            },
+            {
+                path: '**',
+                redirectTo: 'overview'
             }
-        ]
+        ],
     },
 ];
 

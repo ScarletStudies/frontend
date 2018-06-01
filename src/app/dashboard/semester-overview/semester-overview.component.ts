@@ -5,13 +5,14 @@ import { Observable } from 'rxjs';
 import { IAppState, ICourse } from '../../models';
 
 @Component({
-    selector: 'app-dashboard-overview',
-    templateUrl: './dashboard-overview.component.html',
-    styleUrls: ['./dashboard-overview.component.css']
+    selector: 'app-semester-overview',
+    templateUrl: './semester-overview.component.html',
+    styleUrls: ['./semester-overview.component.css']
 })
-export class DashboardOverviewComponent implements OnInit {
+export class SemesterOverviewComponent implements OnInit {
 
     public semesterCourses$: Observable<ICourse[]> = null;
+    public postsView: 'list' | 'calendar' = 'list';
 
     constructor(private store: Store<IAppState>) { }
 

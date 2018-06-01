@@ -1,94 +1,96 @@
-<div class="row">
-    <div class="col">
-	<h4 class="my-4">User Settings</h4>
+<div class="container">
+    <div class="row">
+	<div class="col">
+	    <h4 class="my-4">User Settings</h4>
 
-	<h5>Change Password</h5>
+	    <h5>Change Password</h5>
 
-	<form class="change-password"
-	      [formGroup]="changePasswordForm"
-	      (ngSubmit)="changePassword()">
-	    <div class="form-group">
-		<label for="currentPassword">
-		    Current Password *
-		</label>
-		<input formControlName="currentPassword"
-		       type="password"
-		       class="form-control"
-		       id="currentPassword">
-	    </div>
-
-	    <div class="form-group">
-		<label for="newPassword">
-		    New Password *
-		</label>
-		<input formControlName="newPassword"
-		       type="password"
-		       class="form-control"
-		       id="newPassword">
-	    </div>
-
-	    <div class="form-group">
-		<label for="newPasswordConfirmation">
-		    New Password Confirmation *
-		</label>
-		<input formControlName="newPasswordConfirmation"
-		       type="password"
-		       class="form-control"
-		       id="newPasswordConfirmation">
-	    </div>
-
-	    <button type="submit"
-		    class="btn btn-primary"
-		    [disabled]="changePasswordForm.invalid">
-		Change Password
-	    </button>
-
-	    <div *ngIf="hasChangedPassword"
-		 class="alert alert-success mt-3"
-		 role="alert">
-		<strong>Password successfully changed.</strong>
-	    </div>
-	</form>
-
-	<hr>
-
-	<h5>Delete Account</h5>
-
-	<form class="delete-account"
-	      [formGroup]="deleteAccountForm"
-	      (ngSubmit)="deleteAccount()">
-	    <div class="form-group">
-		<label for="passwordCheck">
-		    Current Password *
-		</label>
-		<input formControlName="password"
-		       type="password"
-		       class="form-control"
-		       id="deleteAccountPassword">
-	    </div>
-
-	    <div class="form-group">
-		<div class="custom-control custom-checkbox">
-		    <input formControlName="remove_content"
-			   type="checkbox"
-			   class="custom-control-input"
-			   id="customCheck1">
-		    <label class="custom-control-label"
-			   for="customCheck1">
-			Remove all content from posts and comments
+	    <form class="change-password"
+		  [formGroup]="changePasswordForm"
+		  (ngSubmit)="changePassword()">
+		<div class="form-group">
+		    <label for="currentPassword">
+			Current Password *
 		    </label>
+		    <input formControlName="currentPassword"
+			   type="password"
+			   class="form-control"
+			   id="currentPassword">
 		</div>
 
-		<small class="form-text text-muted">
-		    Your user account will be deleted no matter what. You may choose not to delete your content, however, and it will become property of this site and anonymous. Or you may choose to delete your content, in which case all posts and comments will be replaced with a message indicating so.
-		</small>
-	    </div>
-	    
-	    <button type="submit"
-		    class="btn btn-danger"
-		    [disabled]="deleteAccountForm.invalid">
-		Delete Account
-	    </button>
-	</form>
+		<div class="form-group">
+		    <label for="newPassword">
+			New Password *
+		    </label>
+		    <input formControlName="newPassword"
+			   type="password"
+			   class="form-control"
+			   id="newPassword">
+		</div>
+
+		<div class="form-group">
+		    <label for="newPasswordConfirmation">
+			New Password Confirmation *
+		    </label>
+		    <input formControlName="newPasswordConfirmation"
+			   type="password"
+			   class="form-control"
+			   id="newPasswordConfirmation">
+		</div>
+
+		<button type="submit"
+			class="btn btn-primary"
+			[disabled]="changePasswordForm.invalid">
+		    Change Password
+		</button>
+
+		<div *ngIf="hasChangedPassword"
+		     class="alert alert-success mt-3"
+		     role="alert">
+		    <strong>Password successfully changed.</strong>
+		</div>
+	    </form>
+
+	    <hr>
+
+	    <h5>Delete Account</h5>
+
+	    <form class="delete-account"
+		  [formGroup]="deleteAccountForm"
+		  (ngSubmit)="deleteAccount()">
+		<div class="form-group">
+		    <label for="passwordCheck">
+			Current Password *
+		    </label>
+		    <input formControlName="password"
+			   type="password"
+			   class="form-control"
+			   id="deleteAccountPassword">
+		</div>
+
+		<div class="form-group">
+		    <div class="custom-control custom-checkbox">
+			<input formControlName="remove_content"
+			       type="checkbox"
+			       class="custom-control-input"
+			       id="customCheck1">
+			<label class="custom-control-label"
+			       for="customCheck1">
+			    Remove all content from posts and comments
+			</label>
+		    </div>
+
+		    <small class="form-text text-muted">
+			Your user account will be deleted no matter what. You may choose not to delete your content, however, and it will become property of this site and anonymous. Or you may choose to delete your content, in which case all posts and comments will be replaced with a message indicating so.
+		    </small>
+		</div>
+		
+		<button type="submit"
+			class="btn btn-danger"
+			[disabled]="deleteAccountForm.invalid">
+		    Delete Account
+		</button>
+	    </form>
+	</div>
     </div>
 </div>

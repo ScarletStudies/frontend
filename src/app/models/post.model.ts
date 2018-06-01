@@ -6,6 +6,7 @@ export interface IPost {
     readonly content: string;
     readonly timestamp: string;
     readonly is_archived: boolean;
+    readonly due_date: string;
     readonly cheers: IUser[];
 
     readonly category: ICategory;
@@ -22,4 +23,6 @@ export interface IPostQueryParameters {
     limit?: number;
     offset?: number;
     sort?: 'time' | 'activity';
+    start_date?: string;
+    end_date?: string;
 }
