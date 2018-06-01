@@ -443,6 +443,14 @@ describe('dashboard course overview', () => {
                 .toContain(courseName, 'posts from another course displayed');
         }
 
+        // should display posts in the calendar
+        await AppDashboardCourseOverview.view.toCalendar();
+
+        await expect(AppDashboardCourseOverview.calendar.posts.count()).toBeGreaterThan(0);
+
+        // return to list
+        await AppDashboardCourseOverview.view.toList();
+
         // should add a post with randomized data to prevent duplication in subsequent tests
         const post = {
             title: `I am an e2e title ${Math.random()}`,

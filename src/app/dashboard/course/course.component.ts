@@ -22,7 +22,7 @@ export class CourseComponent implements OnInit, OnDestroy {
     public course: ICourse = null;
     public sortForm: FormGroup = null;
     public categories$: Observable<ICategory[]> = null;
-    public isSortCollapsed = true;
+    public postsView: 'list' | 'calendar' = 'list';
 
     private subscriptions: Subscription[] = [];
 

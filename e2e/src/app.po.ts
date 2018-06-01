@@ -404,6 +404,23 @@ export class AppDashboardOverview {
 }
 
 export class AppDashboardCourseOverview {
+    static view = {
+        toCalendar() {
+            return element(by.css('app-root app-course .view-calendar')).click();
+        },
+        toList() {
+            return element(by.css('app-root app-course .view-list')).click();
+        }
+    };
+
+    static calendar = {
+        posts: {
+            count() {
+                return element.all(by.css('app-root app-course .cal-event')).count();
+            },
+        }
+    };
+
     static posts = {
         get: {
             count() {

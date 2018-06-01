@@ -3,7 +3,44 @@
 	<div class="col-3">
 	    <app-semester-courses></app-semester-courses>
 
-	    <form class="card mt-2"
+	    <div class="card mt-2">
+		<div class="card-header">
+		    <span class="font-weight-bold">View</span>
+		</div>
+		<div class="card-body">
+		    <div class="form-group mb-0">
+			<div class="custom-control custom-radio">
+			    <input [(ngModel)]="postsView"
+				   value="list"
+				   type="radio"
+				   id="radioListView"
+				   name="postsView"
+				   class="custom-control-input">
+			    <label class="custom-control-label view-list"
+				   for="radioListView">
+				<i class="fa fa-list fa-fw"></i>
+				List View
+			    </label>
+			</div>
+			<div class="custom-control custom-radio">
+			    <input [(ngModel)]="postsView"
+				   value="calendar"
+				   type="radio"
+				   id="radioCalendarView"
+				   name="postsView"
+				   class="custom-control-input">
+			    <label class="custom-control-label view-calendar"
+				   for="radioCalendarView">
+				<i class="fa fa-calendar fa-fw"></i>
+				Calendar View
+			    </label>
+			</div>
+		    </div>
+		</div>
+	    </div>
+
+	    <form *ngIf="postsView === 'list'"
+		  class="card mt-2"
 		  [formGroup]="sortForm">
 		<div class="card-header">
 		    <span class="font-weight-bold">Search and Filter</span>
@@ -51,21 +88,35 @@
 	</div>
 
 	<div class="col-9">
-	    <div class="d-flex justify-content-between mb-2">
-		<h4 class="">{{ course?.name }}</h4>
-		<button type="button"
-			class="btn btn-primary btn-sm open-new-post-modal"
-			(click)="open()">
-		    New Post
-		</button>
-	    </div>
+	    <ng-container *ngIf="course">
+		<div class="d-flex justify-content-between mb-2">
+		    <h4>{{ course.name }}</h4>
 
-	    <app-post-list *ngIf="course"
-			   [courses]="[course]"
-			   [limit]="10"
-			   [sort]="sortForm?.value.sort"
-			   [category]="sortForm?.value.category"
-			   [query]="sortForm?.value.query"></app-post-list>
+		    <button type="button"
+			    class="btn btn-primary btn-sm open-new-post-modal"
+			    (click)="open()">
+			New Post
+		    </button>
+		</div>
+
+
+		<div [ngSwitch]="postsView">
+		    <app-post-list *ngSwitchCase="'list'"
+				   [courses]="[course]"
+		    		   [limit]="10"
+				   [sort]="sortForm?.value.sort"
+				   [category]="sortForm?.value.category"
+				   [query]="sortForm?.value.query"></app-post-list>
+
+		    <app-post-calendar *ngSwitchCase="'calendar'"
+				       [courses]="[course]"></app-post-calendar>
+		</div>
+	    </ng-container>
+
+	    <div *ngIf="!course"
+		 class="loading">
+		...
+	    </div>
 	</div>
     </div>
 </div>
