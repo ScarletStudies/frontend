@@ -1,0 +1,69 @@
+<div class="container">
+    <div class="row mt-4">
+	<div class="col-3">
+	    <app-semester-courses></app-semester-courses>
+
+	    <div class="card mt-2">
+		<div class="card-header">
+		    <span class="font-weight-bold">View</span>
+		</div>
+		<div class="card-body">
+		    <div class="form-group mb-0">
+			<div class="custom-control custom-radio">
+			    <input [(ngModel)]="postsView"
+				   value="list"
+				   type="radio"
+				   id="radioListView"
+				   name="postsView"
+				   class="custom-control-input">
+			    <label class="custom-control-label"
+				   for="radioListView">
+				<i class="fa fa-list fa-fw"></i>
+				List View
+			    </label>
+			</div>
+			<div class="custom-control custom-radio">
+			    <input [(ngModel)]="postsView"
+				   value="calendar"
+				   type="radio"
+				   id="radioCalendarView"
+				   name="postsView"
+				   class="custom-control-input">
+			    <label class="custom-control-label view-calendar"
+				   for="radioCalendarView">
+				<i class="fa fa-calendar fa-fw"></i>
+				Calendar View
+			    </label>
+			</div>
+		    </div>
+		</div>
+	    </div>
+	</div>
+	<div *ngIf="semesterCourses$ | async; let courses"
+	     class="col-9">
+	    <ng-container *ngIf="courses?.length > 0">
+		<h4>
+		    Recent Activity
+		</h4>
+
+		<div *ngIf="courses?.length > 0"
+		     [ngSwitch]="postsView">
+		    <app-post-list *ngSwitchCase="'list'"
+				   [courses]="courses"
+				   [sort]="'activity'"
+				   [limit]="10"
+				   [showLoadMore]="false"></app-post-list>
+
+		    <app-post-calendar *ngSwitchCase="'calendar'"
+				       [courses]="courses"></app-post-calendar>
+		</div>
+	    </ng-container>
+
+	    <div *ngIf="courses?.length === 0"
+		 class="empty-message">
+		<h4 class="title">Your semester is empty!</h4>
+		<p class="subtitle">Navigate to <a routerLink="/dashboard/manage">course manager</a> and add your current courses.</p>
+	    </div>
+	</div>
+    </div>
+</div>

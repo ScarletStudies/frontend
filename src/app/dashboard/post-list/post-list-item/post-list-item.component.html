@@ -30,11 +30,16 @@
 	    </span>
 
 	    {{ post.comments.length }} comment(s)
+
 	    <span class="badge badge-secondary ml-1 post-category">
 		{{ post.category.name }}
 	    </span>
 	    <span class="badge badge-secondary ml-1 post-semester">
 		{{ post.semester.season }} {{ post.semester.year }}
+	    </span>
+	    <span *ngIf="post.due_date"
+		  class="badge badge-secondary ml-1 post-due-date">
+		Due {{ post.due_date | date:short }}
 	    </span>
 	</div>
     </div>

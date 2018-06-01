@@ -41,6 +41,14 @@ export class PostService {
             params = params.set('sort', queryParams.sort);
         }
 
+        if (queryParams.start_date) {
+            params = params.set('start_date', queryParams.start_date);
+        }
+
+        if (queryParams.end_date) {
+            params = params.set('end_date', queryParams.end_date);
+        }
+
         return this.http.get<IPost[]>(`${environment.api}/posts/`, { params });
     }
 

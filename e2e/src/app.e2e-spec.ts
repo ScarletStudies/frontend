@@ -393,8 +393,12 @@ describe('dashboard semester overview', () => {
 
         // remember course names
         const courseNames = await AppManageCourses.courses.schedule.get.all();
+
+        // navigate to dashboard
         await AppHeader.dashboard.go();
 
+        // check for posts from multiple courses
+        // (as defined in e2e test data)
         const posts = await AppDashboardOverview.posts.get.all();
         const postCourseNames = posts.map(post => post.course);
 
@@ -402,6 +406,13 @@ describe('dashboard semester overview', () => {
             expect(postCourseNames)
                 .toContain(courseName, `course ${courseName} has no posts in dashboard`);
         }
+
+        // switch to calendar view
+        await AppDashboardOverview.view.toCalendar();
+
+        // check for posts in calendar
+        // (as defined in e2e test data)
+        await expect(AppDashboardOverview.calendar.posts.count()).toBeGreaterThan(0);
     });
 });
 
@@ -415,9 +426,10 @@ describe('dashboard course overview', () => {
         await AppManageCourses.courses.available.add.byIndex(0);
         const courseName = await AppManageCourses.courses.schedule.get.byIndex(0);
 
+        // return to dashboard
         await AppHeader.dashboard.go();
 
-        // navigate to that course overview
+        // navigate to the course overview
         await AppDashboardSideBar.navigateToCourse.byName(courseName);
 
         // should only display posts from the selected course
@@ -430,6 +442,14 @@ describe('dashboard course overview', () => {
             expect(postCourseName)
                 .toContain(courseName, 'posts from another course displayed');
         }
+
+        // should display posts in the calendar
+        await AppDashboardCourseOverview.view.toCalendar();
+
+        await expect(AppDashboardCourseOverview.calendar.posts.count()).toBeGreaterThan(0);
+
+        // return to list
+        await AppDashboardCourseOverview.view.toList();
 
         // should add a post with randomized data to prevent duplication in subsequent tests
         const post = {

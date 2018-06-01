@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 
 import { CategoryService, PostService } from '../../../services';
 import { ICategory, IAppState, IPost, ICourse } from '../../../models';
+import { ErrorAction } from '../../../actions/error.actions';
+
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-new-post-modal',
@@ -29,7 +33,8 @@ export class NewPostModalComponent implements OnInit {
         private categoryService: CategoryService,
         private fb: FormBuilder,
         private postService: PostService,
-        private router: Router) { }
+        private router: Router,
+        private store: Store<IAppState>) { }
 
     ngOnInit() {
         this.categories$ = this.categoryService.get();
@@ -37,13 +42,15 @@ export class NewPostModalComponent implements OnInit {
         this.form = this.fb.group({
             title: ['', Validators.required],
             content: ['', Validators.required],
-            category: ['', Validators.required]
+            category: ['', Validators.required],
+            due_date: null
         });
     }
 
     submit(): void {
         const { title, content, category } = this.form.value;
-        const post: Partial<IPost> = {
+
+        let post: Partial<IPost> = {
             content,
             title,
             category: {
@@ -54,12 +61,24 @@ export class NewPostModalComponent implements OnInit {
             } as ICourse
         };
 
+        const due_date_control = this.form.get('due_date');
+
+        if (due_date_control.valid && due_date_control.value) {
+            const { year, month, day } = due_date_control.value as { year: number, month: number, day: number };
+
+            post = {
+                ...post,
+                due_date: moment({ year, month: month - 1, day }).format('YYYY-MM-DD'),
+            };
+        }
+
         this.postService.addPost(post)
             .subscribe(
                 p => {
                     this.activeModal.close();
                     this.router.navigate(['/dashboard', 'post', p.id]);
-                }
+                },
+                err => this.store.dispatch(new ErrorAction(err))
             );
     }
 }

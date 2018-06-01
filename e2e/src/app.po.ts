@@ -361,13 +361,27 @@ export class AppDashboardSideBar {
 }
 
 export class AppDashboardOverview {
+    static view = {
+        toCalendar() {
+            return element(by.css('app-root app-semester-overview .view-calendar')).click();
+        }
+    };
+
+    static calendar = {
+        posts: {
+            count() {
+                return element.all(by.css('app-root app-semester-overview .cal-event')).count();
+            },
+        }
+    };
+
     static posts = {
         get: {
             count() {
-                return element.all(by.css('app-root app-dashboard-overview app-post-list-item')).count();
+                return element.all(by.css('app-root app-semester-overview app-post-list-item')).count();
             },
             async all() {
-                const postRefs = await element.all(by.css('app-root app-dashboard-overview app-post-list-item'));
+                const postRefs = await element.all(by.css('app-root app-semester-overview app-post-list-item'));
 
                 const posts = [];
 
@@ -384,12 +398,29 @@ export class AppDashboardOverview {
 
     static message = {
         get() {
-            return element(by.css('app-root app-dashboard-overview .empty-message')).getText();
+            return element(by.css('app-root app-semester-overview .empty-message')).getText();
         }
     };
 }
 
 export class AppDashboardCourseOverview {
+    static view = {
+        toCalendar() {
+            return element(by.css('app-root app-course .view-calendar')).click();
+        },
+        toList() {
+            return element(by.css('app-root app-course .view-list')).click();
+        }
+    };
+
+    static calendar = {
+        posts: {
+            count() {
+                return element.all(by.css('app-root app-course .cal-event')).count();
+            },
+        }
+    };
+
     static posts = {
         get: {
             count() {
@@ -456,11 +487,11 @@ export class AppDashboardPostView {
     static post = {
         async get() {
             return {
-                course: await element(by.css('app-root app-view-post .post-course')).getText(),
-                title: await element(by.css('app-root app-view-post .post-title')).getText(),
-                content: await element(by.css('app-root app-view-post .post-content')).getText(),
-                author: await element(by.css('app-root app-view-post .post-author')).getText(),
-                category: await element(by.css('app-root app-view-post .post-category')).getText()
+                course: await element(by.css('app-root app-post .post-course')).getText(),
+                title: await element(by.css('app-root app-post .post-title')).getText(),
+                content: await element(by.css('app-root app-post .post-content')).getText(),
+                author: await element(by.css('app-root app-post .post-author')).getText(),
+                category: await element(by.css('app-root app-post .post-category')).getText()
             };
         }
     };
@@ -468,7 +499,7 @@ export class AppDashboardPostView {
     static comments = {
         get: {
             async byIndex(index: number) {
-                const commentRef = await element.all(by.css('app-root app-view-post .post-comment'))
+                const commentRef = await element.all(by.css('app-root app-post .post-comment'))
                     .get(index);
 
                 return {
@@ -478,20 +509,20 @@ export class AppDashboardPostView {
             }
         },
         add({ content }) {
-            return element(by.css('app-root app-view-post #comment-content div.ql-editor[contenteditable]'))
+            return element(by.css('app-root app-post #comment-content div.ql-editor[contenteditable]'))
                 .sendKeys(content)
                 .then(
-                    () => element(by.css('app-root app-view-post button#comment-submit')).click()
+                    () => element(by.css('app-root app-post button#comment-submit')).click()
                 );
         }
     };
 
     static cheers = {
         do() {
-            return element(by.css('app-root app-view-post app-cheer-image')).click();
+            return element(by.css('app-root app-post app-cheer-image')).click();
         },
         get() {
-            return element(by.css('app-root app-view-post .cheer-count')).getText();
+            return element(by.css('app-root app-post .cheer-count')).getText();
         }
     };
 }
