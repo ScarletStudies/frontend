@@ -399,8 +399,8 @@ describe('dashboard semester overview', () => {
 
         // check for posts from multiple courses
         // (as defined in e2e test data)
-        let posts = await AppDashboardOverview.posts.get.all();
-        let postCourseNames = posts.map(post => post.course);
+        const posts = await AppDashboardOverview.posts.get.all();
+        const postCourseNames = posts.map(post => post.course);
 
         for (const courseName of courseNames) {
             expect(postCourseNames)
@@ -412,7 +412,7 @@ describe('dashboard semester overview', () => {
 
         // check for posts in calendar
         // (as defined in e2e test data)
-        await expect(AppDashboardOverview.calendar.posts.count()).toBeGreaterThan(0)
+        await expect(AppDashboardOverview.calendar.posts.count()).toBeGreaterThan(0);
     });
 });
 
