@@ -4,7 +4,7 @@ export interface IPost {
     readonly id: string;
     readonly title: string;
     readonly content: string;
-    readonly timestamp: string;
+    readonly timestamp: string | Date;
     readonly is_archived: boolean;
     readonly due_date: string;
     readonly cheers: IUser[];
