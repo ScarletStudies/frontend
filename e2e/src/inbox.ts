@@ -7,7 +7,6 @@ const request = require('request');
 const MAILTRAP_API = process.env.MAILTRAP_API_KEY;
 const MAILTRAP_INBOX = process.env.MAILTRAP_INBOX;
 
-
 const baseURL = 'https://mailtrap.io/api/v1/';
 const headers = {
     'Content-Type': 'application/json',

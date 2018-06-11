@@ -3,14 +3,14 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
-import { IPost, IPostQueryParameters, IComment } from '../models';
+import { IPaginatedResponse, IPost, IPostQueryParameters, IComment } from '../models';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PostService {
 
-    getAll(queryParams: IPostQueryParameters): Observable<IPost[]> {
+    getAll(queryParams: IPostQueryParameters): Observable<IPaginatedResponse<IPost>> {
         let params = new HttpParams();
 
         if (queryParams.courses) {
@@ -25,31 +25,13 @@ export class PostService {
             }
         }
 
-        if (queryParams.limit) {
-            params = params.set('limit', `${queryParams.limit}`);
+        for (const key of ['page', 'query', 'sort', 'start_date', 'end_date']) {
+            if (key in queryParams) {
+                params = params.set(key, `${queryParams[key]}`);
+            }
         }
 
-        if (queryParams.offset) {
-            params = params.set('offset', `${queryParams.offset}`);
-        }
-
-        if (queryParams.query) {
-            params = params.set('query', queryParams.query);
-        }
-
-        if (queryParams.sort) {
-            params = params.set('sort', queryParams.sort);
-        }
-
-        if (queryParams.start_date) {
-            params = params.set('start_date', queryParams.start_date);
-        }
-
-        if (queryParams.end_date) {
-            params = params.set('end_date', queryParams.end_date);
-        }
-
-        return this.http.get<IPost[]>(`${environment.api}/posts/`, { params });
+        return this.http.get<IPaginatedResponse<IPost>>(`${environment.api}/posts/`, { params });
     }
 
     getOne(id: string): Observable<IPost> {

@@ -28,10 +28,10 @@ export class PostListComponent implements OnInit, OnDestroy {
     }
 
     @Input()
-    public set limit(limit: number) {
+    public set page(page: number) {
         this.queryParams$.next({
             ...this.queryParams$.value,
-            limit
+            page
         });
     }
 
@@ -62,10 +62,10 @@ export class PostListComponent implements OnInit, OnDestroy {
     @Input()
     public itemOptions: IPostListItemOptions = {};
 
-    @Input()
-    public showLoadMore = true;
-
     public posts: IPost[] = null;
+
+    public pageNum = 1;
+    public collectionSize = 0;
     public queryParams$ = new BehaviorSubject<IPostQueryParameters>({});
 
     private subscriptions: Subscription[] = [];
@@ -83,7 +83,10 @@ export class PostListComponent implements OnInit, OnDestroy {
                     ),
             )
                 .subscribe(
-                    posts => this.posts = posts
+                    paginated_posts => {
+                        this.posts = paginated_posts.items;
+                        this.collectionSize = paginated_posts.total;
+                    }
                 ),
         );
     }
@@ -94,15 +97,11 @@ export class PostListComponent implements OnInit, OnDestroy {
         }
     }
 
-    public trackByFn(index: number, post: IPost): string {
-        return post.id;
-    }
-
-    public loadMore(): void {
+    public paginate(page: number): void {
         const current = this.queryParams$.value;
         this.queryParams$.next({
             ...current,
-            limit: current.limit * 2
+            page
         });
     }
 }

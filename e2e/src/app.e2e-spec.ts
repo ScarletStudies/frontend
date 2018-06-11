@@ -23,6 +23,8 @@ import {
 
 import { Inbox } from './inbox';
 
+import { ApiDirectAccess } from './api';
+
 describe('app sanity', () => {
     it('should load the home page and display a welcome message and signup button', async () => {
         await AppPage.navigateTo();
@@ -492,7 +494,7 @@ describe('dashboard course overview', () => {
             .toEqual(comment, 'comment content not displayed');
     });
 
-    it('should load more', async () => {
+    it('should paginate', async () => {
         await AppLogin.doTestCredentialsLogin(TEST_CREDENTIALS);
         await AppDashboardSideBar.navigateToManageCourses();
         await AppManageCourses.courses.schedule.remove.all();
@@ -506,42 +508,45 @@ describe('dashboard course overview', () => {
         // navigate to that course overview
         await AppDashboardSideBar.navigateToCourse.byName(courseName);
 
+        // grab login token for use with api
+        const token = await ApiDirectAccess.login(TEST_CREDENTIALS);
+
         const addPost = async () => {
             // should add a post with randomized data to prevent duplication in subsequent tests
+            // use direct api access to speed up test
             const post = {
                 title: `I am an e2e title ${Math.random()}`,
                 content: `I am an e2e content ${Math.random()}`,
-                category: 'Exam',
+                category: { id: 1 }, // random example category
                 author: TEST_CREDENTIALS.email,
-                course: courseName
+                course: { id: 2 } // id for linear algebra
             };
 
-            await AppDashboardCourseOverview.posts.add(post);
-            await AppDashboardSideBar.navigateToCourse.byName(courseName);
+            await ApiDirectAccess.post.add(token, post);
         };
 
-        // count courses beforehand to avoid issues
-        const existing_count = await AppDashboardCourseOverview.posts.get.count();
-        const default_count = 10;
-        const full_count = 15;
+        const default_count = 20;
 
-        for (let i = 0; i < full_count; i++) {
+        for (let i = 0; i < 50; i++) {
             await addPost();
         }
 
-        // refresh to get back to default count
+        // refresh to view new posts
         await AppPage.refresh();
 
-        // default count is 10
-        await expect(AppDashboardCourseOverview.posts.get.count()).toEqual(default_count);
+        const page_one_posts = await AppDashboardCourseOverview.posts.get.all();
 
-        // load more
-        await AppDashboardCourseOverview.posts.loadMore.do();
+        // default count is 20
+        await expect(page_one_posts.length).toEqual(default_count);
 
-        // expect full 15+ now
-        await expect(AppDashboardCourseOverview.posts.get.count()).toEqual(existing_count + full_count);
-        // load more should now be hidden
-        await expect(AppDashboardCourseOverview.posts.loadMore.isPresent()).toBeFalsy();
+        // navigate to next page
+        await AppDashboardCourseOverview.posts.paginate.next();
+
+        const page_two_posts = await AppDashboardCourseOverview.posts.get.all();
+
+        // should remain same default count, but different posts
+        await expect(page_two_posts.length).toEqual(default_count);
+        await expect(page_two_posts).not.toEqual(page_one_posts);
     });
 });
 

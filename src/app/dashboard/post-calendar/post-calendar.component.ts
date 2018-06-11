@@ -79,8 +79,8 @@ export class PostCalendarComponent implements OnInit, OnDestroy {
                     ),
             )
                 .subscribe(
-                    posts => {
-                        this.events = posts.map(
+                    paginated_posts => {
+                        this.events = paginated_posts.items.map(
                             post => ({
                                 title: post.title,
                                 start: moment(post.due_date, 'YYYY-MM-DD').toDate(),

@@ -103,7 +103,6 @@
 		<div [ngSwitch]="postsView">
 		    <app-post-list *ngSwitchCase="'list'"
 				   [courses]="[course]"
-		    		   [limit]="10"
 				   [sort]="sortForm?.value.sort"
 				   [category]="sortForm?.value.category"
 				   [query]="sortForm?.value.query"></app-post-list>

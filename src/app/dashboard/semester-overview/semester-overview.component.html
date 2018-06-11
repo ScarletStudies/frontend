@@ -50,9 +50,7 @@
 		     [ngSwitch]="postsView">
 		    <app-post-list *ngSwitchCase="'list'"
 				   [courses]="courses"
-				   [sort]="'activity'"
-				   [limit]="10"
-				   [showLoadMore]="false"></app-post-list>
+				   [sort]="'activity'"></app-post-list>
 
 		    <app-post-calendar *ngSwitchCase="'calendar'"
 				       [courses]="courses"></app-post-calendar>

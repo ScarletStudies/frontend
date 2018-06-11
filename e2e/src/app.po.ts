@@ -472,12 +472,9 @@ export class AppDashboardCourseOverview {
                     .click();
             }
         },
-        loadMore: {
-            do() {
-                return element(by.css('app-root app-course app-post-list .load-more')).click();
-            },
-            isPresent() {
-                return element(by.css('app-root app-course app-post-list .load-more')).isPresent();
+        paginate: {
+            next() {
+                return element(by.css('app-root app-course app-post-list li.page-item:last-child')).click();
             }
         }
     };

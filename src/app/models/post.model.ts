@@ -20,8 +20,7 @@ export interface IPostQueryParameters {
     courses?: ICourse[];
     categories?: Partial<ICategory>[];
     query?: string;
-    limit?: number;
-    offset?: number;
+    page?: number;
     sort?: 'time' | 'activity';
     start_date?: string;
     end_date?: string;
