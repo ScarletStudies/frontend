@@ -10,5 +10,11 @@
 	<span class="comment-author">
 	    {{ comment.author.email }}
 	</span>
+	<ng-container *ngIf="op?.email === comment.author.email">
+	    &bull;
+	    <span class="original-poster" title="Author of post">
+		Post Author
+	    </span>
+	</ng-container>
     </div>
 </div>

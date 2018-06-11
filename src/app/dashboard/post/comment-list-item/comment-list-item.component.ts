@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
-import { IComment } from '../../../models';
+import { IComment, IUser } from '../../../models';
 
 @Component({
     selector: 'app-comment-list-item',
@@ -12,6 +12,9 @@ export class CommentListItemComponent implements OnInit {
 
     @Input()
     public comment: IComment = null;
+
+    @Input()
+    public op: IUser = null;
 
     public safeCommentContent: SafeHtml = null;
 
