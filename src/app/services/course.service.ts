@@ -25,4 +25,11 @@ export class CourseService {
                 { params }
             );
     }
+
+    public getOne(id: string): Observable<ICourse> {
+        return this.http
+            .get<ICourse>(
+                `${environment.api}/courses/${id}`
+            );
+    }
 }

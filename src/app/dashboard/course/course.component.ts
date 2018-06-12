@@ -7,7 +7,7 @@ import { switchMap, catchError } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IAppState, ICourse, ICategory } from '../../models';
-import { CategoryService } from '../../services';
+import { CategoryService, CourseService } from '../../services';
 import { ErrorAction } from '../../actions/error.actions';
 
 import { NewPostModalComponent } from './new-post-modal/new-post-modal.component';
@@ -30,6 +30,7 @@ export class CourseComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private modalService: NgbModal,
         private categoryService: CategoryService,
+        private courseService: CourseService,
         private fb: FormBuilder) { }
 
     ngOnInit() {
@@ -46,12 +47,7 @@ export class CourseComponent implements OnInit, OnDestroy {
                 .params
                 .pipe(
                     switchMap(
-                        ({ id }) => {
-                            return this.store
-                                .pipe(
-                                    select(state => state.schedule.find(c => c.id === id))
-                                );
-                        }
+                        ({ id }) => this.courseService.getOne(id)
                     ),
                     catchError(
                         (err: any): Observable<ICourse> => {
