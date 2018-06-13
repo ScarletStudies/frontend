@@ -4,9 +4,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 
-import { IPost, IAppState } from '../../models';
+import { IPost, IComment, IUser, IAppState } from '../../models';
 import { PostService, AlertService } from '../../services';
 import { ErrorAction } from '../../actions/error.actions';
 
@@ -26,6 +26,7 @@ export class PostComponent implements OnInit, OnDestroy {
     public post: IPost = null;
     public postSafeHtml: SafeHtml = null;
     public safeLinks: IAnchor[] = null;
+    public user$: Observable<IUser> = null;
     public commentForm: FormGroup = null;
     public quillModules = {
         toolbar: [
@@ -61,6 +62,8 @@ export class PostComponent implements OnInit, OnDestroy {
                     err => this.store.dispatch(new ErrorAction(err))
                 )
         );
+
+        this.user$ = this.store.pipe(select(state => state.user));
     }
 
     ngOnDestroy() {
@@ -112,6 +115,26 @@ export class PostComponent implements OnInit, OnDestroy {
         this.subscriptions.push(
             this.postService
                 .addCheer(this.post)
+                .subscribe(
+                    post => this.updatePost(post)
+                )
+        );
+    }
+
+    public eraseComment(comment: IComment): void {
+        this.subscriptions.push(
+            this.postService
+                .eraseComment(this.post, comment)
+                .subscribe(
+                    post => this.updatePost(post)
+                )
+        );
+    }
+
+    public erasePost(): void {
+        this.subscriptions.push(
+            this.postService
+                .erasePost(this.post)
                 .subscribe(
                     post => this.updatePost(post)
                 )

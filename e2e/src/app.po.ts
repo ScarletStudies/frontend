@@ -490,6 +490,10 @@ export class AppDashboardPostView {
                 author: await element(by.css('app-root app-post .post-author')).getText(),
                 category: await element(by.css('app-root app-post .post-category')).getText()
             };
+        },
+        erase() {
+            return element(by.css('app-root app-post .post-delete'))
+                .click();
         }
     };
 
@@ -511,6 +515,13 @@ export class AppDashboardPostView {
                 .then(
                     () => element(by.css('app-root app-post button#comment-submit')).click()
                 );
+        },
+        erase: {
+            byIndex(index: number) {
+                return element.all(by.css('app-root app-post .post-comment .comment-delete'))
+                    .get(index)
+                    .click();
+            }
         }
     };
 

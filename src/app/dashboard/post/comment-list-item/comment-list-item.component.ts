@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { IComment, IUser } from '../../../models';
@@ -15,6 +15,12 @@ export class CommentListItemComponent implements OnInit {
 
     @Input()
     public op: IUser = null;
+
+    @Input()
+    public currentUser: IUser = null;
+
+    @Output()
+    public erase = new EventEmitter();
 
     public safeCommentContent: SafeHtml = null;
 

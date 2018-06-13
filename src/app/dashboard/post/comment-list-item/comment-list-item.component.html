@@ -10,11 +10,19 @@
 	<span class="comment-author">
 	    {{ comment.author.email }}
 	</span>
-	<ng-container *ngIf="op?.email === comment.author.email">
+	<span *ngIf="op?.email === comment.author.email">
 	    &bull;
 	    <span class="original-poster" title="Author of post">
 		Post Author
 	    </span>
-	</ng-container>
+	</span>
+	<span *ngIf="comment.author.email === currentUser?.email">
+	    &bull;
+	    <button type="button"
+		    class="btn btn-sm btn-danger ml-1 comment-delete"
+		    (click)="erase.emit()">
+		<i class="fa fa-trash"></i>
+	    </button>
+	</span>
     </div>
 </div>

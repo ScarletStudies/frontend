@@ -58,6 +58,12 @@
 		    <span *ngIf="post.due_date" class="badge badge-secondary ml-1 post-semester">
 			Due {{ post.due_date | date:short }}
 		    </span>
+		    <button *ngIf="post.author.email === (user$ | async)?.email" 
+			    type="button"
+			    class="btn btn-sm btn-danger post-delete ml-1"
+			    (click)="erasePost()">
+			<i class="fa fa-trash"></i>
+		    </button>
 		</div>
 	    </div>
 
@@ -98,7 +104,9 @@
 		    <li *ngFor="let comment of post.comments; last as isLast"
 			class="post-comment">
 			<app-comment-list-item [comment]="comment"
-					       [op]="post.author"></app-comment-list-item>
+					       [op]="post.author"
+					       [currentUser]="user$ | async"
+					       (erase)="eraseComment(comment)"></app-comment-list-item>
 		    </li>
 		</ul>
 	    </div>

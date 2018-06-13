@@ -492,6 +492,17 @@ describe('dashboard course overview', () => {
         // should display the new comment
         await expect(AppDashboardPostView.comments.get.byIndex(0))
             .toEqual(comment, 'comment content not displayed');
+
+        // should erase the comment
+        await AppDashboardPostView.comments.erase.byIndex(0);
+        const erased_comment = await AppDashboardPostView.comments.get.byIndex(0);
+        await expect(erased_comment.content)
+            .toEqual('[deleted]', 'comment content not erased');
+
+        // should erase the post
+        await AppDashboardPostView.post.erase();
+        const erased_post = await AppDashboardPostView.post.get();
+        expect(erased_post.content).toEqual('[deleted]', 'post content not erased');
     });
 
     it('should paginate', async () => {

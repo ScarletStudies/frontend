@@ -68,6 +68,16 @@ export class PostService {
         return this.http.post<IPost>(`${environment.api}/posts/`, post);
     }
 
+    erasePost(post: IPost): Observable<IPost> {
+        return this.http
+            .delete<IPost>(`${environment.api}/posts/${post.id}`)
+            .pipe(
+                map(
+                    localize
+                )
+            );
+    }
+
     addCheer(post: IPost): Observable<IPost> {
         return this.http
             .post<IPost>(`${environment.api}/posts/${post.id}/cheers/`, '')
@@ -82,6 +92,16 @@ export class PostService {
     addComment(post: IPost, comment: IComment): Observable<IPost> {
         return this.http
             .post<IPost>(`${environment.api}/posts/${post.id}/comments/`, comment)
+            .pipe(
+                map(
+                    localize
+                )
+            );
+    }
+
+    eraseComment(post: IPost, comment: IComment): Observable<IPost> {
+        return this.http
+            .delete<IPost>(`${environment.api}/posts/${post.id}/comments/${comment.id}`)
             .pipe(
                 map(
                     localize
