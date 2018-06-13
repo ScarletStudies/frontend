@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { environment } from '../environments/environment';
 
@@ -14,8 +13,6 @@ import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 
 import { ToastrModule } from 'ngx-toastr';
-
-import { QuillModule } from 'ngx-quill';
 
 import { of } from 'rxjs';
 import { take, mergeMap, tap, catchError } from 'rxjs/operators';
@@ -116,8 +113,6 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     imports: [
         BrowserModule,
         AppRoutingModule,
-        FormsModule,
-        ReactiveFormsModule,
         HttpClientModule,
         StoreModule.forRoot(
             reducers,
@@ -142,8 +137,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
             }
         }),
         BrowserAnimationsModule,
-        ToastrModule.forRoot(),
-        QuillModule
+        ToastrModule.forRoot()
     ],
     providers: [
         ...APP_SERVICES,
