@@ -42,6 +42,7 @@ import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { AboutComponent } from './about/about.component';
 
 export function jwtOptionsFactory(store: Store<IAppState>, userService: UserService) {
     return {
@@ -110,6 +111,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
         HeaderComponent,
         FooterComponent,
         NotFoundComponent,
+        AboutComponent,
     ],
     imports: [
         BrowserModule,
