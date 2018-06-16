@@ -43,7 +43,7 @@ export class Inbox {
                         const html = messages[0].text_body;
 
                         // tslint:disable:max-line-length
-                        const re = /https:\/\/www\.scarletstudies\.org\/(?:forgot|verify)\/([a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+)/g;
+                        const re = /\/(?:forgot|verify)\/([a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+)/g;
                         // tslint:enable:max-line-length
 
                         const match = re.exec(body);
