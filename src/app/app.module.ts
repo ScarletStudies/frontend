@@ -28,7 +28,7 @@ import { LoginSuccessAction, RefreshJwtAction } from './actions/user.actions';
 import { EffectsModule } from '@ngrx/effects';
 import { APP_EFFECTS } from './effects';
 
-import { JwtModule, JWT_OPTIONS, JwtModuleOptions, JwtHelperService } from '@auth0/angular-jwt';
+import { JwtModule, JWT_OPTIONS, JwtModuleOptions, JwtHelperService } from '@russon77/angular-jwt';
 
 import { APP_SERVICES, UserService } from './services';
 
